@@ -1,47 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Box, Typography, Container, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
 const Login: React.FC = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [initialData, setInitialData] = useState(null); // For fetched data
-    const [error, setError] = useState(null);
-    const [validationError, setValidationError] = useState('');
-
-    useEffect(() => {
-        const fetchInitialData = async () => {
-            try {
-                const response = await axios.get('http://localhost:5007/api/auth/login');
-                setInitialData(response.data);
-                console.log('Initial data fetched:', response.data);
-            } catch (err) {
-                console.error('Error fetching initial data:', err);
-                // setError('Failed to load initial data');
-            }
-        };
-
-        fetchInitialData();
-    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Basic validation
+        if (!email || !password) {
+            alert('Please enter both username and password.');
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:5007/api/auth/login', {
-                username,
+                email,
                 password,
-            });
-            console.log('Login successful:', response.data);
+            }, { withCredentials: true }); // Sending cookies
 
+            console.log('Login successful:', response.data);
             if (response.status === 200) {
                 alert('Login successful!');
-                navigate("/home");
+                navigate("/homePage");
             } else {
                 alert('Login failed.');
             }
         } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                alert('Login failed: ' + error.response.data.message);
+            } else {
+                alert('An unexpected error occurred.');
+            }
             console.error('Error connecting to the server:', error);
         }
     }
@@ -69,8 +64,8 @@ const Login: React.FC = () => {
                         required
                         fullWidth
                         label="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         autoFocus
                     />
                     <TextField
@@ -90,6 +85,14 @@ const Login: React.FC = () => {
                         sx={{ mt: 3, mb: 2 }}
                     >
                         Login
+                    </Button>
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        sx={{ mt: 1 }}
+                        onClick={() => navigate('/signup')}
+                    >
+                        Create Account
                     </Button>
                 </Box>
             </Box>

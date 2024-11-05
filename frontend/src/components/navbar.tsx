@@ -16,14 +16,26 @@ function Navbar() {
                 padding: 0
             }}>
                 <li style={{ marginRight: '1rem' }}>
-                    <Link to="/login" style={linkStyle}>Login</Link>
+                    <Link to="/login" style={linkStyle}>כניסה</Link>
                 </li>
                 <li style={{ marginRight: '1rem' }}>
-                    <Link to="/signupForm" style={linkStyle}>Signup</Link>
+                    <Link to="/zmanim" style={linkStyle}>זמני היום</Link>
                 </li>
                 <li style={{ marginRight: '1rem' }}>
-                    <Link to="/HomePage" style={linkStyle}>HomePage</Link>
+                    <Link to="/Signup" style={linkStyle}>יצירת חשבון</Link>
                 </li>
+                <li style={{ marginRight: '1rem' }}>
+                    <Link to="/HomePage" style={linkStyle}>דף הבית</Link>
+                </li>
+                <li style={{ marginRight: '1rem' }}>
+                    <Link to="/private" style={linkStyle}>איזור אישי</Link>
+                </li>
+                <li style={{ marginRight: '1rem' }}>
+                    <Link to="/pay" style={linkStyle}>תשלומים</Link>
+                </li>
+                <li style={{ marginRight: '1rem' }}>
+                <Link to="/contact" style={linkStyle}>צור קשר</Link>
+            </li>
             </ul>
         </nav>
     );
