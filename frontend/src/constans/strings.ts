@@ -1,1 +1,2 @@
-export const welcomeTitle : string = "Welcome to home page"
+export const welcomeTitle: string = "Welcome to home page"
+

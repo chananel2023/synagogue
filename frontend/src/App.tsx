@@ -4,6 +4,11 @@ import Signup from './pages/signup';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/homePage'
 import WelcomePage from './pages/firstpage'
+import Zmanim from './pages/zmanim'
+import Private from './pages/private'
+import Pay from './pages/pay'
+import Contact from './pages/contact&about'
+
 function App() {
   return (
     <Router>
