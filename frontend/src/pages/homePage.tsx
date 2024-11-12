@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import FullWidthCarousel from '../components/karusela';
 import Navbar from '../components/navbar';
-
+import UserMessagesComponent from '../components/message'
 const HomePage: React.FC = () => {
     const [notifications] = useState<string[]>([
         'שחרית א : 07:30',
@@ -20,6 +20,8 @@ const HomePage: React.FC = () => {
 
         <div style={styles.pageContainer}>
             <Navbar />
+            <UserMessagesComponent/>
+
             <h1 style={styles.title}>בית כנסת - אורט סינגאלובסקי</h1>
 
             <div style={styles.contentContainer}>

@@ -8,12 +8,18 @@ import Zmanim from './pages/zmanim'
 import Private from './pages/private'
 import Pay from './pages/pay'
 import Contact from './pages/contact&about'
+import HomePageAdmin from './pagesAdmin/homePageAdmin'
+import PayAdmin from './pagesAdmin/payAdmin'
+import MessagesComponent from './components/MessagesComponent'
 
 function App() {
   return (
     <Router>
 
       <Routes>
+        <Route path='/messageAdmin' element={<MessagesComponent />} />
+        <Route path='/homePageAdmin' element={<HomePageAdmin />} /> 
+        <Route path='/payAdmin' element={<PayAdmin />} />
         <Route path='/' element={<WelcomePage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/HomePage' element={<HomePage />} />
