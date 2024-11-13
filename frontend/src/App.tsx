@@ -14,7 +14,7 @@ import MessagesComponent from './components/MessagesComponent';
 import SignUpPage from './pages/SignUpPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import FloatingShape from './components/FloatingShape';
-
+//g
 function App() {
   return (
     <Router>
