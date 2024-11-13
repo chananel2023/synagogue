@@ -15,8 +15,9 @@ function Navbar() {
                 margin: 0,
                 padding: 0
             }}>
+                <h2></h2>
                 <li style={{ marginRight: '1rem' }}>
-                    <Link to="/login" style={linkStyle}>כניסה</Link>
+                    <Link to="/login" style={linkStyle}>יציאה</Link>
                 </li>
                 <li style={{ marginRight: '1rem' }}>
                     <Link to="/zmanim" style={linkStyle}>זמני היום</Link>
