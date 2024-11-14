@@ -1,8 +1,9 @@
-
 import React, { useState } from 'react';
 import FullWidthCarousel from '../components/karusela';
 import Navbar from '../components/navbar';
 import UserMessagesComponent from '../components/message'
+import Navbar2 from '../components/Navbar2';
+
 const HomePage: React.FC = () => {
     const [notifications] = useState<string[]>([
         'שחרית א : 07:30',
@@ -13,13 +14,11 @@ const HomePage: React.FC = () => {
         'ערבית ב : 20:30',
     ]);
 
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
     return (
-
-            
-
-
         <div style={styles.pageContainer}>
-            <Navbar />
+            <Navbar2 />
             <UserMessagesComponent/>
 
             <h1 style={styles.title}>בית כנסת - אורט סינגאלובסקי</h1>
@@ -33,7 +32,16 @@ const HomePage: React.FC = () => {
                     <h2 style={styles.sectionTitle}>זמני תפילות</h2>
                     <ul style={styles.notificationsList}>
                         {notifications.map((notification, index) => (
-                            <li key={index} style={styles.notificationItem}>
+                            <li
+                                key={index}
+                                style={{
+                                    ...styles.notificationItem,
+                                    backgroundColor: hoveredIndex === index ? '#ffd6a5' : '#fff5e0',
+                                    transform: hoveredIndex === index ? 'scale(1.02)' : 'scale(1)',
+                                }}
+                                onMouseEnter={() => setHoveredIndex(index)}
+                                onMouseLeave={() => setHoveredIndex(null)}
+                            >
                                 {notification}
                             </li>
                         ))}
@@ -41,7 +49,6 @@ const HomePage: React.FC = () => {
                 </div>
             </div>
         </div>
-        
     );
 };
 
@@ -70,10 +77,10 @@ const styles = {
         marginBottom: '20px',
     },
     carouselContainer: {
-        width: '75%', // רוחב הקרוסלה
+        width: '75%',
     },
     card: {
-        width: '22%', // רוחב קטע התפילות
+        width: '22%',
         padding: '15px',
         borderRadius: '10px',
         backgroundColor: '#fff7e6',
@@ -99,12 +106,8 @@ const styles = {
         borderRadius: '8px',
         backgroundColor: '#fff5e0',
         boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
-        transition: 'background-color 0.3s, transform 0.3s',
         cursor: 'pointer',
-        '&:hover': {
-            backgroundColor: '#ffd6a5', // צבע רקע בהעברה
-            transform: 'scale(1.02)', // התמקדות
-        },
+        transition: 'background-color 0.3s, transform 0.3s',
     },
 };
 
