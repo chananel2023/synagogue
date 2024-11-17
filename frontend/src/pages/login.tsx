@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Box, Typography, Container, Avatar } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { log } from 'console';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -13,12 +14,21 @@ const Login: React.FC = () => {
         e.preventDefault();
 
         // Basic validation
-        if (!email || !password) {
+        if (!email || !password ) {
+            
             alert('Please enter both username and password.');
             return;
         }
+        if (!email.trim() || !password.trim()) {
+            
+            alert('Please enter both username and password.');
+            return;
+        }
+        
 
         try {
+            console.log('Sending data:', { email, password });
+
             const response = await axios.post('http://localhost:5007/api/auth/login', {
                 email,
                 password,

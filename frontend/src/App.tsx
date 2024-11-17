@@ -2,7 +2,7 @@ import React from 'react';
 import './index.css';
 
 import Login from './pages/login';
-import Signup from './pages/signup';
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/homePage';
 import WelcomePage from './pages/firstpage';
@@ -16,6 +16,7 @@ import MessagesComponent from './components/MessagesComponent';
 import SignUpPage from './pages/SignUpPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import FloatingShape from './components/FloatingShape';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
@@ -32,9 +33,9 @@ function App() {
           <Route path="/messageAdmin" element={<MessagesComponent />} />
           <Route path="/homePageAdmin" element={<HomePageAdmin />} /> 
           <Route path="/payAdmin" element={<PayAdmin />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/HomePage" element={<HomePage />} />
-          <Route path="/Signup" element={<Signup />} />
+          
           <Route path="/private" element={<Private />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/zmanim" element={<Zmanim />} />

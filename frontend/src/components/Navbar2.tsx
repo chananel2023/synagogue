@@ -16,11 +16,20 @@ const Navbar2: React.FC = () => {
 
       {/* תפריט קישורים */}
       <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
-        <li className="p-3 hover:bg-white hover:text-black rounded-md transition-all">Home</li>
-        <li className="p-3 hover:bg-white hover:text-black rounded-md transition-all">About</li>
-        <li className="p-3 hover:bg-white hover:text-black rounded-md transition-all">Services</li>
-        <li className="p-3 hover:bg-white hover:text-black rounded-md transition-all">Contact</li>
-      </ul>
+  <li>
+    <a href="/login" className="p-3 hover:bg-white hover:text-black rounded-md transition-all" aria-label="Home">log-out</a>
+  </li>
+  <li>
+    <a href="zmanim" className="p-3 hover:bg-white hover:text-black rounded-md transition-all" aria-label="zmanim">zmanim</a>
+  </li>
+  <li>
+    <a href="/HomePage" className="p-3 hover:bg-white hover:text-black rounded-md transition-all" aria-label="Services">Home</a>
+  </li>
+  <li>
+    <a href="#contact" className="p-3 hover:bg-white hover:text-black rounded-md transition-all" aria-label="Contact">Contact</a>
+  </li>
+</ul>
+
 
       {/* שדה חיפוש */}
       <div className="relative hidden md:flex items-center justify-center gap-3">

@@ -1,19 +1,19 @@
 import React from "react";
-import Navbar from "../components/navbar";
+import Navbar2 from "../components/Navbar2";
 
 const Zmanim = () => {
     return (
-        <div style={{ backgroundColor: '#EDEDED', height: '100vh', margin: 0 }}>
-            <Navbar />
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div className="zmanim-page">
+            <Navbar2 />
+            <div style={{ marginTop: '10%' }}>
                 <iframe
                     src="https://www.yeshiva.org.il/generalpages/yeshivatimes"
                     width="500"
                     height="600"
-                    style={{ transform: 'scale(1.2)', transformOrigin: '0 0' }}
+                    style={{ border: 'none' }}
                     scrolling="no"
                     frameBorder="0"
-                    title="Yeshiva Times Information"
+                    title="זמני היום מישיבה"
                 ></iframe>
             </div>
         </div>
@@ -21,3 +21,4 @@ const Zmanim = () => {
 };
 
 export default Zmanim;
+
