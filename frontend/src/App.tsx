@@ -8,13 +8,12 @@ import Zmanim from './pages/zmanim';
 import Private from './pages/private';
 import Pay from './pages/pay';
 import Contact from './pages/contact&about';
-import HomePageAdmin from './pagesAdmin/homePageAdmin';
 import PayAdmin from './pagesAdmin/payAdmin';
 import MessagesComponent from './components/MessagesComponent';
 import SignUpPage from './pages/SignUpPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import FloatingShape from './components/FloatingShape';
-
+import AdminTfilot from './pagesAdmin/tfilotAdmin'
 function App() {
   return (
     <Router>
@@ -28,7 +27,6 @@ function App() {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/verify-email" element={<EmailVerificationPage />} />
           <Route path="/messageAdmin" element={<MessagesComponent />} />
-          <Route path="/homePageAdmin" element={<HomePageAdmin />} /> 
           <Route path="/payAdmin" element={<PayAdmin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/HomePage" element={<HomePage />} />
@@ -37,6 +35,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/zmanim" element={<Zmanim />} />
           <Route path="/pay" element={<Pay />} />
+          <Route path="/tfilotAdmin" element={<AdminTfilot />} />
+
         </Routes>
       </div>
     </Router>

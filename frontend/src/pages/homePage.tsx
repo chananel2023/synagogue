@@ -1,27 +1,14 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import FullWidthCarousel from '../components/karusela';
 import Navbar from '../components/navbar';
-import UserMessagesComponent from '../components/message'
+import UserMessagesComponent from '../components/message';
+import TfilotList from '../components/TfilotList';
+
 const HomePage: React.FC = () => {
-    const [notifications] = useState<string[]>([
-        'שחרית א : 07:30',
-        'שחרית ב : 07:30',
-        'מנחה א : 13:30',
-        'מנחה ב : 13:30',
-        'ערבית א : 20:30',
-        'ערבית ב : 20:30',
-    ]);
-
     return (
-
-            
-
-
         <div style={styles.pageContainer}>
             <Navbar />
-            <UserMessagesComponent/>
-
+            <UserMessagesComponent />
             <h1 style={styles.title}>בית כנסת - אורט סינגאלובסקי</h1>
 
             <div style={styles.contentContainer}>
@@ -31,17 +18,10 @@ const HomePage: React.FC = () => {
 
                 <div style={styles.card}>
                     <h2 style={styles.sectionTitle}>זמני תפילות</h2>
-                    <ul style={styles.notificationsList}>
-                        {notifications.map((notification, index) => (
-                            <li key={index} style={styles.notificationItem}>
-                                {notification}
-                            </li>
-                        ))}
-                    </ul>
+                    <TfilotList /> {/* מציג את זמני התפילות מדינמיים מה-API */}
                 </div>
             </div>
         </div>
-        
     );
 };
 
@@ -85,26 +65,6 @@ const styles = {
         color: '#4a2c2a',
         fontWeight: '600',
         marginBottom: '10px',
-    },
-    notificationsList: {
-        listStyleType: 'none',
-        padding: '0',
-        margin: '0',
-    },
-    notificationItem: {
-        fontSize: '1.1rem',
-        color: '#4a2c2a',
-        padding: '8px',
-        marginBottom: '6px',
-        borderRadius: '8px',
-        backgroundColor: '#fff5e0',
-        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
-        transition: 'background-color 0.3s, transform 0.3s',
-        cursor: 'pointer',
-        '&:hover': {
-            backgroundColor: '#ffd6a5', // צבע רקע בהעברה
-            transform: 'scale(1.02)', // התמקדות
-        },
     },
 };
 
