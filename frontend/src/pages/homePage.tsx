@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FullWidthCarousel from '../components/karusela';
 import Navbar from '../components/navbar';
 import UserMessagesComponent from '../components/message';
 import TfilotList from '../components/TfilotList';
 
+import Navbar2 from '../components/Navbar2';
+
 const HomePage: React.FC = () => {
     return (
         <div style={styles.pageContainer}>
-            <Navbar />
-            <UserMessagesComponent />
+            <Navbar2 />
+            <UserMessagesComponent/>
+
             <h1 style={styles.title}>בית כנסת - אורט סינגאלובסקי</h1>
 
             <div style={styles.contentContainer}>
@@ -50,10 +53,10 @@ const styles = {
         marginBottom: '20px',
     },
     carouselContainer: {
-        width: '75%', // רוחב הקרוסלה
+        width: '75%',
     },
     card: {
-        width: '22%', // רוחב קטע התפילות
+        width: '22%',
         padding: '15px',
         borderRadius: '10px',
         backgroundColor: '#fff7e6',
@@ -65,6 +68,26 @@ const styles = {
         color: '#4a2c2a',
         fontWeight: '600',
         marginBottom: '10px',
+    },
+    notificationsList: {
+        listStyleType: 'none',
+        padding: '0',
+        margin: '0',
+    },
+    notificationItem: {
+        fontSize: '1.1rem',
+        color: '#4a2c2a',
+        padding: '8px',
+        marginBottom: '6px',
+        borderRadius: '8px',
+        backgroundColor: '#fff5e0',
+        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
+        transition: 'background-color 0.3s, transform 0.3s',
+        cursor: 'pointer',
+        '&:hover': {
+            backgroundColor: '#ffd6a5', // צבע רקע בהעברה
+            transform: 'scale(1.02)', // התמקדות
+        },
     },
 };
 
