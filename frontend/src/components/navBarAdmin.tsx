@@ -16,15 +16,19 @@ function NavbarAdmin() {
                 padding: 0
             }}>
 
+
                 <li style={{ marginRight: '1rem' }}>
-                    <Link to="/homePageAdmin" style={linkStyle}>דף הבית</Link>
+                    <Link to="/homePage" style={linkStyle}> דף הבית משתמשים</Link>
                 </li>
 
                 <li style={{ marginRight: '1rem' }}>
                     <Link to="/payAdmin" style={linkStyle}>תשלומים</Link>
                 </li>
                 <li style={{ marginRight: '1rem' }}>
-                    <Link to="/messageAdmin" style={linkStyle}>הודעות</Link>
+                    <Link to="/tfilotAdmin" style={linkStyle}>הגדרת זמני תפילה</Link>
+                </li>
+                <li style={{ marginRight: '1rem' }}>
+                    <Link to="/messageAdmin" style={linkStyle}>עדכונים חמים</Link>
                 </li>
 
             </ul>

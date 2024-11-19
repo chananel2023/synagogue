@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
+iimport React, { useState } from 'react';
 import FullWidthCarousel from '../components/karusela';
 import Navbar2 from '../components/Navbar2';
 import UserMessagesComponent from '../components/message';
 
 const HomePage: React.FC = () => {
-    const [notifications] = useState<string[]>([
-        'שחרית א : 07:30',
-        'שחרית ב : 07:30',
-        'מנחה א : 13:30',
-        'מנחה ב : 13:30',
-        'ערבית א : 20:30',
-        'ערבית ב : 20:30',
-    ]);
-
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+    const notifications = ["תפילה בבוקר", "שיעור תורה", "ארוחת צהריים"]; // דוגמא להודעות
 
     return (
         <div style={styles.pageContainer}>
@@ -23,33 +16,24 @@ const HomePage: React.FC = () => {
                     <FullWidthCarousel />
                 </div>
 
-                <div style={styles.cardsContainer}>
-                    {/* כרטיס זמני תפילות */}
-                    <div style={styles.card}>
-                        <h2 style={styles.sectionTitle}>זמני תפילות</h2>
-                        <ul style={styles.notificationsList}>
-                            {notifications.map((notification, index) => (
-                                <li
-                                    key={index}
-                                    style={{
-                                        ...styles.notificationItem,
-                                        backgroundColor: hoveredIndex === index ? '#ffd6a5' : '#fff5e0',
-                                        transform: hoveredIndex === index ? 'scale(1.02)' : 'scale(1)',
-                                    }}
-                                    onMouseEnter={() => setHoveredIndex(index)}
-                                    onMouseLeave={() => setHoveredIndex(null)}
-                                >
-                                    {notification}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* כרטיס הודעות למשתמש */}
-                    <div style={styles.card}>
-                        <h2 style={styles.sectionTitle}>הודעות למשתמש</h2>
-                        <UserMessagesComponent />
-                    </div>
+                <div style={styles.card}>
+                    <h2 style={styles.sectionTitle}>זמני תפילות</h2>
+                    <ul style={styles.notificationsList}>
+                        {notifications.map((notification, index) => (
+                            <li
+                                key={index}
+                                style={{
+                                    ...styles.notificationItem,
+                                    backgroundColor: hoveredIndex === index ? '#ffd6a5' : '#fff5e0',
+                                    transform: hoveredIndex === index ? 'scale(1.02)' : 'scale(1)',
+                                }}
+                                onMouseEnter={() => setHoveredIndex(index)}
+                                onMouseLeave={() => setHoveredIndex(null)}
+                            >
+                                {notification}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         </div>
@@ -63,25 +47,20 @@ const styles = {
         flexDirection: 'column' as 'column',
         alignItems: 'center',
         minHeight: '100vh',
-        paddingTop: '10%', // מתאים לרווח מתחת ל-Navbar
+        paddingTop: '10%', // רווח מתחת ל-Navbar
     },
     contentContainer: {
         width: '100%',
         maxWidth: '1200px',
         display: 'flex',
-        justifyContent: 'space-between', // מארגן את הרכיבים בסדר אופקי
-        alignItems: 'flex-start', // כדי לוודא שהכרטיסים יתחילו מהחלק העליון
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
         marginTop: '20px',
-        flexWrap: 'wrap' as 'wrap', // שימוש בערך חוקי עבור flexWrap
+        flexWrap: 'wrap' as 'wrap',
     },
     carouselContainer: {
         width: '75%',
         marginRight: '20px', // ריווח בין הקרוסלה לכרטיסים
-    },
-    cardsContainer: {
-        width: '22%', // רוחב הכרטיסים
-        display: 'flex',
-        flexDirection: 'column' as 'column', // סידור הכרטיסים אחד מעל השני
     },
     card: {
         width: '100%',
@@ -111,41 +90,9 @@ const styles = {
         borderRadius: '8px',
         backgroundColor: '#fff5e0',
         boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
-        cursor: 'pointer',
         transition: 'background-color 0.3s, transform 0.3s',
-    },
-
-    // Media Queries
-    '@media (max-width: 768px)': {
-        contentContainer: {
-            flexDirection: 'rou', // על מסכים קטנים, הסדר יהיה עמודה
-            alignItems: 'center', // מיישר את הפריטים במרכז
-        },
-        carouselContainer: {
-            width: '100%', // על מסכים קטנים, הקרוסלה תיקח את כל רוחב המסך
-            marginRight: '0', // לא צריך ריווח בין הקרוסלה לכרטיסים
-        },
-        cardsContainer: {
-            width: '100%', // הכרטיסים יתפסו 100% מהרוחב במסכים קטנים
-            alignItems: 'center', // למרכז את הכרטיסים במסכים קטנים
-        },
-        card: {
-            width: '80%', // על מסכים קטנים, כל כרטיס יתפוס 80% מהמסך
-        }
-    },
-
-    '@media (max-width: 480px)': {
-        sectionTitle: {
-            fontSize: '1.2rem', // גודל פונט קטן יותר במסכים מאוד קטנים
-        },
-        notificationItem: {
-            fontSize: '1rem', // גודל פונט קטן יותר
-            padding: '6px', // מעט פחות ריווח
-        },
+        cursor: 'pointer',
     },
 };
-
-
-
 
 export default HomePage;
