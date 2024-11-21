@@ -18,13 +18,28 @@ const FullWidthCarousel: React.FC = () => {
         <div style={styles.carouselContainer}>
             <Slider {...settings}>
                 <div style={styles.slide}>
-                    <img src="https://kav.meorot.net/wp-content/uploads/elementor/thumbs/%D7%A1%D7%9C%D7%99%D7%97%D7%95%D7%AA-%D7%9C%D7%90%D7%AA%D7%A8-pkbpfvrstb70u08tvd9zsgqu77hcu6pqq8lycc8z8w.png" alt="סליחות לאתר" style={styles.image} />
+                    <img 
+                        src="https://kav.meorot.net/wp-content/uploads/elementor/thumbs/%D7%A1%D7%9C%D7%99%D7%97%D7%95%D7%AA-%D7%9C%D7%90%D7%AA%D7%A8-pkbpfvrstb70u08tvd9zsgqu77hcu6pqq8lycc8z8w.png" 
+                        alt="סליחות לאתר" 
+                        style={styles.image}
+                        loading="lazy"
+                    />
                 </div>
                 <div style={styles.slide}>
-                    <img src="https://chabadarielcampus.co.il/wordpress/wp-content/uploads/2022/09/%D7%A2%D7%A8%D7%91-%D7%A1%D7%9C%D7%99%D7%97%D7%95%D7%AA-%D7%91%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%99%D7%9D-1024x1024.jpeg" alt="ערב סליחות בירושלים" style={styles.image} />
+                    <img 
+                        src="https://chabadarielcampus.co.il/wordpress/wp-content/uploads/2022/09/%D7%A2%D7%A8%D7%91-%D7%A1%D7%9C%D7%99%D7%97%D7%95%D7%AA-%D7%91%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%99%D7%9D-1024x1024.jpeg" 
+                        alt="ערב סליחות בירושלים" 
+                        style={styles.image}
+                        loading="lazy"
+                    />
                 </div>
                 <div style={styles.slide}>
-                    <img src="https://kav.meorot.net/wp-content/uploads/elementor/thumbs/%D7%A1%D7%9C%D7%99%D7%97%D7%95%D7%AA-%D7%9C%D7%90%D7%AA%D7%A8-pkbpfvrstb70u08tvd9zsgqu77hcu6pqq8lycc8z8w.png" alt="סליחות לאתר" style={styles.image} />
+                    <img 
+                        src="https://kav.meorot.net/wp-content/uploads/elementor/thumbs/%D7%A1%D7%9C%D7%99%D7%97%D7%95%D7%AA-%D7%9C%D7%90%D7%AA%D7%A8-pkbpfvrstb70u08tvd9zsgqu77hcu6pqq8lycc8z8w.png" 
+                        alt="סליחות לאתר" 
+                        style={styles.image}
+                        loading="lazy"
+                    />
                 </div>
             </Slider>
         </div>
@@ -33,11 +48,14 @@ const FullWidthCarousel: React.FC = () => {
 
 const styles = {
     carouselContainer: {
-        width: '75%', // תפס את רוב רוחב העמוד
+        maxWidth: '75%', // תפס את רוב רוחב העמוד
         margin: '20px auto', // ממורכז עם ריווח
         borderRadius: '10px', // עגל פינות
         overflow: 'hidden', // מונע חפיפות
         boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // צל עדין
+        '@media (max-width: 768px)': {
+            maxWidth: '90%', // רוחב יותר קטן במסכים קטנים
+        },
     },
     slide: {
         display: 'flex', // סידור פנימי גמיש
