@@ -31,7 +31,7 @@ export const useAuthStore = create((set) => ({
 		if (!email || !password ) {
             
             alert('Please enter both username and password.');
-            return;
+            
         }	
 				
 			set({ isLoading: true, error: null });

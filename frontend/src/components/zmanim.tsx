@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getZmanimJson } from 'kosher-zmanim';
 
-
-
 interface Location {
   name: string;
   latitude: number;
@@ -18,6 +16,9 @@ const locations: Location[] = [
   { name: 'חיפה', latitude: 32.7940, longitude: 34.9896, timeZoneId: 'Asia/Jerusalem' },
   { name: 'לונדון', latitude: 51.5074, longitude: -0.1278, timeZoneId: 'Europe/London' },
 ];
+interface Zmanim {
+  zmanim?: Record<string, string>;
+}
 
 const Zmanim2: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -50,7 +51,8 @@ const Zmanim2: React.FC = () => {
         };
 
         const zmanimJson = await getZmanimJson(options);
-        setZmanim({ zmanim: zmanimJson.BasicZmanim });
+        setZmanim({ zmanim: zmanimJson.BasicZmanim as Record<string, string> });
+
         setError(null); // Clear errors
       } catch (err) {
         setError('שגיאה בקבלת זמני היום');
@@ -69,9 +71,33 @@ const Zmanim2: React.FC = () => {
     return <p>טוען זמני היום...</p>;
   }
 
+  // Translate zmanim keys to Hebrew
   const translateKeyToHebrew = (key: string): string => {
     const translations: Record<string, string> = {
-      // Add translations here
+      BeginAstronomicalTwilight: 'התחלת בין הערביים האסטרונומית',
+      AlosHashachar: 'עלות השחר',
+      Alos72: 'עלות השחר 72 דקות',
+      BeginNauticalTwilight: 'התחלת בין הערביים הימי',
+      BeginCivilTwilight: 'התחלת בין הערביים האזרחית',
+      SeaLevelSunrise: 'זריחה (רמת ים)',
+      Sunrise: 'זריחה',
+      SofZmanShmaMGA: 'סוף זמן שמע',
+      SofZmanShmaGRA: 'סוף זמן שמע גרא',
+      SofZmanTfilaMGA: 'סוף זמן תפילה (מג\'א)',
+      SofZmanTfilaGRA: 'סוף זמן תפילה (גרא)',
+      Chatzos: 'חצות',
+      SunTransit: 'מעבר השמש',
+      MinchaGedola: 'מנחה גדולה',
+      MinchaKetana: 'מנחה קטנה',
+      PlagHamincha: 'פלג המנחה',
+      CandleLighting: 'הדלקת נרות',
+      SeaLevelSunset: 'שקיעה (רמת ים)',
+      Sunset: 'שקיעה',
+      EndCivilTwilight: 'סוף בין הערביים האזרחית',
+      Tzais: 'צאת הכוכבים',
+      EndNauticalTwilight: 'סוף בין הערביים הימי',
+      Tzais72: 'צאת הכוכבים 72 דקות',
+      EndAstronomicalTwilight: 'סוף בין הערביים האסטרונומית',
     };
     return translations[key] || key;
   };
@@ -84,8 +110,6 @@ const Zmanim2: React.FC = () => {
       <div className="flex justify-center items-center mb-6">
         <div className="bg-blue-500 text-white text-xl font-bold rounded-full p-6 shadow-md ">
           השעה בתל אביב: {currentTime}
-
-          
         </div>
       </div>
 
@@ -122,7 +146,7 @@ const Zmanim2: React.FC = () => {
               key={key}
               className="mb-2 p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-500 transition duration-200 ease-in-out"
             >
-              <strong>{translateKeyToHebrew(key)}:</strong>{' '}
+              <strong>{translateKeyToHebrew(key)}:</strong> 
               {dateValue.toLocaleTimeString('he-IL', {
                 timeZone: selectedLocation.timeZoneId,
               })}
