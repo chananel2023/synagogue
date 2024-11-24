@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
-import Logo from "/Users/baruchyankvtz/Desktop/ti/channal2023/synagogue/frontend/src/assets/Logo.jpg";
+import Logo from '../assets/Logo.jpg';
+
 
 const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -9,7 +10,7 @@ const Navbar2: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    
+
   };
 
   return (
@@ -38,6 +39,15 @@ const Navbar2: React.FC = () => {
             aria-label="Zmanim"
           >
             זמני היום
+          </a>
+        </li>
+        <li>
+          <a
+            href="/private"
+            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
+            aria-label="Zmanim"
+          >
+            איזור אישי
           </a>
         </li>
         <li>
@@ -87,9 +97,8 @@ const Navbar2: React.FC = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`absolute xl:hidden top-24 left-0 w-full bg-white bg-opacity-50 flex flex-col items-center gap-6 font-semibold text-lg transform transition-transform ${
-          isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`absolute xl:hidden top-24 left-0 w-full bg-white bg-opacity-50 flex flex-col items-center gap-6 font-semibold text-lg transform transition-transform ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         style={{ transition: "transform 0.3s ease, opacity 0.3s ease" }}
       >
         <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
@@ -111,7 +120,7 @@ const Navbar2: React.FC = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={handleLogout}
-        
+
       >
         Log Out
       </motion.button>

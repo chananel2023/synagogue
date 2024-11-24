@@ -29,7 +29,6 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         height: '100vh',
-        backgroundColor: '#FAF3E0', // צבע חמים לרקע
         padding: '20px',
     },
     title: {

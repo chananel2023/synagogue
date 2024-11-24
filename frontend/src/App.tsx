@@ -2,7 +2,6 @@ import React from 'react';
 import './index.css';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
 import HomePage from './pages/homePage';
 import WelcomePage from './pages/firstpage';
 import Private from './pages/private';
@@ -16,7 +15,7 @@ import FloatingShape from './components/FloatingShape';
 import LoginPage from './pages/LoginPage';
 import AdminTfilot from './pagesAdmin/tfilotAdmin';
 import ZmanimPage from './pages/ZmanimPage';
-
+import NavbarAdmin from './pagesAdmin/deshbordAdmin'
 function App() {
   const routes = [
     { path: "/", element: <WelcomePage /> },
@@ -31,6 +30,8 @@ function App() {
     { path: "/contact", element: <Contact /> },
     { path: "/pay", element: <Pay /> },
     { path: "/tfilotAdmin", element: <AdminTfilot /> },
+    { path: "/deshbord", element: <NavbarAdmin /> },
+
   ];
 
   return (

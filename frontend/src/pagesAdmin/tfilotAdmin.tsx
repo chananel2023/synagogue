@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import NavbarAdmin from '../components/navBarAdmin'
 interface Tfila {
     _id: string;
     tfila: string;
@@ -80,7 +79,6 @@ const AdminTfilot = () => {
 
     return (
         <div>
-            <NavbarAdmin />
             <h2>ניהול תפילות - אדמין</h2>
 
             {message && <div>{message}</div>}

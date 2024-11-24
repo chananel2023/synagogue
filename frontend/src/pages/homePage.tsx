@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import FullWidthCarousel from '../components/karusela';
-import Navbar from '../components/navbar';
-import UserMessagesComponent from '../components/UserMessagesComponent';
 import TfilotList from '../components/TfilotList';
-
 import Navbar2 from '../components/Navbar2';
 
 
@@ -20,7 +17,6 @@ const HomePage: React.FC = () => {
                     <TfilotList/>
                 </div>
                 <div>
-                <UserMessagesComponent/>
                
                 </div>
                 

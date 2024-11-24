@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
-import NavbarAdmin from '../components/navBarAdmin'
 // הגדרת סוגים להודעה
 interface Message {
     _id: string;
@@ -150,7 +149,6 @@ const MessagesComponent: React.FC = () => {
 
     return (
         <div>
-            <NavbarAdmin />
             <div style={containerStyle}>
                 <h1 style={titleStyle}>Admin Messages</h1>
                 <ul style={messageListStyle}>

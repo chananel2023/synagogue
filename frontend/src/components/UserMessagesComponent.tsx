@@ -5,8 +5,6 @@ import axios from 'axios';
 interface Message {
     _id: string;
     text: string;
-    startTime: string;
-    endTime: string;
     isActive: boolean;
 }
 
@@ -31,29 +29,87 @@ const UserMessagesComponent: React.FC = () => {
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
-            <h2 className="text-2xl font-bold text-center mb-4 text-gray-800">הודעות</h2>
+        <div style={styles.container}>
+            <h2 style={styles.title}>עדכונים חמים</h2>
             {messages.length === 0 ? (
-                <p className="text-center text-gray-500">לא נמצאו הודעות</p>
+                <p style={styles.noMessages}>לא נמצאו הודעות</p>
             ) : (
-                <ul className="space-y-4">
+                <div className="marquee-container">
                     {messages.map((message) => (
-                        <li
+                        <div
                             key={message._id}
-                            className={`p-4 border rounded-md ${
-                                message.isActive ? 'bg-green-100 border-green-300' : 'bg-gray-100 border-gray-300'
-                            }`}
+                            style={{
+                                ...styles.messageBox,
+                                backgroundColor: message.isActive ? '#D1F7D4' : '#E2E8F0',
+                            }}
                         >
-                            <p className="text-lg font-medium text-gray-800">{message.text}</p>
-                            <p className="text-sm text-gray-600">
-                                <strong>מ: </strong>{message.startTime} <strong>עד: </strong>{message.endTime}
-                            </p>
-                        </li>
+                            <p style={styles.messageText}>{message.text}</p>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );
 };
+
+// סגנונות CSS בתוכה קובץ React
+const styles: { [key: string]: React.CSSProperties } = {
+    container: {
+        position: 'relative',
+        overflow: 'hidden',
+        maxWidth: '100%',
+        backgroundColor: 'white',
+        borderRadius: '10px',
+        padding: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        paddingTop: '0px', // טופ פדינג עליון
+    },
+    title: {
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: '20px',
+        color: '#2D3748',
+    },
+    noMessages: {
+        textAlign: 'center',
+        color: '#A0AEC0',
+    },
+    messageBox: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        borderRadius: '5px',
+        marginRight: '20px',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+        whiteSpace: 'nowrap',
+        minWidth: '200px', // הגבלת רוחב מינימלי
+    },
+    messageText: {
+        fontSize: '1.2rem',
+        fontWeight: '500',
+        color: '#2D3748',
+    },
+};
+
+// הכנסת אנימציה באמצעות CSS רגיל במקום JavaScript
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = `
+    @keyframes marquee {
+        0% {
+            transform: translateX(-100%);
+        }
+        100% {
+            transform: translateX(100%);
+        }
+    }
+    .marquee-container {
+        display: flex;
+        flex-direction: row;
+        animation: marquee 10s linear infinite;
+    }
+`;
+document.head.appendChild(styleSheet);
 
 export default UserMessagesComponent;
