@@ -15,7 +15,7 @@ function Navbar() {
                 margin: 0,
                 padding: 0
             }}>
-                <h2></h2>
+                <h2>ל</h2>
                 <li style={{ marginRight: '1rem' }}>
                     <Link to="/login" style={linkStyle}>יציאה</Link>
                 </li>
