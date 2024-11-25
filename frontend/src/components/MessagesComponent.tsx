@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
+
 // הגדרת סוגים להודעה
 interface Message {
     _id: string;
@@ -53,10 +54,8 @@ const MessagesComponent: React.FC = () => {
                 endTime: end.toISOString(),
             };
 
-            const response = await axios.post('http://localhost:5007/api/messages', newMessage, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+            await axios.post('http://localhost:5007/api/messages', newMessage, {
+                headers: { 'Content-Type': 'application/json' },
             });
 
             fetchMessages();
@@ -77,116 +76,143 @@ const MessagesComponent: React.FC = () => {
         }
     };
 
-    // הגדרת העיצוב של הדף
-    const containerStyle: React.CSSProperties = {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        width: '100%',
-        maxWidth: '600px',
-        margin: '0 auto', // מרכז את הרכיב
-    };
-
-    const titleStyle: React.CSSProperties = {
-        textAlign: 'center',
-        marginBottom: '20px',
-    };
-
-    const messageListStyle: React.CSSProperties = {
-        listStyleType: 'none',
-        padding: '0',
-        margin: '0',
-        width: '100%',
-    };
-
-    const messageItemStyle: React.CSSProperties = {
-        padding: '10px',
-        borderBottom: '1px solid #ddd',
-    };
-
-    const deleteButtonStyle: React.CSSProperties = {
-        backgroundColor: '#ff4d4d',
-        color: 'white',
-        border: 'none',
-        padding: '5px 10px',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        marginTop: '10px',
-    };
-
-    const formContainerStyle: React.CSSProperties = {
-        marginTop: '30px',
-        width: '100%',
-    };
-
-    const subtitleStyle: React.CSSProperties = {
-        textAlign: 'center',
-        marginBottom: '20px',
-    };
-
-    const inputFieldStyle: React.CSSProperties = {
-        width: '100%',
-        padding: '10px',
-        margin: '10px 0',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-    };
-
-    const submitButtonStyle: React.CSSProperties = {
-        width: '100%',
-        padding: '10px',
-        backgroundColor: '#4CAF50',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-    };
-
     return (
-        <div>
-            <div style={containerStyle}>
-                <h1 style={titleStyle}>Admin Messages</h1>
-                <ul style={messageListStyle}>
-                    {messages.map(message => (
-                        <li key={message._id} style={messageItemStyle}>
-                            <strong>Message:</strong> {message.text} <br />
-                            <strong>Start Time:</strong> {new Date(message.startTime).toLocaleString()} <br />
-                            <strong>End Time:</strong> {new Date(message.endTime).toLocaleString()}
-                            <button onClick={() => deleteMessage(message._id)} style={deleteButtonStyle}>Delete</button>
-                        </li>
-                    ))}
-                </ul>
-                <div style={formContainerStyle}>
-                    <h2 style={subtitleStyle}>Add a New Message</h2>
-                    <input
-                        type="text"
+        <div style={styles.pageContainer}>
+            <h1 style={styles.title}>ניהול הודעות</h1>
+            <div style={styles.contentContainer}>
+                <div style={styles.messageBox}>
+                    <h1 style={styles.subtitle}>הודעות קיימות</h1>
+                    <ul style={styles.messageList}>
+                        {messages.map((message) => (
+                            <li key={message._id} style={styles.messageItem}>
+                                <p>
+                                    <strong>הודעה:</strong> {message.text}
+                                </p>
+                                <p>
+                                    <strong>תחילת תוקף:</strong>{' '}
+                                    {new Date(message.startTime).toLocaleString()}
+                                </p>
+                                <p>
+                                    <strong>סיום תוקף:</strong>{' '}
+                                    {new Date(message.endTime).toLocaleString()}
+                                </p>
+                                <button
+                                    onClick={() => deleteMessage(message._id)}
+                                    style={styles.deleteButton}
+                                >
+                                    מחיקה
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div style={styles.formBox}>
+                    <h2 style={styles.subtitle}>הוסף הודעה חדשה</h2>
+                    <textarea
                         value={text}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
-                        placeholder="Message text"
-                        style={inputFieldStyle}
+                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value)}
+                        placeholder="תוכן ההודעה"
+                        style={styles.textarea}
                     />
                     <input
                         type="datetime-local"
                         value={startTime}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setStartTime(e.target.value)}
-                        style={inputFieldStyle}
+                        style={styles.input}
                     />
                     <input
                         type="datetime-local"
                         value={endTime}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setEndTime(e.target.value)}
-                        style={inputFieldStyle}
+                        style={styles.input}
                     />
-                    <button onClick={addMessage} style={submitButtonStyle}>Add Message</button>
+                    <button onClick={addMessage} style={styles.submitButton}>
+                        הוסף הודעה
+                    </button>
                 </div>
             </div>
         </div>
     );
+};
+
+const styles = {
+    pageContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '20px',
+        minHeight: '100vh',
+    } as React.CSSProperties,
+    title: {
+        marginBottom: '20px',
+        color: '#333',
+        fontSize: 50
+    } as React.CSSProperties,
+    contentContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '90%',
+        maxWidth: '1200px',
+    } as React.CSSProperties,
+    messageBox: {
+        flex: 1,
+        borderRadius: '8px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        marginRight: '10px',
+        padding: '20px',
+    } as React.CSSProperties,
+    formBox: {
+        flex: 1,
+        borderRadius: '8px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        padding: '20px',
+    } as React.CSSProperties,
+    subtitle: {
+        marginBottom: '10px',
+        color: '#555',
+    } as React.CSSProperties,
+    messageList: {
+        listStyle: 'none',
+        padding: '0',
+        margin: '0',
+    } as React.CSSProperties,
+    messageItem: {
+        borderBottom: '1px solid #eee',
+        padding: '10px 0',
+    } as React.CSSProperties,
+    deleteButton: {
+        marginTop: '10px',
+        backgroundColor: '#e74c3c',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '8px 12px',
+        cursor: 'pointer',
+    } as React.CSSProperties,
+    textarea: {
+        width: '100%',
+        height: '100px',
+        marginBottom: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        padding: '10px',
+    } as React.CSSProperties,
+    input: {
+        width: '100%',
+        marginBottom: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        padding: '10px',
+    } as React.CSSProperties,
+    submitButton: {
+        width: '100%',
+        backgroundColor: '#3498db',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+        padding: '10px',
+        cursor: 'pointer',
+    } as React.CSSProperties,
 };
 
 export default MessagesComponent;
