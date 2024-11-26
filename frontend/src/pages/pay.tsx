@@ -2,8 +2,9 @@
 import React from 'react';
 
 const Pay: React.FC = () => {
-    console.log('Pay');
-    return null;
+    return(
+        <div>Pay</div>
+    )
 };
 
 export default Pay;
