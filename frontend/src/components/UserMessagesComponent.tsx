@@ -10,7 +10,6 @@ interface Message {
 
 const UserMessagesComponent: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]); // מצב ראשוני כ-מערך ריק
-
     useEffect(() => {
         fetchMessages();
     }, []);

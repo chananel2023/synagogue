@@ -6,7 +6,6 @@ import HomePage from './pages/homePage';
 import WelcomePage from './pages/firstpage';
 import Private from './pages/private';
 import Pay from './pages/pay';
-import Contact from './pages/contact&about';
 import PayAdmin from './pagesAdmin/payAdmin';
 import MessagesComponent from './components/MessagesComponent';
 import SignUpPage from './pages/SignUpPage';
@@ -16,6 +15,8 @@ import LoginPage from './pages/LoginPage';
 import AdminTfilot from './pagesAdmin/tfilotAdmin';
 import ZmanimPage from './pages/ZmanimPage';
 import NavbarAdmin from './pagesAdmin/deshbordAdmin'
+import AboutAndContact from './pages/contact&about'
+import Navbar2 from './components/Navbar2';
 function App() {
   const routes = [
     { path: "/", element: <WelcomePage /> },
@@ -27,7 +28,7 @@ function App() {
     { path: "/HomePage", element: <HomePage /> },
     { path: "/zmanim", element: <ZmanimPage /> },
     { path: "/private", element: <Private /> },
-    { path: "/contact", element: <Contact /> },
+    { path: "/contact", element: <AboutAndContact /> },
     { path: "/pay", element: <Pay /> },
     { path: "/tfilotAdmin", element: <AdminTfilot /> },
     { path: "/deshbord", element: <NavbarAdmin /> },
@@ -37,6 +38,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-cyan-300 via-cyan-200 to-sky-900 flex items-center justify-center relative overflow-hidden">
+        <Navbar2 />
         <>
           <FloatingShape color="bg-yellow-400" size="w-64 h-64" top="-5%" left="10%" delay={0} />
           <FloatingShape color="bg-yellow-400" size="w-48 h-48" top="70%" left="80%" delay={0} />
@@ -48,7 +50,7 @@ function App() {
           ))}
         </Routes>
       </div>
-    </Router>
+    </Router >
   );
 }
 
