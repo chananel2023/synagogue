@@ -89,30 +89,5 @@ const Carousel: React.FC = () => {
   );
 };
 
-<<<<<<< HEAD
-const styles = {
-    carouselContainer: {
-        maxWidth: '75%', // תפס את רוב רוחב העמוד
-        margin: '20px auto', // ממורכז עם ריווח
-        borderRadius: '10px', // עגל פינות
-        overflow: 'hidden', // מונע חפיפות
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)', // צל עדין
-        '@media (max-width: 768px)': {
-            maxWidth: '90%', // רוחב יותר קטן במסכים קטנים
-        },
-    },
-    slide: {
-        display: 'flex', // סידור פנימי גמיש
-        justifyContent: 'center', // מרכז את התמונה
-        alignItems: 'center', // מרכז את התמונה אנכית
-    },
-    image: {
-        width: '100%', // תמונה תופסת את כל רוחב הקונטיינר
-        borderRadius: '10px', // עגל פינות
-    },
-};
 
-export default FullWidthCarousel;
-=======
 export default Carousel;
->>>>>>> f103e9eec91d901434614e9402052275a541bc40

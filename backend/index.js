@@ -25,14 +25,9 @@ app.use(cors({
 }));
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messagesRoutes);
-<<<<<<< HEAD
-app.use('/api/tfilot', tfilotRoutes); 
-app.use('/api/lessons', shiurimRouter); // מחבר את הראוטר לנתיב /api
-=======
 app.use('/api/tfilot', tfilotRoutes);
-app.use('/api/slides', slideRoutes); 
->>>>>>> f103e9eec91d901434614e9402052275a541bc40
-
+app.use('/api/lessons', shiurimRouter); // מחבר את הראוטר לנתיב /api
+app.use('/api/slides', slideRoutes);
 
 app.listen(PORT, () => {
     connectDB();
