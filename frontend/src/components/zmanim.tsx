@@ -16,34 +16,32 @@ const locations: Location[] = [
   { name: 'חיפה', latitude: 32.7940, longitude: 34.9896, timeZoneId: 'Asia/Jerusalem' },
   { name: 'לונדון', latitude: 51.5074, longitude: -0.1278, timeZoneId: 'Europe/London' },
 ];
-interface Zmanim {
-  zmanim?: Record<string, string>;
-}
 
 const Zmanim2: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<Location>(locations[0]);
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [zmanim, setZmanim] = useState<{ zmanim?: Record<string, string> } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Update current time in Tel Aviv
+  // Update current time for the selected location
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date().toLocaleTimeString('he-IL', {
-        timeZone: 'Asia/Jerusalem',
+        timeZone: selectedLocation.timeZoneId,
       });
       setCurrentTime(now);
     }, 1000);
 
-    return () => clearInterval(interval); // Cleanup interval on component unmount
-  }, []);
+    return () => clearInterval(interval);
+  }, [selectedLocation]);
 
-  // Fetch Zmanim for the selected location
+  // Fetch Zmanim for the selected location and date
   useEffect(() => {
     const fetchZmanim = async () => {
       try {
         const options = {
-          date: new Date(),
+          date: new Date(selectedDate),
           latitude: selectedLocation.latitude,
           longitude: selectedLocation.longitude,
           timeZoneId: selectedLocation.timeZoneId,
@@ -61,7 +59,7 @@ const Zmanim2: React.FC = () => {
     };
 
     fetchZmanim();
-  }, [selectedLocation]);
+  }, [selectedLocation, selectedDate]);
 
   if (error) {
     return <p className="text-red-500">{error}</p>;
@@ -76,28 +74,8 @@ const Zmanim2: React.FC = () => {
     const translations: Record<string, string> = {
       BeginAstronomicalTwilight: 'התחלת בין הערביים האסטרונומית',
       AlosHashachar: 'עלות השחר',
-      Alos72: 'עלות השחר 72 דקות',
-      BeginNauticalTwilight: 'התחלת בין הערביים הימי',
-      BeginCivilTwilight: 'התחלת בין הערביים האזרחית',
-      SeaLevelSunrise: 'זריחה (רמת ים)',
       Sunrise: 'זריחה',
-      SofZmanShmaMGA: 'סוף זמן שמע',
-      SofZmanShmaGRA: 'סוף זמן שמע גרא',
-      SofZmanTfilaMGA: 'סוף זמן תפילה (מג\'א)',
-      SofZmanTfilaGRA: 'סוף זמן תפילה (גרא)',
-      Chatzos: 'חצות',
-      SunTransit: 'מעבר השמש',
-      MinchaGedola: 'מנחה גדולה',
-      MinchaKetana: 'מנחה קטנה',
-      PlagHamincha: 'פלג המנחה',
-      CandleLighting: 'הדלקת נרות',
-      SeaLevelSunset: 'שקיעה (רמת ים)',
-      Sunset: 'שקיעה',
-      EndCivilTwilight: 'סוף בין הערביים האזרחית',
-      Tzais: 'צאת הכוכבים',
-      EndNauticalTwilight: 'סוף בין הערביים הימי',
-      Tzais72: 'צאת הכוכבים 72 דקות',
-      EndAstronomicalTwilight: 'סוף בין הערביים האסטרונומית',
+      // Add more translations as needed
     };
     return translations[key] || key;
   };
@@ -106,10 +84,10 @@ const Zmanim2: React.FC = () => {
     <div className="p-6 max-w-lg mx-auto shadow-md rounded-lg">
       <h1 className="text-2xl font-bold text-center mb-4">זמני היום</h1>
 
-      {/* Current time in Tel Aviv */}
+      {/* Current time */}
       <div className="flex justify-center items-center mb-6">
-        <div className="bg-blue-500 text-white text-xl font-bold rounded-full p-6 shadow-md ">
-          השעה בתל אביב: {currentTime}
+        <div className="bg-blue-500 text-white text-xl font-bold rounded-full p-6 shadow-md">
+          השעה ב{selectedLocation.name}: {currentTime}
         </div>
       </div>
 
@@ -133,6 +111,17 @@ const Zmanim2: React.FC = () => {
         </select>
       </div>
 
+      {/* Date picker */}
+      <div className="mb-6">
+        <label className="block mb-2 text-center font-semibold">בחר תאריך:</label>
+        <input
+          type="date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+
       {/* Zmanim list */}
       <ul className="list-none pl-0 text-right rtl">
         {Object.entries(zmanim.zmanim).map(([key, value]) => {
@@ -146,7 +135,11 @@ const Zmanim2: React.FC = () => {
               key={key}
               className="mb-2 p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-500 transition duration-200 ease-in-out"
             >
+<<<<<<< HEAD
               <strong>{translateKeyToHebrew(key)}:</strong>
+=======
+              <strong>{translateKeyToHebrew(key)}:</strong>{' '}
+>>>>>>> f103e9eec91d901434614e9402052275a541bc40
               {dateValue.toLocaleTimeString('he-IL', {
                 timeZone: selectedLocation.timeZoneId,
               })}
