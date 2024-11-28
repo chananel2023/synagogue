@@ -15,8 +15,14 @@ const TfilotList: React.FC = () => {
     const fetchTfilot = async () => {
         setLoading(true);
         setError(null); // Reset error
+
+
+
+        
         try {
             const response = await axios.get<Tfila[]>('http://localhost:5007/api/tfilot');
+          //  const sortedTfilot = response.data.tfila.sort((a, b) => a - b);
+
             setTfilot(response.data);
         } catch (err) {
             setError('שגיאה בטעינת התפילות');

@@ -10,7 +10,6 @@ interface Message {
 
 const UserMessagesComponent: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]); // מצב ראשוני כ-מערך ריק
-
     useEffect(() => {
         fetchMessages();
     }, []);
@@ -57,36 +56,39 @@ const styles: { [key: string]: React.CSSProperties } = {
     container: {
         position: 'relative',
         overflow: 'hidden',
-        maxWidth: '100%',
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        padding: '20px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        paddingTop: '0px', // טופ פדינג עליון
+        width: '100vw', // פריסה על כל רוחב העמוד
+        height: '120x', // עובי צר
+        padding: '0',
+        margin: '0',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     },
     title: {
-        fontSize: '1.5rem',
+        fontSize: '1rem',
         fontWeight: 'bold',
         textAlign: 'center',
-        marginBottom: '20px',
+        padding: '5px 0',
         color: '#2D3748',
+        margin: '0',
     },
     noMessages: {
         textAlign: 'center',
         color: '#A0AEC0',
+        fontSize: '0.9rem',
     },
     messageBox: {
         display: 'flex',
         alignItems: 'center',
-        padding: '10px 20px',
+        justifyContent: 'center',
+        padding: '5px 20px',
         borderRadius: '5px',
         marginRight: '20px',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         whiteSpace: 'nowrap',
-        minWidth: '200px', // הגבלת רוחב מינימלי
+        minWidth: '200px',
+        height: '80%', // תופס את כל הגובה של השורה
+        backgroundColor: '#D1F7D4',
     },
     messageText: {
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         fontWeight: '500',
         color: '#2D3748',
     },
@@ -107,7 +109,11 @@ styleSheet.innerText = `
     .marquee-container {
         display: flex;
         flex-direction: row;
-        animation: marquee 10s linear infinite;
+        animation: marquee 20s linear infinite;
+        position: relative;
+        width: 100vw; /* פריסה על כל רוחב המסך */
+        height: 100%; /* מתיישר לגובה הרכיב */
+        padding-top: 0; /* טופ פדינג */
     }
 `;
 document.head.appendChild(styleSheet);

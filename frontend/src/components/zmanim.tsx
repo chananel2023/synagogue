@@ -81,7 +81,7 @@ const Zmanim2: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+    <div className="p-6 max-w-lg mx-auto shadow-md rounded-lg">
       <h1 className="text-2xl font-bold text-center mb-4">זמני היום</h1>
 
       {/* Current time */}
