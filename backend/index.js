@@ -4,6 +4,7 @@ import { connectDB } from './db/connectDB.js';
 import authRoutes from './routes/auth.route.js';
 import messagesRoutes from './routes/message.route.js';
 import tfilotRoutes from './routes/tfilot.route.js';
+import shiurimRouter from './routes/shiurim.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
 dotenv.config();
@@ -21,6 +22,8 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/tfilot', tfilotRoutes); 
+app.use('/api/lessons', shiurimRouter); // מחבר את הראוטר לנתיב /api
+
 
 app.listen(PORT, () => {
     connectDB();

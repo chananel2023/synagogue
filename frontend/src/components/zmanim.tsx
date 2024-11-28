@@ -146,7 +146,7 @@ const Zmanim2: React.FC = () => {
               key={key}
               className="mb-2 p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-500 transition duration-200 ease-in-out"
             >
-              <strong>{translateKeyToHebrew(key)}:</strong> 
+              <strong>{translateKeyToHebrew(key)}:</strong>
               {dateValue.toLocaleTimeString('he-IL', {
                 timeZone: selectedLocation.timeZoneId,
               })}
@@ -159,3 +159,4 @@ const Zmanim2: React.FC = () => {
 };
 
 export default Zmanim2;
+

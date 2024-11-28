@@ -16,7 +16,10 @@ import AdminTfilot from './pagesAdmin/tfilotAdmin';
 import ZmanimPage from './pages/ZmanimPage';
 import NavbarAdmin from './pagesAdmin/deshbordAdmin'
 import AboutAndContact from './pages/contact&about'
-import Navbar2 from './components/Navbar2';
+import AdminLessons from './pagesAdmin/shiurimAdmun'
+import ShiurimHome from './pages/user.shiurim'
+//import { ChakraProvider } from '@chakra-ui/react'
+
 function App() {
   const routes = [
     { path: "/", element: <WelcomePage /> },
@@ -32,13 +35,17 @@ function App() {
     { path: "/pay", element: <Pay /> },
     { path: "/tfilotAdmin", element: <AdminTfilot /> },
     { path: "/deshbord", element: <NavbarAdmin /> },
+    { path: "/Lessons", element: <AdminLessons /> },
+    { path: "/shiurim", element: <ShiurimHome /> },
 
   ];
 
   return (
+   // <ChakraProvider>
+ 
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-cyan-300 via-cyan-200 to-sky-900 flex items-center justify-center relative overflow-hidden">
-        <Navbar2 />
+        
         <>
           <FloatingShape color="bg-yellow-400" size="w-64 h-64" top="-5%" left="10%" delay={0} />
           <FloatingShape color="bg-yellow-400" size="w-48 h-48" top="70%" left="80%" delay={0} />
@@ -50,7 +57,9 @@ function App() {
           ))}
         </Routes>
       </div>
-    </Router >
+      </Router >
+      
+    //  </ChakraProvider>
   );
 }
 

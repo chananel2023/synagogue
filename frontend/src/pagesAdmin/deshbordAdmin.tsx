@@ -1,15 +1,23 @@
 import React, { useState, CSSProperties } from 'react';
+import { useNavigate } from 'react-router-dom'; // שימוש ב- useNavigate מ-react-router-dom
 
 function NavbarAdmin() {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+    const navigate = useNavigate();
 
     const handleMouseEnter = (index: number) => setHoverIndex(index);
     const handleMouseLeave = () => setHoverIndex(null);
 
+    const handleNavigate = (link: string) => {
+        navigate(link); // ניווט לכתובת הקישור
+    };
+
     return (
+        
         <div style={dashboardContainer}>
             {menuItems.map((item, index) => (
                 <div
+
                     key={index}
                     style={{
                         ...dashboardItem,
@@ -17,8 +25,9 @@ function NavbarAdmin() {
                     }}
                     onMouseEnter={() => handleMouseEnter(index)}
                     onMouseLeave={handleMouseLeave}
+                    onClick={() => handleNavigate(item.link)} // ניווט בעת לחיצה
                 >
-                    <a href={item.link} style={linkStyle}>{item.label}</a>
+                    <span style={linkStyle}>{item.label}</span>
                 </div>
             ))}
         </div>
@@ -31,6 +40,8 @@ const menuItems: { label: string; link: string }[] = [
     { label: 'תשלומים', link: '/payAdmin' },
     { label: 'הגדרת זמני תפילה', link: '/tfilotAdmin' },
     { label: 'עדכונים חמים', link: '/messageAdmin' },
+    { label: 'הגדרת שיעורים', link: '/Lessons' },
+
 ];
 
 // עיצוב הדשבורד הכללי
@@ -46,7 +57,7 @@ const dashboardContainer: CSSProperties = {
 
 // עיצוב של כל כפתור/קובייה
 const dashboardItem: CSSProperties = {
-    backgroundColor: '#2D3748', // צבע כהה
+    backgroundColor: '#63B3ED', // כחול בהיר
     color: '#E2E8F0', // צבע טקסט בהיר
     width: '200px',
     height: '200px',
@@ -68,7 +79,7 @@ const dashboardItem: CSSProperties = {
 const dashboardItemHover: CSSProperties = {
     transform: 'translateY(-5px)',
     boxShadow: '0 12px 20px rgba(0, 0, 0, 0.3)',
-    backgroundColor: '#4A5568', // צבע רקע כהה יותר
+    backgroundColor: '#4299E1', // כחול מעט כהה יותר
 };
 
 // עיצוב הטקסט בתוך הקישורים
