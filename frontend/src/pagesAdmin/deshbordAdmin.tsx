@@ -41,6 +41,7 @@ const menuItems: { label: string; link: string }[] = [
     { label: 'הגדרת זמני תפילה', link: '/tfilotAdmin' },
     { label: 'עדכונים חמים', link: '/messageAdmin' },
     { label: 'הגדרת שיעורים', link: '/Lessons' },
+    { label: 'עדכון תמונות קרוסלה', link: '/UpdataAdminCarousel' },
 
 ];
 
