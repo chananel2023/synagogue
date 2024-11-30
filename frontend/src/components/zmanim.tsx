@@ -15,6 +15,17 @@ const locations: Location[] = [
   { name: 'ניו יורק', latitude: 40.7128, longitude: -74.0060, timeZoneId: 'America/New_York' },
   { name: 'חיפה', latitude: 32.7940, longitude: 34.9896, timeZoneId: 'Asia/Jerusalem' },
   { name: 'לונדון', latitude: 51.5074, longitude: -0.1278, timeZoneId: 'Europe/London' },
+  { name: 'פריז', latitude: 48.8566, longitude: 2.3522, timeZoneId: 'Europe/Paris' },
+  { name: 'ברלין', latitude: 52.5200, longitude: 13.4050, timeZoneId: 'Europe/Berlin' },
+  { name: 'טוקיו', latitude: 35.6895, longitude: 139.6917, timeZoneId: 'Asia/Tokyo' },
+  { name: 'מוסקבה', latitude: 55.7558, longitude: 37.6173, timeZoneId: 'Europe/Moscow' },
+  { name: 'בייג׳ינג', latitude: 39.9042, longitude: 116.4074, timeZoneId: 'Asia/Shanghai' },
+  { name: 'סידני', latitude: -33.8688, longitude: 151.2093, timeZoneId: 'Australia/Sydney' },
+  { name: 'ריו דה ז׳ניירו', latitude: -22.9068, longitude: -43.1729, timeZoneId: 'America/Sao_Paulo' },
+  { name: 'מדריד', latitude: 40.4168, longitude: -3.7038, timeZoneId: 'Europe/Madrid' },
+  { name: 'מומבאי', latitude: 19.0760, longitude: 72.8777, timeZoneId: 'Asia/Kolkata' },
+  { name: 'קייפטאון', latitude: -33.9249, longitude: 18.4241, timeZoneId: 'Africa/Johannesburg' }
+
 ];
 
 const Zmanim2: React.FC = () => {
@@ -69,13 +80,33 @@ const Zmanim2: React.FC = () => {
     return <p>טוען זמני היום...</p>;
   }
 
-  // Translate zmanim keys to Hebrew
+  
   const translateKeyToHebrew = (key: string): string => {
     const translations: Record<string, string> = {
       BeginAstronomicalTwilight: 'התחלת בין הערביים האסטרונומית',
       AlosHashachar: 'עלות השחר',
       Sunrise: 'זריחה',
-      // Add more translations as needed
+      Alos72: 'עלות השחר (72 דקות)',
+      BeginNauticalTwilight: 'התחלת בין הערביים הימית',
+      BeginCivilTwilight: 'התחלת בין הערביים האזרחית',
+      SeaLevelSunrise: 'זריחה בגובה פני הים',
+      SofZmanShmaMGA: 'סוף זמן קריאת שמע (מ"ג א)',
+      SofZmanShmaGRA: 'סוף זמן קריאת שמע (גר"א)',
+      SofZmanTfilaMGA: 'סוף זמן תפילה (מ"ג א)',
+      SofZmanTfilaGRA: 'סוף זמן תפילה (גר"א)',
+      Chatzos: 'חצות היום',
+      SunTransit: 'מעבר השמש',
+      MinchaGedola: 'מנחה גדולה',
+      MinchaKetana: 'מנחה קטנה',
+      PlagHamincha: 'פלג המנחה',
+      CandleLighting: 'הדלקת נרות',
+      SeaLevelSunset: 'שקיעה בגובה פני הים',
+      Sunset: 'שקיעה',
+      EndCivilTwilight: 'סיום בין הערביים האזרחית',
+      Tzais: 'צאת הכוכבים',
+      EndNauticalTwilight: 'סיום בין הערביים הימית',
+      Tzais72: 'צאת הכוכבים (72 דקות)',
+      EndAstronomicalTwilight: 'סיום בין הערביים האסטרונומית'
     };
     return translations[key] || key;
   };
