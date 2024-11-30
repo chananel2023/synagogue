@@ -1,5 +1,6 @@
 import React from 'react';
 import UserMessagesComponent from '../components/UserMessagesComponent';
+import Footer from '../components/footer'
 
 const Private: React.FC = () => {
     console.log('Private');
@@ -7,6 +8,7 @@ const Private: React.FC = () => {
         <div style={styles.privateContainer}>
             <h1 style={styles.privateTitle}>איזור אישי</h1>
             <UserMessagesComponent />
+            <Footer/>
         </div>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import FullWidthCarousel from '../components/karusela';
 import TfilotList from '../components/TfilotList';
 import Navbar2 from '../components/Navbar2';
+import Footer from '../components/footer'
 
 const videoIds = [
     "TFFnwIS0_pk",
@@ -39,14 +40,14 @@ const HomePage: React.FC = () => {
                     ))}
                 </div>
             </div>
+            <Footer /> 
         </div>
     );
 };
 
 const styles = {
     contentContainer: {
-        width: '100%',
-        maxWidth: '1200px',
+        width: '100%',  // רוחב מלא
         display: 'flex',
         flexDirection: 'column' as 'column',
         alignItems: 'center',
@@ -60,7 +61,7 @@ const styles = {
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
         gap: '20px',
-        width: '100%',
+        width: '100%',  // רוחב מלא
     },
     card: {
         backgroundColor: '#fff',

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Footer from '../components/footer'
+
 import axios from "axios";
 import {
     Typography,
@@ -39,6 +41,7 @@ const ShiurimHome: React.FC = () => {
     };
 
     return (
+    <div>
         <Box sx={{ padding: 4 }}>
             <Typography variant="h4" align="center" gutterBottom>
                 זמני שיעורים
@@ -69,7 +72,9 @@ const ShiurimHome: React.FC = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </Box>
+            </Box>
+            <Footer />
+        </div>
     );
 };
 

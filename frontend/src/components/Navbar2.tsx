@@ -66,6 +66,7 @@ const Navbar2: React.FC = () => {
             שיעורים
           </a>
         </li>
+        
         <li>
           <a
             href="/pay"
@@ -73,6 +74,15 @@ const Navbar2: React.FC = () => {
             aria-label="Payments"
           >
             תשלומים
+          </a>
+        </li>
+        <li>
+          <a
+            href="/private"
+            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
+            aria-label="Payments"
+          >
+            איזור אישי
           </a>
         </li>
         <li>
