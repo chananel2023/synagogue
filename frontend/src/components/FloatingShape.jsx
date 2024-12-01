@@ -22,7 +22,7 @@ const FloatingShape = ({ color, size, top, left, delay }) => {
 	);
 };
 
-// Define PropTypes for FloatingShape
+
 FloatingShape.propTypes = {
 	color: PropTypes.string.isRequired,
 	size: PropTypes.string.isRequired,

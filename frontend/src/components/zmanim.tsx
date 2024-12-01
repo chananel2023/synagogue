@@ -1,21 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getZmanimJson } from 'kosher-zmanim';
+import locations from '../data/locations.json';
+import TranslateKeyToHebrew from './TranslateKeyToHebrew'
+import Location from '../models/Location'
 
-interface Location {
-  name: string;
-  latitude: number;
-  longitude: number;
-  timeZoneId: string;
-  elevation?: number;
-}
-
-const locations: Location[] = [
-  { name: 'תל אביב', latitude: 32.0853, longitude: 34.7818, timeZoneId: 'Asia/Jerusalem' },
-  { name: 'ירושלים', latitude: 31.7683, longitude: 35.2137, timeZoneId: 'Asia/Jerusalem' },
-  { name: 'ניו יורק', latitude: 40.7128, longitude: -74.0060, timeZoneId: 'America/New_York' },
-  { name: 'חיפה', latitude: 32.7940, longitude: 34.9896, timeZoneId: 'Asia/Jerusalem' },
-  { name: 'לונדון', latitude: 51.5074, longitude: -0.1278, timeZoneId: 'Europe/London' },
-];
 
 const Zmanim2: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -69,16 +57,8 @@ const Zmanim2: React.FC = () => {
     return <p>טוען זמני היום...</p>;
   }
 
-  // Translate zmanim keys to Hebrew
-  const translateKeyToHebrew = (key: string): string => {
-    const translations: Record<string, string> = {
-      BeginAstronomicalTwilight: 'התחלת בין הערביים האסטרונומית',
-      AlosHashachar: 'עלות השחר',
-      Sunrise: 'זריחה',
-      // Add more translations as needed
-    };
-    return translations[key] || key;
-  };
+  
+  
 
   return (
     <div className="p-6 max-w-lg mx-auto shadow-md rounded-lg">
@@ -111,7 +91,8 @@ const Zmanim2: React.FC = () => {
         </select>
       </div>
 
-      {/* Date picker */}
+     
+      
       <div className="mb-6">
         <label className="block mb-2 text-center font-semibold">בחר תאריך:</label>
         <input
@@ -135,7 +116,7 @@ const Zmanim2: React.FC = () => {
               key={key}
               className="mb-2 p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-500 transition duration-200 ease-in-out"
             >
-              <strong>{translateKeyToHebrew(key)}:</strong>{' '}
+              <strong>{TranslateKeyToHebrew(key)}:</strong>{' '}
               {dateValue.toLocaleTimeString('he-IL', {
                 timeZone: selectedLocation.timeZoneId,
               })}
