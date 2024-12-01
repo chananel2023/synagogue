@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useAuthStore } from "../store/authStore";
-import Logo from "../assets/Logo.jpg";
+import { Link } from "react-router-dom"; // שימוש ב-Link מ-react-router
+import { useAuthStore } from "../store/authStore"; // חנות האותנטיקציה
+import Logo from "../assets/Logo.jpg"; // הלוגו
 
 const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const { user, logout } = useAuthStore();
+  const { user, logout } = useAuthStore(); // קבלת המידע על המשתמש והפעולה logout
 
   const handleLogout = () => {
     logout();
@@ -12,87 +13,67 @@ const Navbar2: React.FC = () => {
 
   return (
     <div
-      className="flex justify-between items-center text-white py-6 px-8 md:px-32 drop-shadow-md fixed top-0 left-0 z-10 w-full"
-      style={{
-        backgroundColor: "#1D3557", // כחול חיל הים
-        marginBottom: "20px",
-      }}
+      className="flex justify-between items-center text-white py-6 px-8 md:px-32 drop-shadow-md fixed top-0 left-0 w-full z-50 bg-[#1D3557] shadow-lg my-15"
     >
       {/* Logo */}
-      <a href="/HomePage">
+      <Link to="/HomePage">
         <img
           src={Logo}
           alt="Migo"
           className="w-20 h-20 rounded-full hover:scale-105 transition-all"
         />
-      </a>
+      </Link>
 
       {/* Navigation Links */}
       <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
         <li>
-          <a
-            href="/login"
+          <Link
+            to="/login"
             className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
             onClick={handleLogout}
-            aria-label="Logout"
           >
             יציאה
-          </a>
+          </Link>
         </li>
         <li>
-          <a
-            href="/contact"
+          <Link
+            to="/contact"
             className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            aria-label="Contact"
           >
             אודות בית הכנסת
-          </a>
+          </Link>
         </li>
         <li>
-          <a
-            href="/zmanim"
+          <Link
+            to="/zmanim"
             className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            aria-label="Zmanim"
           >
             זמני היום
-          </a>
+          </Link>
         </li>
         <li>
-          <a
-            href="/shiurim"
+          <Link
+            to="/shiurim"
             className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            aria-label="Private"
           >
             שיעורים
-          </a>
+          </Link>
         </li>
-        
         <li>
-          <a
-            href="/pay"
+          <Link
+            to="/pay"
             className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            aria-label="Payments"
           >
             תשלומים
-          </a>
+          </Link>
         </li>
         <li>
-          <a
-            href="/private"
+          <Link
+            to="/homePage"
             className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            aria-label="Payments"
-          >
-            איזור אישי
-          </a>
-        </li>
-        <li>
-          <a
-            href="/homePage"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            aria-label="Payments"
           >
             דף הבית
-          </a>
+          </Link>
         </li>
       </ul>
 
@@ -100,25 +81,36 @@ const Navbar2: React.FC = () => {
       <i
         className="bx bx-menu xl:hidden block text-5xl cursor-pointer"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Toggle Menu"
       ></i>
 
       {/* Mobile Menu */}
       <div
-        className={`absolute xl:hidden top-24 left-0 w-full bg-white flex flex-col items-center gap-6 font-semibold text-lg transform transition-transform ${isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-        style={{ transition: "transform 0.3s ease, opacity 0.3s ease" }}
+        className={`absolute xl:hidden top-24 right-0 w-40 bg-[#1D3557] flex flex-col items-center gap-6 font-semibold text-lg transition-all duration-300 ease-in-out   ${
+          isMenuOpen
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-95 pointer-events-none "
+        }`}
       >
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          1
+        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer ">
+          <Link to="/login" onClick={handleLogout}>
+            יציאה
+          </Link>
         </li>
         <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          2
+          <Link to="/contact">אודות בית הכנסת</Link>
         </li>
         <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          3
+          <Link to="/zmanim">זמני היום</Link>
         </li>
         <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          4
+          <Link to="/shiurim">שיעורים</Link>
+        </li>
+        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
+          <Link to="/pay">תשלומים</Link>
+        </li>
+        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
+          <Link to="/homePage">דף הבית</Link>
         </li>
       </div>
     </div>
@@ -126,3 +118,4 @@ const Navbar2: React.FC = () => {
 };
 
 export default Navbar2;
+

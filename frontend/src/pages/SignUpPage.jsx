@@ -50,21 +50,21 @@ const SignUpPage = () => {
                     <Input
                         icon={User}
                         type='text'
-                        placeholder="Full Name"
+                        placeholder="שם מלא"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                     <Input
                         icon={Mail}
                         type='email'
-                        placeholder="Email Address"
+                        placeholder="כתןבת מייל"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <Input
                         icon={Lock}
                         type='password'
-                        placeholder="Password"
+                        placeholder="סיסמה"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -82,15 +82,15 @@ const SignUpPage = () => {
                         type='submit'
                         disabled={isLoading}
                     >
-                        {isLoading ? <Loader className=' animate-spin mx-auto' size={24} /> : "Sign Up"}
+                        {isLoading ? <Loader className=' animate-spin mx-auto' size={24} /> : "להירשם"}
                     </motion.button>
                 </form>
             </div>
             <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
                 <p className='text-sm text-gray-400'>
-                    Already have an account?{" "}
+                      כבר רשום ?{" "}
                     <Link to={"/login"} className='text-green-400 hover:underline'>
-                        Login
+                       לכניסה לחץ כאן
                     </Link>
                 </p>
             </div>

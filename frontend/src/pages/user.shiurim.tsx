@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Footer from '../components/footer'
-
+import Footer from '../components/footer';
 import axios from "axios";
 import {
     Typography,
@@ -41,37 +40,98 @@ const ShiurimHome: React.FC = () => {
     };
 
     return (
-    <div>
-        <Box sx={{ padding: 4 }}>
-            <Typography variant="h4" align="center" gutterBottom>
-                זמני שיעורים
-            </Typography>
-            <TableContainer component={Paper} sx={{ maxWidth: 900, margin: "auto" }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell align="center">נושא</TableCell>
-                            <TableCell align="center">הרב המלמד</TableCell>
-                            <TableCell align="center">שעה</TableCell>
-                            <TableCell align="center">ימים</TableCell>
-                            <TableCell align="center">מיקום</TableCell>
-                            <TableCell align="center">מיועד ל</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {lessons.map((lesson) => (
-                            <TableRow key={lesson._id}>
-                                <TableCell align="center">{lesson.topic}</TableCell>
-                                <TableCell align="center">{lesson.teacher}</TableCell>
-                                <TableCell align="center">{lesson.time}</TableCell>
-                                <TableCell align="center">{lesson.days}</TableCell>
-                                <TableCell align="center">{lesson.location}</TableCell>
-                                <TableCell align="center">{lesson.audience}</TableCell>
+        <div style={{ width: "100%", padding: 0, margin: 0 }}>
+            <Box
+                sx={{
+                    padding: 4,
+                    minHeight: "100vh",
+                    width: "100%", // התפשטות של ה-Box על 100% רוחב המסך
+                }}
+            >
+                <Typography
+                    variant="h4"
+                    align="center"
+                    gutterBottom
+                    sx={{
+                        fontWeight: "bold",
+                        color: "#2E3B55",
+                        marginBottom: "30px",
+                    }}
+                >
+                    זמני שיעורים
+                </Typography>
+                <TableContainer
+                    component={Paper}
+                    sx={{
+                        width: "100%", // התפשטות של טבלה ל-100% רוחב
+                        margin: "auto",
+                        boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.1)",
+                        borderRadius: "12px",
+                        overflow: "hidden",
+                    }}
+                >
+                    <Table>
+                        <TableHead>
+                            <TableRow
+                                sx={{
+                                    backgroundColor: "#2E3B55",
+                                }}
+                            >
+                                <TableCell align="center" sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                                    נושא
+                                </TableCell>
+                                <TableCell align="center" sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                                    הרב המלמד
+                                </TableCell>
+                                <TableCell align="center" sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                                    שעה
+                                </TableCell>
+                                <TableCell align="center" sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                                    ימים
+                                </TableCell>
+                                <TableCell align="center" sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                                    מיקום
+                                </TableCell>
+                                <TableCell align="center" sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                                    מיועד ל
+                                </TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                            {lessons.map((lesson) => (
+                                <TableRow
+                                    key={lesson._id}
+                                    sx={{
+                                        "&:nth-of-type(odd)": { backgroundColor: "#F7FAFF" },
+                                        "&:hover": {
+                                            backgroundColor: "#E3E9F5",
+                                            transition: "background-color 0.3s",
+                                        },
+                                    }}
+                                >
+                                    <TableCell align="center" sx={{ color: "#2E3B55" }}>
+                                        {lesson.topic}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ color: "#2E3B55" }}>
+                                        {lesson.teacher}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ color: "#2E3B55" }}>
+                                        {lesson.time}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ color: "#2E3B55" }}>
+                                        {lesson.days}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ color: "#2E3B55" }}>
+                                        {lesson.location}
+                                    </TableCell>
+                                    <TableCell align="center" sx={{ color: "#2E3B55" }}>
+                                        {lesson.audience}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Box>
             <Footer />
         </div>

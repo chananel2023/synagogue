@@ -6,10 +6,10 @@ import {
     CardContent,
     Typography,
     Button,
-    TextField,
     Box,
     Modal,
     Container,
+    TextField,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -61,6 +61,7 @@ const ShiurimAdmin: React.FC = () => {
 
             getLessons();
             resetForm();
+            setIsModalOpen(false); // סגירת המודל אחרי שמירת שיעור
         } catch (error) {
             console.error("Error creating/updating lesson:", error);
         }
@@ -83,17 +84,14 @@ const ShiurimAdmin: React.FC = () => {
         setLocation("");
         setAudience("");
         setCurrentLessonId(null);
-        setIsModalOpen(false);
     };
 
     return (
         <Container
             sx={{
-                backgroundImage: "url('/path-to-your-background-image.jpg')",
-                backgroundSize: "cover",
+                width: "100%",
                 minHeight: "100vh",
                 padding: 4,
-                color: "#fff",
             }}
         >
             <motion.div
@@ -106,10 +104,10 @@ const ShiurimAdmin: React.FC = () => {
                         variant="contained"
                         onClick={() => navigate("/homePage")}
                         sx={{
-                            backgroundColor: "#FFD700",
-                            color: "#333",
+                            backgroundColor: "#1976d2", // צבע כפתור
+                            color: "#fff",
                             fontWeight: "bold",
-                            "&:hover": { backgroundColor: "#FFC107" },
+                            "&:hover": { backgroundColor: "#1565c0" },
                         }}
                     >
                         חזור לדשבורד
@@ -121,12 +119,11 @@ const ShiurimAdmin: React.FC = () => {
                     align="center"
                     gutterBottom
                     sx={{
-                        fontFamily: "Georgia, serif",
+                        fontFamily: "Arial, sans-serif",
                         fontWeight: "bold",
-                        textShadow: "2px 2px 4px #000",
                     }}
                 >
-                    שיעורים באתר הנופש שלנו
+                    שיעורים באתר
                 </Typography>
             </motion.div>
 
@@ -178,9 +175,9 @@ const ShiurimAdmin: React.FC = () => {
                         <Card
                             sx={{
                                 width: "300px",
-                                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                                borderRadius: "20px",
-                                boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+                                backgroundColor: "white",
+                                borderRadius: "10px",
+                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                                 transition: "transform 0.3s",
                                 "&:hover": { transform: "scale(1.05)" },
                             }}
@@ -227,17 +224,96 @@ const ShiurimAdmin: React.FC = () => {
                     </motion.div>
                 ))}
             </motion.div>
+
+            <Modal
+                open={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 400,
+                        backgroundColor: "white",
+                        padding: 4,
+                        boxShadow: 24,
+                        borderRadius: 4,
+                    }}
+                >
+                    <Typography id="modal-title" variant="h6" sx={{ mb: 2 }}>
+                        {currentLessonId ? "ערוך שיעור" : "הוסף שיעור"}
+                    </Typography>
+                    <TextField
+                        label="נושא"
+                        variant="outlined"
+                        fullWidth
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="רב המלמד"
+                        variant="outlined"
+                        fullWidth
+                        value={teacher}
+                        onChange={(e) => setTeacher(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="שעה"
+                        variant="outlined"
+                        fullWidth
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="ימים"
+                        variant="outlined"
+                        fullWidth
+                        value={days}
+                        onChange={(e) => setDays(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="מיקום"
+                        variant="outlined"
+                        fullWidth
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        label="מיועד ל"
+                        variant="outlined"
+                        fullWidth
+                        value={audience}
+                        onChange={(e) => setAudience(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
+                    <Box textAlign="center" mt={2}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleCreateOrUpdate}
+                            sx={{
+                                backgroundColor: "#1976d2",
+                                color: "#fff",
+                                fontWeight: "bold",
+                                "&:hover": { backgroundColor: "#1565c0" },
+                            }}
+                        >
+                            {currentLessonId ? "עדכן שיעור" : "הוסף שיעור"}
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
         </Container>
     );
 };
 
 export default ShiurimAdmin;
-
-
-
-
-
-
-
-
-

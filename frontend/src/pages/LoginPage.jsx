@@ -37,21 +37,21 @@ const LoginPage = () => {
         >
             <div className='p-8'>
                 <h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-500 to-yellow-100 text-transparent bg-clip-text'>
-                    Welcome Back
+                    ברוכים הבאים
                 </h2>
 
                 <form onSubmit={handleLogin}>
                     <Input
                         icon={Mail}
                         type='email'
-                        placeholder="Email Address"
+                        placeholder="כתובת מייל"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
                     <Input
                         icon={Lock}
                         type='password'
-                        placeholder="Password"
+                        placeholder="סיסמה"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
@@ -67,15 +67,15 @@ const LoginPage = () => {
                         type='submit'
                         disabled={isLoading}
                     >
-                        {isLoading ? <Loader className='w-6 h-6 animate-spin justify-content mx-auto'/> : "Login"}
+                        {isLoading ? <Loader className='w-6 h-6 animate-spin justify-content mx-auto'/> : "כניסה"}
                     </motion.button>
                 </form>
             </div>
             <div className='px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center'>
                 <p className='text-sm text-gray-400'>
-                    Don&apos;t have an account{" "}
+                    אינך רשום{" "}
                     <Link to='/signup' className='text-green-400 hover:underline'>
-                        Sign up
+                        הרשמה
                     </Link>
                 </p>
             </div>

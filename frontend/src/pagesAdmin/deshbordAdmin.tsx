@@ -1,23 +1,19 @@
 import React, { useState, CSSProperties } from 'react';
-import { useNavigate } from 'react-router-dom'; // שימוש ב- useNavigate מ-react-router-dom
+import { useNavigate } from 'react-router-dom';
 
 function NavbarAdmin() {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const navigate = useNavigate();
-
     const handleMouseEnter = (index: number) => setHoverIndex(index);
     const handleMouseLeave = () => setHoverIndex(null);
-
     const handleNavigate = (link: string) => {
-        navigate(link); // ניווט לכתובת הקישור
+        navigate(link);
     };
 
     return (
-        
         <div style={dashboardContainer}>
             {menuItems.map((item, index) => (
                 <div
-
                     key={index}
                     style={{
                         ...dashboardItem,
@@ -25,9 +21,16 @@ function NavbarAdmin() {
                     }}
                     onMouseEnter={() => handleMouseEnter(index)}
                     onMouseLeave={handleMouseLeave}
-                    onClick={() => handleNavigate(item.link)} // ניווט בעת לחיצה
+                    onClick={() => handleNavigate(item.link)}
                 >
-                    <span style={linkStyle}>{item.label}</span>
+                    <span
+                        style={{
+                            ...linkStyle,
+                            fontSize: hoverIndex === index ? '2rem' : '1.2rem', // שינוי גודל הפונט
+                        }}
+                    >
+                        {item.label}
+                    </span>
                 </div>
             ))}
         </div>
@@ -36,12 +39,11 @@ function NavbarAdmin() {
 
 // רשימת פריטים
 const menuItems: { label: string; link: string }[] = [
-    { label: 'דף הבית', link: '/homePage' },
     { label: 'תשלומים', link: '/payAdmin' },
-    { label: 'הגדרת זמני תפילה', link: '/tfilotAdmin' },
+    { label: 'תפילות', link: '/tfilotAdmin' },
     { label: 'עדכונים חמים', link: '/messageAdmin' },
-    { label: 'הגדרת שיעורים', link: '/Lessons' },
-
+    { label: 'שיעורים', link: '/Lessons' },
+    { label: 'קרוסלה', link: '/UpdataAdminCarousel' },
 ];
 
 // עיצוב הדשבורד הכללי
@@ -57,14 +59,14 @@ const dashboardContainer: CSSProperties = {
 
 // עיצוב של כל כפתור/קובייה
 const dashboardItem: CSSProperties = {
-    backgroundColor: '#63B3ED', // כחול בהיר
-    color: '#E2E8F0', // צבע טקסט בהיר
+    backgroundColor: '#63B3ED',
+    color: '#E2E8F0',
     width: '200px',
     height: '200px',
-    borderRadius: '12px',
+    borderRadius: '40px',
     textAlign: 'center',
     boxShadow: '0 8px 15px rgba(0, 0, 0, 0.2)',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease',
+    transition: 'all 0.3s ease', // שינוי כל המאפיינים בצורה חלקה
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -79,15 +81,21 @@ const dashboardItem: CSSProperties = {
 const dashboardItemHover: CSSProperties = {
     transform: 'translateY(-5px)',
     boxShadow: '0 12px 20px rgba(0, 0, 0, 0.3)',
-    backgroundColor: '#4299E1', // כחול מעט כהה יותר
+    backgroundColor: '#4299E1',
+    width: '300px', // גודל כפול ברוחב
+    height: '300px', // גודל כפול בגובה
+    borderRadius: '50px', // שינוי רדיוס הקצוות
 };
 
 // עיצוב הטקסט בתוך הקישורים
 const linkStyle: CSSProperties = {
     color: '#E2E8F0',
     textDecoration: 'none',
-    textTransform: 'uppercase', // הופך את הטקסט לאותיות גדולות
+    textTransform: 'uppercase',
+    transition: 'font-size 0.3s ease',
+    fontFamily: '"Suez One", serif', // שימוש בפונט Suez One
 };
+
 
 // ייצוא הקומפוננטה
 export default NavbarAdmin;
