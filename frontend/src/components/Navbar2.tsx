@@ -1,109 +1,120 @@
-import { useState } from "react";
-import { Link } from "react-router-dom"; // שימוש ב-Link מ-react-router
-import { useAuthStore } from "../store/authStore"; // חנות האותנטיקציה
+import React, { useState, useCallback, useMemo } from "react";
+import { Link } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
+import { Menu, Close } from '@mui/icons-material';
+import { motion } from 'framer-motion';
+import PayPalIcon from '@mui/icons-material/Payment'; // אייקון פייפל
+import CreditCardIcon from '@mui/icons-material/CreditCard'; // אייקון כרטיס אשראי
 
 const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const { user, logout } = useAuthStore(); // קבלת המידע על המשתמש והפעולה logout
+  const [isDonateDrawerOpen, setIsDonateDrawerOpen] = useState<boolean>(false);
+  const { logout } = useAuthStore();
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
-  };
+  }, [logout]);
+
+  const menuItems = useMemo(() => [
+    { path: '/homePage', label: 'דף הבית' },
+    { path: '/pay', label: 'תשלומים' },
+    { path: '/shiurim', label: 'שיעורים' },
+    { path: '/zmanim', label: 'זמני היום' },
+    { path: '/contact', label: 'אודות בית הכנסת' },
+    { path: '/login', label: 'יציאה', onClick: handleLogout },
+  ], [handleLogout]);
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+    if (isDonateDrawerOpen) {
+      setIsDonateDrawerOpen(false); // סוגר את מגירת התרומות אם היא פתוחה
+    }
+  }, [isDonateDrawerOpen]);
+
+  const toggleDonateDrawer = useCallback(() => {
+    setIsDonateDrawerOpen(prev => !prev);
+    if (isMenuOpen) {
+      setIsMenuOpen(false); // סוגר את התפריט אם הוא פתוח
+    }
+  }, [isMenuOpen]);
 
   return (
-    <div
-      className="flex justify-between items-center text-white py-14 px-8 md:px-32 drop-shadow-md fixed top-0 left-0 w-full z-50 bg-[#1D3557] shadow-lg"
-    >
-      {/* Navigation Links */}
+    <nav className="flex justify-between items-center text-white py-4 px-8 md:px-32 fixed top-0 left-0 w-full z-50 bg-[#1D3557] shadow-lg">
+      {/* כפתור תרומה */}
+      <button
+        onClick={toggleDonateDrawer}
+        className="bg-[#1D3557] border border-white text-white rounded-md p-2 hover:bg-opacity-70 transition-all"
+      >
+        תרום
+      </button>
+
+      <h1 className="text-xl font-bold text-yellow-300">בית הכנסת אורט סינגאלובסקי</h1>
+
       <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
-        <li>
-          <Link
-            to="/login"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-            onClick={handleLogout}
-          >
-            יציאה
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/contact"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-          >
-            אודות בית הכנסת
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/zmanim"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-          >
-            זמני היום
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/shiurim"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-          >
-            שיעורים
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/pay"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-          >
-            תשלומים
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/homePage"
-            className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-          >
-            דף הבית
-          </Link>
-        </li>
+        {menuItems.map((item) => (
+          <li key={item.path}>
+            <Link
+              to={item.path}
+              className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
+              onClick={item.onClick}
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
       </ul>
 
-      {/* Mobile Menu Toggle Button */}
-      <i
-        className="bx bx-menu xl:hidden block text-5xl cursor-pointer"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      <button
+        className="xl:hidden block text-3xl cursor-pointer"
+        onClick={toggleMenu}
         aria-label="Toggle Menu"
-      ></i>
-
-      {/* Mobile Menu */}
-      <div
-        className={`absolute xl:hidden top-24 right-0 w-40 bg-[#1D3557] flex flex-col items-center gap-6 font-semibold text-lg transition-all duration-300 ease-in-out   ${isMenuOpen
-            ? "opacity-100 scale-100"
-            : "opacity-0 scale-95 pointer-events-none "
-          }`}
       >
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer ">
-          <Link to="/login" onClick={handleLogout}>
-            יציאה
-          </Link>
-        </li>
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          <Link to="/contact">אודות בית הכנסת</Link>
-        </li>
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          <Link to="/zmanim">זמני היום</Link>
-        </li>
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          <Link to="/shiurim">שיעורים</Link>
-        </li>
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          <Link to="/pay">תשלומים</Link>
-        </li>
-        <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer">
-          <Link to="/homePage">דף הבית</Link>
-        </li>
-      </div>
-    </div>
+        {isMenuOpen ? <Close style={{ color: 'white' }} /> : <Menu style={{ color: 'white' }} />}
+      </button>
+
+      {/* מגירת תרומות */}
+      <motion.div
+        initial={{ x: '-100%' }}
+        animate={{ x: isDonateDrawerOpen ? 0 : '-100%' }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="absolute top-16 left-0 w-64 bg-lightblue-500 shadow-lg rounded-lg p-4 z-50" // רקע תכלת
+      >
+        <br />
+        <br />
+        <div className="flex flex-col gap-2 items-center">
+          <a href="https://www.paypal.com" target="_blank" rel="noopener noreferrer">
+            <button className="flex items-center bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 transition-all w-full">
+              <PayPalIcon className="mr-2" /> תרום דרך פייפל
+            </button>
+          </a>
+          <a href="https://www.biteasy.co.il" target="_blank" rel="noopener noreferrer">
+            <button className="flex items-center bg-green-500 text-white rounded-md p-2 hover:bg-green-600 transition-all w-full">
+              <CreditCardIcon className="mr-2" /> תרום דרך ביט
+            </button>
+          </a>
+        </div>
+      </motion.div>
+
+      {/* תפריט נפתח */}
+      {isMenuOpen && (
+        <div className="absolute xl:hidden top-16 right-0 w-48 bg-[#1D3557] flex flex-col items-center gap-4 font-semibold text-lg transition-all duration-300 ease-in-out rounded-lg shadow-lg">
+          {menuItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer"
+              onClick={() => {
+                toggleMenu();
+                item.onClick?.();
+              }}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </nav>
   );
 };
 
-export default Navbar2;
+export default React.memo(Navbar2);

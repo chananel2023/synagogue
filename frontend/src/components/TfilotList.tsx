@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
 interface Tfila {
     _id: string;
@@ -12,7 +13,7 @@ const TfilotList: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
-    const fetchTfilot = async () => {
+    const fetchTfilot = useCallback(async () => {
         setLoading(true);
         setError(null);
         try {
@@ -23,61 +24,92 @@ const TfilotList: React.FC = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchTfilot();
-    }, []);
+    }, [fetchTfilot]);
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1
+        }
+    };
 
     return (
-        <div className="p-6 max-w-full">
-            <h2 className="heebo-custom-font text-4xl font-bold text-center mb-4 text-gray-800">
+        <div className="p-6 max-w-4xl mx-auto">
+            <h2 className="text-4xl font-bold text-center mb-8 text-indigo-800" style={{ fontFamily: 'Arial, sans-serif' }}>
                 זמני תפילות
             </h2>
 
             {loading && (
-                <div className="flex justify-center">
-                    <div className="spinner border-t-4 border-blue-500 rounded-full w-8 h-8"></div>
+                <div className="flex justify-center items-center h-40">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
                 </div>
             )}
 
             {error && !loading && (
-                <div className="text-center mb-4">
-                    <p className="text-red-600">{error}</p>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center mb-4"
+                >
+                    <p className="text-red-600 mb-2">{error}</p>
                     <button
                         onClick={fetchTfilot}
-                        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="px-4 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out transform hover:scale-105"
                     >
                         נסה שוב
                     </button>
-                </div>
+                </motion.div>
             )}
 
             {!loading && !error && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
                     {tfilot.length === 0 ? (
-                        <div className="text-center text-gray-500 col-span-2">
+                        <motion.div
+                            variants={itemVariants}
+                            className="text-center text-gray-500 col-span-full"
+                        >
                             לא קיימות תפילות במערכת כרגע. חזור מאוחר יותר.
-                        </div>
+                        </motion.div>
                     ) : (
                         tfilot.map((tfila) => (
-                            <div
+                            <motion.div
                                 key={tfila._id}
-                                className="flex flex-col items-center bg-gray-100 rounded-lg shadow-md p-4 text-center"
+                                variants={itemVariants}
+                                className="flex flex-col items-center bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1"
                             >
-                                <span className="text-lg font-bold text-gray-800">{tfila.tfila}</span>
-                                <span className="text-3xl font-mono font-bold text-blue-600">
+                                <span className="text-xl font-bold text-indigo-800 mb-2">{tfila.tfila}</span>
+                                <span className="text-4xl font-mono font-bold text-indigo-600">
                                     {tfila.time.split(':')[0]}
-                                    <span className="text-2xl">:</span>
+                                    <span className="text-3xl">:</span>
                                     {tfila.time.split(':')[1]}
                                 </span>
-                            </div>
+                            </motion.div>
                         ))
                     )}
-                </div>
+                </motion.div>
             )}
         </div>
     );
 };
 
-export default TfilotList;
+export default React.memo(TfilotList);

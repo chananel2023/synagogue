@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './index.css';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar2 from './components/Navbar2';
-import FloatingShapes from './components/FloatingShapes';
 import routes from './routes/routes';
 
 function App() {
@@ -14,27 +13,21 @@ function App() {
 }
 
 const MainApp = () => {
-  const location = useLocation(); // קבלת המיקום הנוכחי
-  const hiddenNavbarPaths = ['/', '/login', '/signup'];
+  const location = useLocation();
+  const hiddenNavbarPaths = useMemo(() => ['/', '/login', '/signup'], []);
+
+  const showNavbar = !hiddenNavbarPaths.includes(location.pathname);
 
   return (
     <div className="min-h-screen">
-      {!hiddenNavbarPaths.includes(location.pathname) && (
+      {showNavbar && (
         <div className="navbar">
           <Navbar2 />
         </div>
       )}
 
-      <div
-        className={`${!hiddenNavbarPaths.includes(location.pathname)
-          ? "content pt-[100px]" // נניח שה-Navbar גובה 100px
-          : ""
-          }`}
-      >
-        <div className="min-h-screen  w-full items-center justify-center  overflow-hidden">
-          {/* <FloatingShapes /> */}
-
-          {/* נתיבים */}
+      <div className={`${showNavbar ? "content pt-[100px]" : ""}`}>
+        <div className="min-h-screen w-full items-center justify-center overflow-hidden">
           <Routes>
             {routes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
@@ -44,7 +37,6 @@ const MainApp = () => {
       </div>
     </div>
   );
-
 }
 
 export default App;
