@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Footer from '../components/footer';
 import axios from "axios";
 import {
     Typography,
@@ -58,7 +57,7 @@ const ShiurimHome: React.FC = () => {
                         marginBottom: "30px",
                     }}
                 >
-                    זמני שיעורים
+                    שיעורים קבועים 
                 </Typography>
                 <TableContainer
                     component={Paper}
@@ -133,7 +132,6 @@ const ShiurimHome: React.FC = () => {
                     </Table>
                 </TableContainer>
             </Box>
-            <Footer />
         </div>
     );
 };

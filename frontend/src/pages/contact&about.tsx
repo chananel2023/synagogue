@@ -46,10 +46,7 @@ const AboutContactPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* תחתית */}
-            <footer style={styles.footer}>
-                <p>כל הזכויות שמורות &copy; 2024</p>
-            </footer>
+         
         </div>
     );
 };
@@ -106,15 +103,6 @@ const styles = {
     } as React.CSSProperties,
     icon: {
         fontSize: '2rem',
-    } as React.CSSProperties,
-    footer: {
-        marginTop: 'auto',
-        padding: '20px',    
-        backgroundColor: '#1E293B',
-        color: '#F1F5F9',
-        textAlign: 'center',
-        fontSize: '1rem',
-        width: '100%',
     } as React.CSSProperties,
 };
 

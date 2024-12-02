@@ -15,7 +15,7 @@ function App() {
 
 const MainApp = () => {
   const location = useLocation(); // קבלת המיקום הנוכחי
-  const hiddenNavbarPaths = ['/', '/login', '/signup']; 
+  const hiddenNavbarPaths = ['/', '/login', '/signup'];
 
   return (
     <div className="min-h-screen">
@@ -24,17 +24,16 @@ const MainApp = () => {
           <Navbar2 />
         </div>
       )}
-  
+
       <div
-        className={`${
-          !hiddenNavbarPaths.includes(location.pathname)
-            ? "content pt-[100px]" // נניח שה-Navbar גובה 100px
-            : ""
-        }`}
+        className={`${!hiddenNavbarPaths.includes(location.pathname)
+          ? "content pt-[100px]" // נניח שה-Navbar גובה 100px
+          : ""
+          }`}
       >
-        <div className="min-h-screen  w-full bg-gradient-to-br from-cyan-300 via-cyan-200 to-sky-900 flex items-center justify-center relative overflow-hidden">
-          <FloatingShapes />
-  
+        <div className="min-h-screen  w-full items-center justify-center  overflow-hidden">
+          {/* <FloatingShapes /> */}
+
           {/* נתיבים */}
           <Routes>
             {routes.map(({ path, element }) => (
@@ -45,7 +44,7 @@ const MainApp = () => {
       </div>
     </div>
   );
-  
+
 }
 
 export default App;

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom"; // שימוש ב-Link מ-react-router
 import { useAuthStore } from "../store/authStore"; // חנות האותנטיקציה
-import Logo from "../assets/Logo.jpg"; // הלוגו
 
 const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -13,17 +12,8 @@ const Navbar2: React.FC = () => {
 
   return (
     <div
-      className="flex justify-between items-center text-white py-6 px-8 md:px-32 drop-shadow-md fixed top-0 left-0 w-full z-50 bg-[#1D3557] shadow-lg my-15"
+      className="flex justify-between items-center text-white py-14 px-8 md:px-32 drop-shadow-md fixed top-0 left-0 w-full z-50 bg-[#1D3557] shadow-lg"
     >
-      {/* Logo */}
-      <Link to="/HomePage">
-        <img
-          src={Logo}
-          alt="Migo"
-          className="w-20 h-20 rounded-full hover:scale-105 transition-all"
-        />
-      </Link>
-
       {/* Navigation Links */}
       <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
         <li>
@@ -86,11 +76,10 @@ const Navbar2: React.FC = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`absolute xl:hidden top-24 right-0 w-40 bg-[#1D3557] flex flex-col items-center gap-6 font-semibold text-lg transition-all duration-300 ease-in-out   ${
-          isMenuOpen
+        className={`absolute xl:hidden top-24 right-0 w-40 bg-[#1D3557] flex flex-col items-center gap-6 font-semibold text-lg transition-all duration-300 ease-in-out   ${isMenuOpen
             ? "opacity-100 scale-100"
             : "opacity-0 scale-95 pointer-events-none "
-        }`}
+          }`}
       >
         <li className="list-none w-full text-center p-4 hover:bg-sky-400 hover:text-white transition-all cursor-pointer ">
           <Link to="/login" onClick={handleLogout}>
@@ -118,4 +107,3 @@ const Navbar2: React.FC = () => {
 };
 
 export default Navbar2;
-

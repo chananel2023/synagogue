@@ -14,15 +14,9 @@ const TfilotList: React.FC = () => {
 
     const fetchTfilot = async () => {
         setLoading(true);
-        setError(null); // Reset error
-
-
-
-        
+        setError(null);
         try {
             const response = await axios.get<Tfila[]>('http://localhost:5007/api/tfilot');
-          //  const sortedTfilot = response.data.tfila.sort((a, b) => a - b);
-
             setTfilot(response.data);
         } catch (err) {
             setError('שגיאה בטעינת התפילות');
@@ -36,8 +30,10 @@ const TfilotList: React.FC = () => {
     }, []);
 
     return (
-        <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
-            <h2 className="text-2xl font-bold text-center mb-4 text-gray-800">זמני תפילות</h2>
+        <div className="p-6 max-w-full">
+            <h2 className="heebo-custom-font text-4xl font-bold text-center mb-4 text-gray-800">
+                זמני תפילות
+            </h2>
 
             {loading && (
                 <div className="flex justify-center">
@@ -58,41 +54,30 @@ const TfilotList: React.FC = () => {
             )}
 
             {!loading && !error && (
-                <table className="min-w-full border-collapse border border-gray-200">
-                    <thead>
-                        <tr className="bg-gray-100">
-                            <th className="border border-gray-300 px-4 py-2 text-right">תפילה</th>
-                            <th className="border border-gray-300 px-4 py-2 text-right">שעה</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tfilot.length === 0 ? (
-                            <tr>
-                                <td
-                                    colSpan={2}
-                                    className="border border-gray-300 px-4 py-2 text-center text-gray-500"
-                                >
-                                    לא קיימות תפילות במערכת כרגע. חזור מאוחר יותר.
-                                </td>
-                            </tr>
-                        ) : (
-                            tfilot.map((tfila) => (
-                                <tr key={tfila._id} className="hover:bg-gray-50">
-                                    <td className="border border-gray-300 px-4 py-2 text-right">
-                                        {tfila.tfila}
-                                    </td>
-                                    <td className="border border-gray-300 px-4 py-2 text-right">
-                                        {tfila.time}
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {tfilot.length === 0 ? (
+                        <div className="text-center text-gray-500 col-span-2">
+                            לא קיימות תפילות במערכת כרגע. חזור מאוחר יותר.
+                        </div>
+                    ) : (
+                        tfilot.map((tfila) => (
+                            <div
+                                key={tfila._id}
+                                className="flex flex-col items-center bg-gray-100 rounded-lg shadow-md p-4 text-center"
+                            >
+                                <span className="text-lg font-bold text-gray-800">{tfila.tfila}</span>
+                                <span className="text-3xl font-mono font-bold text-blue-600">
+                                    {tfila.time.split(':')[0]}
+                                    <span className="text-2xl">:</span>
+                                    {tfila.time.split(':')[1]}
+                                </span>
+                            </div>
+                        ))
+                    )}
+                </div>
             )}
         </div>
     );
 };
 
 export default TfilotList;
-

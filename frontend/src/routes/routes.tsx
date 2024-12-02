@@ -4,7 +4,6 @@ import WelcomePage from "../pages/firstpage"
 import HomePage from "../pages/homePage"
 import LoginPage from "../pages/LoginPage"
 import Pay from "../pages/pay"
-import Private from "../pages/private"
 import SignUpPage from "../pages/SignUpPage"
 import ZmanimPage from "../pages/ZmanimPage"
 import NavbarAdmin from "../pagesAdmin/deshbordAdmin"
@@ -24,7 +23,6 @@ const routes = [
     { path: "/login", element: <LoginPage /> },
     { path: "/HomePage", element: <HomePage /> },
     { path: "/zmanim", element: <ZmanimPage /> },
-    { path: "/private", element: <Private /> },
     { path: "/contact", element: <AboutAndContact /> },
     { path: "/pay", element: <Pay /> },
     { path: "/tfilotAdmin", element: <AdminTfilot /> },

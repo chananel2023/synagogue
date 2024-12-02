@@ -15,7 +15,6 @@ const Carousel: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   useEffect(() => {
-    // קריאה ל-API לקבלת השקופיות
     const fetchSlides = async () => {
       try {
         const response = await axios.get('http://localhost:5007/api/slides');
@@ -31,14 +30,13 @@ const Carousel: React.FC = () => {
 
   useEffect(() => {
     if (slides.length > 0) {
-      // מעבר אוטומטי לשקופית הבאה כל displayTime שניות
       const interval = setInterval(() => {
         setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-      }, slides[currentSlide]?.displayTime * 1000);
+      }, 3000);
 
       return () => clearInterval(interval);
     }
-  }, [slides, currentSlide]);
+  }, [slides]);
 
   const handleNext = () => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
@@ -49,23 +47,29 @@ const Carousel: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto">
+    <div className="relative w-screen h-screen overflow-hidden">
       {slides.length > 0 ? (
-        <div className="relative">
+        <div className="relative w-full h-full transition-all duration-1000 ease-in-out">
           {/* תמונה נוכחית */}
           <img
             src={slides[currentSlide].imageUrl}
             alt={slides[currentSlide].title}
-            className="w-full h-72 object-cover rounded-lg"
+            className="w-full h-full object-cover opacity-90 transition-opacity duration-1000 ease-in-out"
           />
+          {/* שכבת כהות מתחת לטקסט */}
+          <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 pointer-events-none"></div>
           {/* כותרת ותיאור */}
-          <div className="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white p-4 w-full text-center">
-            <h2 className="text-2xl font-bold">{slides[currentSlide].title}</h2>
-            <p>{slides[currentSlide].description}</p>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center text-white">
+            {/* כותרת */}
+            <h2 className="text-6xl font-extrabold mb-8">{slides[currentSlide].title}</h2>
+            {/* תיאור */}
+            <div className="bg-black bg-opacity-50 border-4 border-white text-white p-8 rounded-lg max-w-2xl mx-auto">
+              <p className="text-3xl font-extrabold">{slides[currentSlide].description}</p>
+            </div>
           </div>
         </div>
       ) : (
-        <p>טוען שקופיות...</p>
+        <p>טוען...</p>
       )}
 
       {/* כפתורי ניווט */}
@@ -73,18 +77,29 @@ const Carousel: React.FC = () => {
         <>
           <button
             onClick={handlePrev}
-            className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-black text-white p-2 rounded-full hover:bg-gray-700"
+            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black text-white p-4 rounded-full hover:bg-gray-700 transition-all"
           >
             &#10094;
           </button>
           <button
             onClick={handleNext}
-            className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-black text-white p-2 rounded-full hover:bg-gray-700"
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white p-4 rounded-full hover:bg-gray-700 transition-all"
           >
             &#10095;
           </button>
         </>
       )}
+
+      {/* שורה של עיגולים למטה */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4">
+        {slides.map((_, index) => (
+          <div
+            key={index}
+            className={`w-4 h-4 rounded-full bg-white cursor-pointer transition-all ${currentSlide === index ? 'bg-blue-500' : 'bg-opacity-50'}`}
+            onClick={() => setCurrentSlide(index)}
+          />
+        ))}
+      </div>
     </div>
   );
 };

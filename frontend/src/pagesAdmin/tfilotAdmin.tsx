@@ -7,7 +7,7 @@ interface Tfila {
     time: string;
 }
 
-const AdminTfilot = () => {
+const AdminTfilot: React.FC = () => {
     const [tfilot, setTfilot] = useState<Tfila[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [newTfila, setNewTfila] = useState<{ tfila: string; time: string }>({
@@ -58,13 +58,16 @@ const AdminTfilot = () => {
     const handleUpdateTfila = async () => {
         if (editingTfila) {
             try {
-                const updatedTfila = await axios.put(
+                const response = await axios.put(
                     `http://localhost:5007/api/tfilot/${editingTfila._id}`,
-                    editingTfila
+                    {
+                        tfila: editingTfila.tfila,
+                        time: editingTfila.time,
+                    }
                 );
                 setTfilot(
                     tfilot.map((tfila) =>
-                        tfila._id === updatedTfila.data._id ? updatedTfila.data : tfila
+                        tfila._id === response.data._id ? response.data : tfila
                     )
                 );
                 setEditingTfila(null);
@@ -145,7 +148,14 @@ const AdminTfilot = () => {
                             <tbody>
                                 {Array.isArray(tfilot) &&
                                     tfilot.map((tfila) => (
-                                        <tr key={tfila._id} className="hover:bg-gray-100">
+                                        <tr
+                                            key={tfila._id}
+                                            className={`hover:bg-gray-100 ${editingTfila &&
+                                                    editingTfila._id === tfila._id
+                                                    ? "bg-yellow-100"
+                                                    : ""
+                                                }`}
+                                        >
                                             <td className="p-3 border">{tfila.tfila}</td>
                                             <td className="p-3 border">{tfila.time}</td>
                                             <td className="p-3 border flex gap-4">
@@ -166,6 +176,42 @@ const AdminTfilot = () => {
                                     ))}
                             </tbody>
                         </table>
+                    )}
+
+                    {editingTfila && (
+                        <div className="mt-6">
+                            <h4 className="text-lg font-semibold mb-2">עריכת תפילה</h4>
+                            <input
+                                type="text"
+                                name="tfila"
+                                value={editingTfila.tfila}
+                                onChange={handleChange}
+                                placeholder="שם תפילה"
+                                className="p-3 border rounded-md focus:outline-blue-400 mb-4"
+                            />
+                            <input
+                                type="time"
+                                name="time"
+                                value={editingTfila.time}
+                                onChange={handleChange}
+                                placeholder="שעה"
+                                className="p-3 border rounded-md focus:outline-blue-400"
+                            />
+                            <div className="flex gap-4 mt-4">
+                                <button
+                                    onClick={handleUpdateTfila}
+                                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
+                                >
+                                    עדכן תפילה
+                                </button>
+                                <button
+                                    onClick={() => setEditingTfila(null)}
+                                    className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md"
+                                >
+                                    בטל
+                                </button>
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>

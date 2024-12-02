@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { getZmanimJson } from 'kosher-zmanim';
 import locations from '../data/locations.json';
-import TranslateKeyToHebrew from './TranslateKeyToHebrew'
-import Location from '../models/Location'
-
+import TranslateKeyToHebrew from './TranslateKeyToHebrew';
+import Location from '../models/Location';
 
 const Zmanim2: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<Location>(locations[0]);
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().split('T')[0]
+  );
   const [zmanim, setZmanim] = useState<{ zmanim?: Record<string, string> } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Update current time for the selected location
-  useEffect(() => {
+  useMemo(() => {
     const interval = setInterval(() => {
       const now = new Date().toLocaleTimeString('he-IL', {
         timeZone: selectedLocation.timeZoneId,
@@ -24,7 +24,6 @@ const Zmanim2: React.FC = () => {
     return () => clearInterval(interval);
   }, [selectedLocation]);
 
-  // Fetch Zmanim for the selected location and date
   useEffect(() => {
     const fetchZmanim = async () => {
       try {
@@ -39,7 +38,7 @@ const Zmanim2: React.FC = () => {
         const zmanimJson = await getZmanimJson(options);
         setZmanim({ zmanim: zmanimJson.BasicZmanim as Record<string, string> });
 
-        setError(null); // Clear errors
+        setError(null);
       } catch (err) {
         setError('שגיאה בקבלת זמני היום');
         console.error(err);
@@ -57,12 +56,17 @@ const Zmanim2: React.FC = () => {
     return <p>טוען זמני היום...</p>;
   }
 
-  
-  
+  const sortedZmanim = Object.entries(zmanim.zmanim)
+    .map(([key, value]) => {
+      const date = new Date(value);
+      return { key, value, date };
+    })
+    .filter(({ date }) => !isNaN(date.getTime()))
+    .sort((a, b) => a.date.getTime() - b.date.getTime());
 
   return (
-    <div className="p-6 max-w-lg mx-auto shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold text-center mb-4">זמני היום</h1>
+    <div className="p-6 w-full shadow-md rounded-lg">
+      <h1 className="text-4xl font-bold text-center mb-6">זמני היום</h1>
 
       {/* Current time */}
       <div className="flex justify-center items-center mb-6">
@@ -91,8 +95,6 @@ const Zmanim2: React.FC = () => {
         </select>
       </div>
 
-     
-      
       <div className="mb-6">
         <label className="block mb-2 text-center font-semibold">בחר תאריך:</label>
         <input
@@ -104,29 +106,21 @@ const Zmanim2: React.FC = () => {
       </div>
 
       {/* Zmanim list */}
-      <ul className="list-none pl-0 text-right rtl">
-        {Object.entries(zmanim.zmanim).map(([key, value]) => {
-          const dateValue = new Date(value);
-          if (isNaN(dateValue.getTime())) {
-            return null;
-          }
-
-          return (
-            <li
-              key={key}
-              className="mb-2 p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-500 transition duration-200 ease-in-out"
-            >
-              <strong>{TranslateKeyToHebrew(key)}:</strong>{' '}
-              {dateValue.toLocaleTimeString('he-IL', {
-                timeZone: selectedLocation.timeZoneId,
-              })}
-            </li>
-          );
-        })}
+      <ul className="list-none w-full text-right rtl">
+        {sortedZmanim.map(({ key, date }) => (
+          <li
+            key={key}
+            className="mb-2 p-3 shadow-sm hover:bg-gray-500 transition duration-200 ease-in-out"
+          >
+            <strong>{TranslateKeyToHebrew(key)}:</strong>{' '}
+            {date.toLocaleTimeString('he-IL', {
+              timeZone: selectedLocation.timeZoneId,
+            })}
+          </li>
+        ))}
       </ul>
     </div>
   );
 };
 
 export default Zmanim2;
-
