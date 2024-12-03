@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { Menu, Close } from '@mui/icons-material';
@@ -10,6 +10,8 @@ const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isDonateDrawerOpen, setIsDonateDrawerOpen] = useState<boolean>(false);
   const { logout } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
+  
 
   const handleLogout = useCallback(() => {
     logout();
@@ -38,6 +40,20 @@ const Navbar2: React.FC = () => {
     }
   }, [isMenuOpen]);
 
+  // הגדרת ברכת בוקר טוב בהתאם לשעה
+  const [greeting, setGreeting] = useState<string>('');
+
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+    if (currentHour < 12) {
+      setGreeting('בוקר טוב');
+    } else if (currentHour < 18) {
+      setGreeting('אחר צהריים טובים');
+    } else {
+      setGreeting('ערב טוב');
+    }
+  }, []);
+
   return (
     <nav className="flex justify-between items-center text-white py-4 px-8 md:px-32 fixed top-0 left-0 w-full z-50 bg-[#1D3557] shadow-lg">
       {/* כפתור תרומה */}
@@ -49,6 +65,9 @@ const Navbar2: React.FC = () => {
       </button>
 
       <h1 className="text-xl font-bold text-yellow-300">בית הכנסת בית ישראל</h1>
+
+      {/* ברכת בוקר טוב */}
+      <span className="text-lg font-semibold text-white">{greeting} {user ? user.name : "Guest"}</span>
 
       <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
         {menuItems.map((item) => (
