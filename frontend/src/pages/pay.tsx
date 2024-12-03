@@ -1,56 +1,76 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
+import './PaymentPage.css'; // Custom CSS for better styling
 
-// טעינת Stripe במפתח הציבורי שלך
-const stripePromise = loadStripe('YOUR_STRIPE_PUBLIC_KEY'); // המפתח הציבורי שלך מ-Stripe
+// Load Stripe with your publishable key
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY || '');
 
 const PaymentPage = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const [dues, setDues] = useState<number | ''>(''); // 
+    const [amount, setAmount] = useState<number | ''>(''); // Support for empty state
     const [error, setError] = useState<string | null>(null);
-    const [amount, setAmount] = useState(10); // סכום ברירת מחדל של 10 דולר
-    const [description, setDescription] = useState('תרומה לבית הכנסת');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [success, setSuccess] = useState<boolean>(false);
 
+    // useEffect(()=>{
+    //     const fetchDept = ()=>{
+    //         const result = axios.get(...)
+    //         setDues(result.data)
+    //     }
+    //     fetchDept();
+    // },[])
     const stripe = useStripe();
     const elements = useElements();
 
-    // טיפול בהגשת טופס התשלום
-    const handleDonation = async () => {
-        setIsLoading(true);
+    const handlePayment = async (e: React.FormEvent) => {
+        e.preventDefault();
         setError(null);
+        setSuccess(false);
 
         if (!stripe || !elements) {
-            setError('Stripe לא הוטען כראוי');
-            setIsLoading(false);
+            setError('Stripe has not been loaded properly.');
             return;
         }
 
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+            setError('Please enter your card details.');
+            return;
+        }
+
+        if (!amount || amount <= 0) {
+            setError('Please enter a valid amount.');
+            return;
+        }
+
+        setIsLoading(true);
+
         try {
-            // שליחת בקשה ליצירת Payment Intent
-            const response = await axios.post('/api/payment/create-payment-intent', {
-                amount,
-                description,
+            // Send payment amount to backend to create a PaymentIntent
+            const { data } = await axios.post('/api/payment/create-payment-intent', {
+                amount: Math.round(amount * 100), // Stripe expects the amount in cents
+                description: 'Payment to synagogue',
             });
 
-            const { clientSecret } = response.data;
+            const { clientSecret } = data;
 
-            // אישור תשלום עם Stripe
+            // Confirm card payment with Stripe
             const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
-                    card: elements.getElement(CardElement), // משתמשים ב-CardElement ישירות
+                    card: cardElement,
                 },
             });
 
             if (stripeError) {
-                setError('stripeError.message');
-            } else if (paymentIntent.status === 'succeeded') {
-                // התשלום הצליח
-                alert('התשלום הושלם בהצלחה');
+                setError(stripeError.message || 'Payment failed.');
+            } else if (paymentIntent?.status === 'succeeded') {
+                setSuccess(true);
+                setAmount(''); // Reset amount after successful payment
             }
-
-        } catch (error) {
-            setError('שגיאה בתשלום');
+        } catch (err: any) {
+            setError(err.response?.data?.message || 'Server error during payment.');
         } finally {
             setIsLoading(false);
         }
@@ -58,35 +78,57 @@ const PaymentPage = () => {
 
     return (
         <div className="payment-page">
-            <h1>תרום לבית הכנסת</h1>
-            <div>
-                <label>סכום תרומה ($):</label>
-                <input 
-                    type="number" 
-                    value={amount} 
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                    min="1"
-                />
-            </div>
-            <div>
-                <label>תיאור:</label>
-                <input 
-                    type="text" 
-                    value={description} 
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>פרטי כרטיס אשראי:</label>
-                <CardElement />
-            </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <button 
-                onClick={handleDonation} 
-                disabled={isLoading}
-            >
-                {isLoading ? 'ממתין...' : 'תרום'}
-            </button>
+            <h1>אתה נמצא בחוב על סך {dues} </h1>
+            <p className="description">
+                Use the form below to pay your outstanding dues to the synagogue.
+            </p>
+            <form onSubmit={handlePayment} className="payment-form">
+                <div className="form-group">
+                    <label htmlFor="amount">Amount Due ($):</label>
+                    <input
+                        id="amount"
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(Number(e.target.value))}
+                        min="0.01"
+                        step="0.01"
+                        required
+                        placeholder="Enter amount"
+                        className="input-field"
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Credit Card Details:</label>
+                    <CardElement
+                        options={{
+                            style: {
+                                base: {
+                                    fontSize: '16px',
+                                    color: '#32325d',
+                                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                                    '::placeholder': {
+                                        color: '#aab7c4',
+                                    },
+                                },
+                                invalid: {
+                                    color: '#fa755a',
+                                    iconColor: '#fa755a',
+                                },
+                            },
+                        }}
+                        className="card-element"
+                    />
+                </div>
+                {error && <p className="error-message">{error}</p>}
+                {success && <p className="success-message">Payment successful! Thank you.</p>}
+                <button
+                    type="submit"
+                    disabled={isLoading || !stripe || !elements}
+                    className={`submit-button ${isLoading ? 'loading' : ''}`}
+                >
+                    {isLoading ? 'Processing...' : 'Pay Now'}
+                </button>
+            </form>
         </div>
     );
 };

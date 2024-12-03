@@ -30,6 +30,7 @@ const routes = [
     { path: "/Lessons", element: <AdminLessons /> },
     { path: "/shiurim", element: <ShiurimHome /> },
     { path: "/UpdataAdminCarousel", element: <UpdataAdminCarousel /> },
+    
 ];
 
 export default routes;

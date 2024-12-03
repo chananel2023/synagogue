@@ -7,31 +7,34 @@ const addToCart = async (req, res) => {
   try {
     const { userId, products } = req.body;
 
-    // בדוק אם ה-ID של המשתמש תקין
+    // בדיקת תקינות המידע
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).send("Invalid user ID");
+      return res.status(400).json({ error: "Invalid user ID" });
     }
 
-    // מציאת המשתמש לפי ה-ID
+    if (!Array.isArray(products) || products.some(p => !p._id || !p.quantity || !p.price)) {
+      return res.status(400).json({ error: "Invalid products data" });
+    }
+
+    // מציאת המשתמש
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.status(404).json({ error: "User not found" });
     }
 
-    // עדכון רשימת המוצרים בעגלה
+    // עדכון עגלת הקניות
     products.forEach((product) => {
       const existingProduct = user.cartItems.find(
         (item) => item._id.toString() === product._id
       );
 
       if (existingProduct) {
-        // עדכון כמות המוצר בעגלה
         existingProduct.quantity += product.quantity;
       } else {
-        // הוספת המוצר החדש לעגלה
         user.cartItems.push({
           _id: product._id,
           quantity: product.quantity,
+          price: product.price,
         });
       }
     });
@@ -39,37 +42,33 @@ const addToCart = async (req, res) => {
     // שמירה למסד נתונים
     await user.save();
 
-    return res.status(200).json(user.cartItems);
+    return res.status(200).json({ cartItems: user.cartItems });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Error updating cart");
+    res.status(500).json({ error: "Error updating cart" });
   }
 };
 
 const getCart = async (req, res) => {
-  console.log('Fetching cart...');
   try {
-      const { userId } = req.params;
+    const { userId } = req.params;
 
-      // אם ה-ID לא תקין, החזר שגיאה
-      if (!mongoose.Types.ObjectId.isValid(userId)) {
-          return res.status(400).send("Invalid user ID");
-      }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
 
-      // חפש את המשתמש לפי ה-ID
-      const user = await User.findById(userId);
-      if (!user) {
-          return res.status(404).send("User not found");
-      }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
 
-      // החזר את המוצרים בעגלה
-      return res.status(200).json(user.cartItems);
+    return res.status(200).json({ cartItems: user.cartItems });
   } catch (error) {
-      console.error("Error:", error);
-      res.status(500).send("Error retrieving cart");
+    console.error("Error:", error);
+    res.status(500).json({ error: "Error retrieving cart" });
   }
 };
 
-// ייצוא נפרד לכל פונקציה
+// ייצוא
 export default addToCart;
 export { getCart };
