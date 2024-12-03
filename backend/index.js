@@ -8,6 +8,9 @@ import shiurimRouter from './routes/shiurim.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import slideRoutes from './routes/slide.route.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import addToCart from './routes/addToCard.r.js';
+import cartRoutes from './routes/addToCard.r.js'
 
 
 
@@ -28,6 +31,10 @@ app.use('/api/messages', messagesRoutes);
 app.use('/api/tfilot', tfilotRoutes);
 app.use('/api/lessons', shiurimRouter); // מחבר את הראוטר לנתיב /api
 app.use('/api/slides', slideRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/addToCart',addToCart)
+
+app.use('/cart', cartRoutes);
 
 app.listen(PORT, () => {
     connectDB();

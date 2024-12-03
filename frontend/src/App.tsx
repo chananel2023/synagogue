@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import Navbar2 from './components/Navbar2';
 import routes from './routes/routes';
+import { useAuthStore } from './store/authStore'; // ייבוא של החנות
 
 function App() {
   return (
@@ -14,20 +15,37 @@ function App() {
 
 const MainApp = () => {
   const location = useLocation();
-  const hiddenNavbarPaths = useMemo(() => ['/', '/login', '/signup'], []);
+  const { isAuthenticated, isCheckingAuth } = useAuthStore(); 
+  const hiddenNavbarPaths = ['/', '/login', '/signup'];
 
-  const showNavbar = !hiddenNavbarPaths.includes(location.pathname);
+  useEffect(() => {
+   
+    if (!isCheckingAuth) {
+      
+    }
+  }, [isCheckingAuth]);
+
+  
+  if (!isAuthenticated && !hiddenNavbarPaths.includes(location.pathname)) {
+    return <Navigate to="/login" replace />; 
+  }
 
   return (
     <div className="min-h-screen">
-      {showNavbar && (
+      {!hiddenNavbarPaths.includes(location.pathname) && (
         <div className="navbar">
           <Navbar2 />
         </div>
       )}
 
-      <div className={`${showNavbar ? "content pt-[100px]" : ""}`}>
+      <div
+        className={`${!hiddenNavbarPaths.includes(location.pathname)
+          ? "content pt-[100px]" 
+          : ""
+          }`}
+      >
         <div className="min-h-screen w-full items-center justify-center overflow-hidden">
+          {/* נתיבים */}
           <Routes>
             {routes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
