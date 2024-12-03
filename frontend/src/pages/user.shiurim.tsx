@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import Footer from '../components/footer'
+import Footer from '../components/Footer'
 
 import {
     Typography,

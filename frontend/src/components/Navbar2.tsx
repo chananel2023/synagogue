@@ -23,6 +23,7 @@ const Navbar2: React.FC = () => {
     { path: '/shiurim', label: 'שיעורים' },
     { path: '/zmanim', label: 'זמני היום' },
     { path: '/contact', label: 'אודות בית הכנסת' },
+    { path: "/deshbord", label: 'ניהול' },
     { path: '/login', label: 'יציאה', onClick: handleLogout },
   ], [handleLogout]);
 
@@ -63,60 +64,24 @@ const Navbar2: React.FC = () => {
       >
         תרום
       </button>
-
+  
       <h1 className="text-xl font-bold text-yellow-300">בית הכנסת בית ישראל</h1>
-
+  
       {/* ברכת בוקר טוב */}
       <span className="text-lg font-semibold text-white">{greeting} {user ? user.name : "Guest"}</span>
-
-      <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
-        {menuItems.map((item) => (
-          <li key={item.path}>
-            <Link
-              to={item.path}
-              className="p-3 hover:bg-white hover:text-black rounded-md transition-all"
-              onClick={item.onClick}
-            >
-              {item.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-
+  
+      {/* כפתור תפריט */}
       <button
-        className="xl:hidden block text-3xl cursor-pointer"
+        className="block text-3xl cursor-pointer"
         onClick={toggleMenu}
         aria-label="Toggle Menu"
       >
         {isMenuOpen ? <Close style={{ color: 'white' }} /> : <Menu style={{ color: 'white' }} />}
       </button>
-
-      {/* מגירת תרומות */}
-      <motion.div
-        initial={{ x: '-100%' }}
-        animate={{ x: isDonateDrawerOpen ? 0 : '-100%' }}
-        transition={{ type: "spring", stiffness: 300 }}
-        className="absolute top-16 left-0 w-64 bg-lightblue-500 shadow-lg rounded-lg p-4 z-50" // רקע תכלת
-      >
-        <br />
-        <br />
-        <div className="flex flex-col gap-2 items-center">
-          <a href="https://www.paypal.com" target="_blank" rel="noopener noreferrer">
-            <button className="flex items-center bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 transition-all w-full">
-              <PayPalIcon className="mr-2" /> תרום דרך פייפל
-            </button>
-          </a>
-          <a href="https://www.biteasy.co.il" target="_blank" rel="noopener noreferrer">
-            <button className="flex items-center bg-green-500 text-white rounded-md p-2 hover:bg-green-600 transition-all w-full">
-              <CreditCardIcon className="mr-2" /> תרום דרך ביט
-            </button>
-          </a>
-        </div>
-      </motion.div>
-
+  
       {/* תפריט נפתח */}
       {isMenuOpen && (
-        <div className="absolute xl:hidden top-16 right-0 w-48 bg-[#1D3557] flex flex-col items-center gap-4 font-semibold text-lg transition-all duration-300 ease-in-out rounded-lg shadow-lg">
+        <div className="absolute top-16 right-0 w-48 bg-[#1D3557] flex flex-col items-center gap-4 font-semibold text-lg transition-all duration-300 ease-in-out rounded-lg shadow-lg">
           {menuItems.map((item) => (
             <Link
               key={item.path}
@@ -132,8 +97,30 @@ const Navbar2: React.FC = () => {
           ))}
         </div>
       )}
+  
+      {/* מגירת תרומות */}
+      <motion.div
+        initial={{ x: '-100%' }}
+        animate={{ x: isDonateDrawerOpen ? 0 : '-100%' }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="absolute top-16 left-0 w-64 bg-lightblue-500 shadow-lg rounded-lg p-4 z-50" // רקע תכלת
+      >
+        <div className="flex flex-col gap-2 items-center">
+          <a href="https://www.paypal.com" target="_blank" rel="noopener noreferrer">
+            <button className="flex items-center bg-blue-500 text-white rounded-md p-2 hover:bg-blue-600 transition-all w-full">
+              <PayPalIcon className="mr-2" /> תרום דרך פייפל
+            </button>
+          </a>
+          <a href="https://www.biteasy.co.il" target="_blank" rel="noopener noreferrer">
+            <button className="flex items-center bg-green-500 text-white rounded-md p-2 hover:bg-green-600 transition-all w-full">
+              <CreditCardIcon className="mr-2" /> תרום דרך ביט
+            </button>
+          </a>
+        </div>
+      </motion.div>
     </nav>
   );
+  
 };
 
 export default React.memo(Navbar2);
