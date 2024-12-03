@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import Footer from '../components/footer'
+
 import {
     Typography,
     Box,
@@ -151,8 +153,11 @@ const ShiurimHome: React.FC = () => {
                     </Grid>
                 ))}
             </Grid>
+            <Footer />
+
         </Box>
     );
 };
 
 export default React.memo(ShiurimHome);
+

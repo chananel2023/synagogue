@@ -48,7 +48,7 @@ const Navbar2: React.FC = () => {
         תרום
       </button>
 
-      <h1 className="text-xl font-bold text-yellow-300">בית הכנסת אורט סינגאלובסקי</h1>
+      <h1 className="text-xl font-bold text-yellow-300">בית הכנסת בית ישראל</h1>
 
       <ul className="hidden xl:flex items-center gap-12 font-semibold text-base">
         {menuItems.map((item) => (

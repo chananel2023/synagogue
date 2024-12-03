@@ -1,5 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
+import { Box, Typography, Button, TextField, CircularProgress } from '@mui/material';
+import { AccessTime, Delete } from '@mui/icons-material';
 
 // הגדרת סוגים להודעה
 interface Message {
@@ -15,6 +17,8 @@ const MessagesComponent: React.FC = () => {
     const [text, setText] = useState<string>('');
     const [startTime, setStartTime] = useState<string>('');
     const [endTime, setEndTime] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchMessages();
@@ -30,6 +34,9 @@ const MessagesComponent: React.FC = () => {
             }
         } catch (error) {
             console.error('Error fetching messages:', error);
+            setError('שגיאה בטעינת ההודעות');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -76,12 +83,21 @@ const MessagesComponent: React.FC = () => {
         }
     };
 
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+                <CircularProgress />
+            </Box>
+        );
+    }
+
     return (
         <div style={styles.pageContainer}>
-            <h1 style={styles.title}>ניהול הודעות</h1>
+            <Typography variant="h4" style={styles.title}>ניהול הודעות</Typography>
+
             <div style={styles.contentContainer}>
                 <div style={styles.messageBox}>
-                    <h1 style={styles.subtitle}>הודעות קיימות</h1>
+                    <Typography variant="h5" style={styles.subtitle}>הודעות קיימות</Typography>
                     <ul style={styles.messageList}>
                         {messages.map((message) => (
                             <li key={message._id} style={styles.messageItem}>
@@ -96,39 +112,49 @@ const MessagesComponent: React.FC = () => {
                                     <strong>סיום תוקף:</strong>{' '}
                                     {new Date(message.endTime).toLocaleString()}
                                 </p>
-                                <button
+                                <Button
                                     onClick={() => deleteMessage(message._id)}
                                     style={styles.deleteButton}
+                                    startIcon={<Delete />}
                                 >
                                     מחיקה
-                                </button>
+                                </Button>
                             </li>
                         ))}
                     </ul>
                 </div>
+
                 <div style={styles.formBox}>
-                    <h2 style={styles.subtitle}>הוסף הודעה חדשה</h2>
-                    <textarea
+                    <Typography variant="h5" style={styles.subtitle}>הוסף הודעה חדשה</Typography>
+                    <TextField
                         value={text}
                         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value)}
                         placeholder="תוכן ההודעה"
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        rows={4}
                         style={styles.textarea}
                     />
-                    <input
+                    <TextField
                         type="datetime-local"
                         value={startTime}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setStartTime(e.target.value)}
+                        variant="outlined"
+                        fullWidth
                         style={styles.input}
                     />
-                    <input
+                    <TextField
                         type="datetime-local"
                         value={endTime}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setEndTime(e.target.value)}
+                        variant="outlined"
+                        fullWidth
                         style={styles.input}
                     />
-                    <button onClick={addMessage} style={styles.submitButton}>
+                    <Button onClick={addMessage} variant="contained" color="primary" style={styles.submitButton}>
                         הוסף הודעה
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
@@ -142,11 +168,13 @@ const styles = {
         alignItems: 'center',
         padding: '20px',
         minHeight: '100vh',
+        backgroundColor: '#f0f4f8', // צבע רקע בהיר ונעים
     } as React.CSSProperties,
     title: {
         marginBottom: '20px',
         color: '#333',
-        fontSize: 50
+        fontSize: 36,
+        fontWeight: 'bold',
     } as React.CSSProperties,
     contentContainer: {
         display: 'flex',
@@ -160,58 +188,43 @@ const styles = {
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         marginRight: '10px',
         padding: '20px',
+        backgroundColor: '#ffffff', // צבע רקע לבן לכרטיס ההודעות
     } as React.CSSProperties,
     formBox: {
         flex: 1,
         borderRadius: '8px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
         padding: '20px',
+        backgroundColor: '#ffffff', // צבע רקע לבן לכרטיס ההוספה
     } as React.CSSProperties,
     subtitle: {
         marginBottom: '10px',
         color: '#555',
     } as React.CSSProperties,
     messageList: {
-        listStyle: 'none',
-        padding: '0',
-        margin: '0',
+        listStyleType: 'none',
+        paddingLeft: 0,
     } as React.CSSProperties,
     messageItem: {
         borderBottom: '1px solid #eee',
-        padding: '10px 0',
+        paddingBottom: '10px',
+        marginBottom: '10px',
     } as React.CSSProperties,
     deleteButton: {
         marginTop: '10px',
         backgroundColor: '#e74c3c',
         color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        padding: '8px 12px',
-        cursor: 'pointer',
     } as React.CSSProperties,
     textarea: {
         width: '100%',
-        height: '100px',
         marginBottom: '10px',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        padding: '10px',
     } as React.CSSProperties,
     input: {
         width: '100%',
         marginBottom: '10px',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-        padding: '10px',
     } as React.CSSProperties,
     submitButton: {
         width: '100%',
-        backgroundColor: '#3498db',
-        color: 'white',
-        border: 'none',
-        borderRadius: '4px',
-        padding: '10px',
-        cursor: 'pointer',
     } as React.CSSProperties,
 };
 

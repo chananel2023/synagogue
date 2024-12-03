@@ -1,5 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
+import {
+    Card,
+    CardContent,
+    Typography,
+    Button,
+    Box,
+    Modal,
+    Container,
+    TextField,
+    IconButton,
+} from "@mui/material";
+import {
+    Add as AddIcon,
+    Edit as EditIcon,
+    Delete as DeleteIcon,
+    Schedule as ScheduleIcon,
+} from '@mui/icons-material';
 
 interface Tfila {
     _id: string;
@@ -10,36 +28,35 @@ interface Tfila {
 const AdminTfilot: React.FC = () => {
     const [tfilot, setTfilot] = useState<Tfila[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [newTfila, setNewTfila] = useState<{ tfila: string; time: string }>({
-        tfila: "",
-        time: "",
-    });
+    const [newTfila, setNewTfila] = useState<{ tfila: string; time: string }>({ tfila: "", time: "" });
     const [editingTfila, setEditingTfila] = useState<Tfila | null>(null);
     const [message, setMessage] = useState<string>("");
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+    const memoizedTfilot = useMemo(() => tfilot, [tfilot]);
 
     useEffect(() => {
-        const fetchTfilot = async () => {
-            try {
-                const response = await axios.get("http://localhost:5007/api/tfilot");
-                setTfilot(response.data);
-                setLoading(false);
-            } catch (error) {
-                setMessage("שגיאה בטעינת התפילות");
-                setLoading(false);
-            }
-        };
         fetchTfilot();
     }, []);
 
+    const fetchTfilot = async () => {
+        try {
+            const response = await axios.get("http://localhost:5007/api/tfilot");
+            setTfilot(response.data);
+            setLoading(false);
+        } catch (error) {
+            setMessage("שגיאה בטעינת התפילות");
+            setLoading(false);
+        }
+    };
+
     const handleCreateTfila = async () => {
         try {
-            const response = await axios.post(
-                "http://localhost:5007/api/tfilot",
-                newTfila
-            );
+            const response = await axios.post("http://localhost:5007/api/tfilot", newTfila);
             setTfilot([response.data, ...tfilot]);
             setNewTfila({ tfila: "", time: "" });
             setMessage("התפילה נוספה בהצלחה");
+            setIsModalOpen(false);
         } catch (error) {
             setMessage("שגיאה בהוספת תפילה");
         }
@@ -60,18 +77,12 @@ const AdminTfilot: React.FC = () => {
             try {
                 const response = await axios.put(
                     `http://localhost:5007/api/tfilot/${editingTfila._id}`,
-                    {
-                        tfila: editingTfila.tfila,
-                        time: editingTfila.time,
-                    }
+                    { tfila: editingTfila.tfila, time: editingTfila.time }
                 );
-                setTfilot(
-                    tfilot.map((tfila) =>
-                        tfila._id === response.data._id ? response.data : tfila
-                    )
-                );
+                setTfilot(tfilot.map((tfila) => (tfila._id === response.data._id ? response.data : tfila)));
                 setEditingTfila(null);
                 setMessage("התפילה עודכנה בהצלחה");
+                setIsModalOpen(false);
             } catch (error) {
                 setMessage("שגיאה בעדכון תפילה");
             }
@@ -80,6 +91,7 @@ const AdminTfilot: React.FC = () => {
 
     const handleEditTfila = (tfila: Tfila) => {
         setEditingTfila({ ...tfila });
+        setIsModalOpen(true);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,130 +104,105 @@ const AdminTfilot: React.FC = () => {
     };
 
     return (
-        <div className="p-8 bg-gray-100 min-h-screen">
-            <h2 className="text-2xl font-bold text-center mb-8">ניהול תפילות - אדמין</h2>
+        <Container maxWidth="lg">
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Typography variant="h4" align="center" gutterBottom sx={{ mt: 4, fontWeight: 'bold' }}>
+                    ניהול זמני תפילות
+                </Typography>
 
-            {message && (
-                <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-md shadow">
-                    {message}
-                </div>
-            )}
+                {message && (
+                    <Box sx={{ mb: 2, p: 2, bgcolor: 'background.paper', borderRadius: 1, boxShadow: 1 }}>
+                        <Typography color="primary">{message}</Typography>
+                    </Box>
+                )}
 
-            <div className="flex gap-8">
-                {/* צד ימין: הוספת תפילה */}
-                <div className="w-1/3 bg-white p-6 rounded-md shadow">
-                    <h3 className="text-xl font-semibold mb-4">הוסף תפילה חדשה</h3>
-                    <div className="flex flex-col gap-4">
-                        <input
-                            type="text"
-                            name="tfila"
-                            value={newTfila.tfila}
-                            onChange={handleChange}
-                            placeholder="תפילה"
-                            className="p-3 border rounded-md focus:outline-blue-400"
-                        />
-                        <input
-                            type="time"
-                            name="time"
-                            value={newTfila.time}
-                            onChange={handleChange}
-                            placeholder="שעה"
-                            className="p-3 border rounded-md focus:outline-blue-400"
-                        />
-                        <button
-                            onClick={handleCreateTfila}
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md"
-                        >
-                            הוסף תפילה
-                        </button>
-                    </div>
-                </div>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={() => setIsModalOpen(true)}
+                        sx={{ borderRadius: 28 }}
+                    >
+                        הוסף תפילה חדשה
+                    </Button>
+                </Box>
 
-                {/* צד שמאל: הצגת התפילות */}
-                <div className="w-2/3 bg-white p-6 rounded-md shadow">
-                    <h3 className="text-xl font-semibold mb-4">רשימת תפילות</h3>
-                    {loading ? (
-                        <p className="text-center text-gray-500">טוען תפילות...</p>
-                    ) : (
-                        <table className="w-full table-auto border-collapse">
-                            <thead>
-                                <tr className="bg-gray-200">
-                                    <th className="p-3 border">תפילה</th>
-                                    <th className="p-3 border">שעה</th>
-                                    <th className="p-3 border">פעולות</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Array.isArray(tfilot) &&
-                                    tfilot.map((tfila) => (
-                                        <tr
-                                            key={tfila._id}
-                                            className={`hover:bg-gray-100 ${editingTfila &&
-                                                    editingTfila._id === tfila._id
-                                                    ? "bg-yellow-100"
-                                                    : ""
-                                                }`}
-                                        >
-                                            <td className="p-3 border">{tfila.tfila}</td>
-                                            <td className="p-3 border">{tfila.time}</td>
-                                            <td className="p-3 border flex gap-4">
-                                                <button
-                                                    onClick={() => handleEditTfila(tfila)}
-                                                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded-md"
-                                                >
-                                                    ערוך
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteTfila(tfila._id)}
-                                                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded-md"
-                                                >
-                                                    מחק
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                            </tbody>
-                        </table>
-                    )}
+                {loading ? (
+                    <Typography align="center">טוען תפילות...</Typography>
+                ) : (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
+                        {memoizedTfilot.map((tfila) => (
+                            <Card key={tfila._id} sx={{ width: 300, borderRadius: 2, boxShadow: 3 }}>
+                                <CardContent>
+                                    <Typography variant="h6" gutterBottom>
+                                        {tfila.tfila}
+                                    </Typography>
+                                    <Typography color="textSecondary">
+                                        <ScheduleIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+                                        {tfila.time}
+                                    </Typography>
+                                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+                                        <IconButton onClick={() => handleEditTfila(tfila)} color="primary">
+                                            <EditIcon />
+                                        </IconButton>
+                                        <IconButton onClick={() => handleDeleteTfila(tfila._id)} color="error">
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </Box>
+                )}
+            </motion.div>
 
-                    {editingTfila && (
-                        <div className="mt-6">
-                            <h4 className="text-lg font-semibold mb-2">עריכת תפילה</h4>
-                            <input
-                                type="text"
-                                name="tfila"
-                                value={editingTfila.tfila}
-                                onChange={handleChange}
-                                placeholder="שם תפילה"
-                                className="p-3 border rounded-md focus:outline-blue-400 mb-4"
-                            />
-                            <input
-                                type="time"
-                                name="time"
-                                value={editingTfila.time}
-                                onChange={handleChange}
-                                placeholder="שעה"
-                                className="p-3 border rounded-md focus:outline-blue-400"
-                            />
-                            <div className="flex gap-4 mt-4">
-                                <button
-                                    onClick={handleUpdateTfila}
-                                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-md"
-                                >
-                                    עדכן תפילה
-                                </button>
-                                <button
-                                    onClick={() => setEditingTfila(null)}
-                                    className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md"
-                                >
-                                    בטל
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
+            <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2,
+                }}>
+                    <Typography variant="h6" gutterBottom>
+                        {editingTfila ? 'עריכת תפילה' : 'הוספת תפילה חדשה'}
+                    </Typography>
+                    <TextField
+                        fullWidth
+                        label="שם התפילה"
+                        name="tfila"
+                        value={editingTfila ? editingTfila.tfila : newTfila.tfila}
+                        onChange={handleChange}
+                        sx={{ mb: 2 }}
+                    />
+                    <TextField
+                        fullWidth
+                        label="זמן התפילה"
+                        name="time"
+                        type="time"
+                        value={editingTfila ? editingTfila.time : newTfila.time}
+                        onChange={handleChange}
+                        sx={{ mb: 2 }}
+                    />
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        onClick={editingTfila ? handleUpdateTfila : handleCreateTfila}
+                        sx={{ mt: 2 }}
+                    >
+                        {editingTfila ? 'עדכן תפילה' : 'הוסף תפילה'}
+                    </Button>
+                </Box>
+            </Modal>
+        </Container>
     );
 };
 

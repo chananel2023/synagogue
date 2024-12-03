@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from "react";
 import { getZmanimJson } from 'kosher-zmanim';
 import locations from '../data/locations.json';
 import TranslateKeyToHebrew from './TranslateKeyToHebrew';
 import Location from '../models/Location';
 import { motion } from 'framer-motion';
-import { AccessTime, Event, LocationOn } from '@mui/icons-material';
+import { AccessTime, CalendarToday, LocationOn } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 
 const Zmanim2: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location>(locations[0]);
@@ -38,11 +39,11 @@ const Zmanim2: React.FC = () => {
   }, [selectedLocation, selectedDate]);
 
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return <Typography color="error">{error}</Typography>;
   }
 
   if (!zmanim || !zmanim.zmanim) {
-    return <p>טוען זמני היום...</p>;
+    return <Typography>טוען זמני היום...</Typography>;
   }
 
   const sortedZmanim = Object.entries(zmanim.zmanim)
@@ -54,8 +55,21 @@ const Zmanim2: React.FC = () => {
     .sort((a, b) => a.date.getTime() - b.date.getTime());
 
   return (
-    <div className="p-6 w-full bg-gray-100">
-      <h1 className="text-4xl font-bold text-center mb-6 text-blue-600">זמני היום</h1>
+    <Box className="p-6 w-full bg-gray-100">
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{
+          fontWeight: "bold",
+          color: "#2E3B55",
+          marginTop: "60px",
+          marginBottom: "40px",
+          fontFamily: 'Arial, sans-serif', // פונט אריאל
+        }}
+      >
+        זמני היום
+      </Typography>
 
       <div className="mb-6 flex flex-wrap justify-center gap-4">
         <div className="inline-block">
@@ -87,7 +101,7 @@ const Zmanim2: React.FC = () => {
         <div className="inline-block">
           <label className="block mb-2 text-center font-semibold">בחר תאריך</label>
           <div className="relative inline-block">
-            <Event className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <CalendarToday className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="date"
               value={selectedDate}
@@ -105,13 +119,13 @@ const Zmanim2: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
-            className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+            className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center justify-center"
           >
-            <div className="flex items-center mb-2">
+            <div className="flex items-center mb-2 justify-center">
               <AccessTime className="text-blue-500 mr-2" />
               <h3 className="text-lg font-semibold text-blue-600">{TranslateKeyToHebrew(key)}</h3>
             </div>
-            <p className="text-2xl font-bold text-gray-800">
+            <p className="text-2xl font-bold text-gray-800 text-center">
               {date.toLocaleTimeString('he-IL', {
                 timeZone: selectedLocation.timeZoneId,
                 hour: '2-digit',
@@ -121,7 +135,7 @@ const Zmanim2: React.FC = () => {
           </motion.div>
         ))}
       </div>
-    </div>
+    </Box>
   );
 };
 

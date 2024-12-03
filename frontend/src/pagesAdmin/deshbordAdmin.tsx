@@ -1,9 +1,14 @@
 import React, { useState, CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PaymentIcon from '@mui/icons-material/Payment'; // אייקון תשלומים
+import SchoolIcon from '@mui/icons-material/School'; // אייקון שיעורים
+import MessageIcon from '@mui/icons-material/Message'; // אייקון עדכונים חמים
+import CarouselIcon from '@mui/icons-material/Slideshow'; // אייקון קרוסלה
 
 function NavbarAdmin() {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const navigate = useNavigate();
+
     const handleMouseEnter = (index: number) => setHoverIndex(index);
     const handleMouseLeave = () => setHoverIndex(null);
     const handleNavigate = (link: string) => {
@@ -23,13 +28,17 @@ function NavbarAdmin() {
                     onMouseLeave={handleMouseLeave}
                     onClick={() => handleNavigate(item.link)}
                 >
-                    <span
-                        style={{
-                            ...linkStyle,
-                            fontSize: hoverIndex === index ? '2rem' : '1.2rem', // שינוי גודל הפונט
-                        }}
-                    >
-                        {item.label}
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {item.icon}
+                        <span
+                            style={{
+                                ...linkStyle,
+                                fontSize: hoverIndex === index ? '1.5rem' : '1.2rem', // שינוי גודל הפונט
+                                marginLeft: '8px', // רווח בין האייקון לטקסט
+                            }}
+                        >
+                            {item.label}
+                        </span>
                     </span>
                 </div>
             ))}
@@ -37,13 +46,13 @@ function NavbarAdmin() {
     );
 }
 
-// רשימת פריטים
-const menuItems: { label: string; link: string }[] = [
-    { label: 'תשלומים', link: '/payAdmin' },
-    { label: 'תפילות', link: '/tfilotAdmin' },
-    { label: 'עדכונים חמים', link: '/messageAdmin' },
-    { label: 'שיעורים', link: '/Lessons' },
-    { label: 'קרוסלה', link: '/UpdataAdminCarousel' },
+// רשימת פריטים עם אייקונים
+const menuItems = [
+    { label: 'תשלומים', link: '/payAdmin', icon: <PaymentIcon /> },
+    { label: 'תפילות', link: '/tfilotAdmin', icon: <SchoolIcon /> },
+    { label: 'עדכונים חמים', link: '/messageAdmin', icon: <MessageIcon /> },
+    { label: 'שיעורים', link: '/Lessons', icon: <SchoolIcon /> },
+    { label: 'קרוסלה', link: '/UpdataAdminCarousel', icon: <CarouselIcon /> },
 ];
 
 // עיצוב הדשבורד הכללי
@@ -59,43 +68,34 @@ const dashboardContainer: CSSProperties = {
 
 // עיצוב של כל כפתור/קובייה
 const dashboardItem: CSSProperties = {
-    backgroundColor: '#63B3ED',
-    color: '#E2E8F0',
+    backgroundColor: '#4A90E2', // צבע רקע כחול מודרני
+    color: '#FFFFFF',
     width: '200px',
     height: '200px',
-    borderRadius: '40px',
+    borderRadius: '20px',
     textAlign: 'center',
-    boxShadow: '0 8px 15px rgba(0, 0, 0, 0.2)',
-    transition: 'all 0.3s ease', // שינוי כל המאפיינים בצורה חלקה
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease', // שינוי כל המאפיינים בצורה חלקה
     cursor: 'pointer',
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
-    position: 'relative',
-    overflow: 'hidden',
 };
 
 // אפקט hover
 const dashboardItemHover: CSSProperties = {
-    transform: 'translateY(-5px)',
-    boxShadow: '0 12px 20px rgba(0, 0, 0, 0.3)',
-    backgroundColor: '#4299E1',
-    width: '300px', // גודל כפול ברוחב
-    height: '300px', // גודל כפול בגובה
-    borderRadius: '50px', // שינוי רדיוס הקצוות
+    transform: 'scale(1.05)', // הגדלה קלה כאשר הכרטיס מוחזק
+    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)',
 };
 
 // עיצוב הטקסט בתוך הקישורים
 const linkStyle: CSSProperties = {
-    color: '#E2E8F0',
+    color: '#FFFFFF',
     textDecoration: 'none',
     textTransform: 'uppercase',
     transition: 'font-size 0.3s ease',
-    fontFamily: '"Suez One", serif', // שימוש בפונט Suez One
 };
-
 
 // ייצוא הקומפוננטה
 export default NavbarAdmin;

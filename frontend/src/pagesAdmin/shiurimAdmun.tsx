@@ -11,7 +11,7 @@ import {
     Container,
     TextField,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { AddCircle, Edit, Delete } from '@mui/icons-material';
 
 interface Lesson {
     _id: string;
@@ -33,8 +33,6 @@ const ShiurimAdmin: React.FC = () => {
     const [location, setLocation] = useState<string>("");
     const [audience, setAudience] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         getLessons();
@@ -61,7 +59,7 @@ const ShiurimAdmin: React.FC = () => {
 
             getLessons();
             resetForm();
-            setIsModalOpen(false); // סגירת המודל אחרי שמירת שיעור
+            setIsModalOpen(false);
         } catch (error) {
             console.error("Error creating/updating lesson:", error);
         }
@@ -87,33 +85,12 @@ const ShiurimAdmin: React.FC = () => {
     };
 
     return (
-        <Container
-            sx={{
-                width: "100%",
-                minHeight: "100vh",
-                padding: 4,
-            }}
-        >
+        <Container sx={{ width: "100%", minHeight: "100vh", padding: 4 }}>
             <motion.div
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                <Box textAlign="center" mb={2}>
-                    <Button
-                        variant="contained"
-                        onClick={() => navigate("/homePage")}
-                        sx={{
-                            backgroundColor: "#1976d2", // צבע כפתור
-                            color: "#fff",
-                            fontWeight: "bold",
-                            "&:hover": { backgroundColor: "#1565c0" },
-                        }}
-                    >
-                        חזור לדשבורד
-                    </Button>
-                </Box>
-
                 <Typography
                     variant="h3"
                     align="center"
@@ -123,7 +100,8 @@ const ShiurimAdmin: React.FC = () => {
                         fontWeight: "bold",
                     }}
                 >
-                    שיעורים באתר
+                    שיעורים 
+                    <br />
                 </Typography>
             </motion.div>
 
@@ -137,6 +115,7 @@ const ShiurimAdmin: React.FC = () => {
                         variant="contained"
                         color="primary"
                         onClick={() => setIsModalOpen(true)}
+                        startIcon={<AddCircle />}
                         sx={{
                             backgroundColor: "#4CAF50",
                             fontWeight: "bold",
@@ -175,9 +154,9 @@ const ShiurimAdmin: React.FC = () => {
                         <Card
                             sx={{
                                 width: "300px",
-                                backgroundColor: "white",
+                                backgroundColor: "#f5f5f5",
                                 borderRadius: "10px",
-                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
                                 transition: "transform 0.3s",
                                 "&:hover": { transform: "scale(1.05)" },
                             }}
@@ -198,6 +177,7 @@ const ShiurimAdmin: React.FC = () => {
                                     <Button
                                         variant="contained"
                                         color="secondary"
+                                        startIcon={<Edit />}
                                         onClick={() => {
                                             setTeacher(lesson.teacher);
                                             setTopic(lesson.topic);
@@ -214,6 +194,7 @@ const ShiurimAdmin: React.FC = () => {
                                     <Button
                                         variant="outlined"
                                         color="error"
+                                        startIcon={<Delete />}
                                         onClick={() => deleteLesson(lesson._id)}
                                     >
                                         מחק
@@ -304,7 +285,7 @@ const ShiurimAdmin: React.FC = () => {
                                 backgroundColor: "#1976d2",
                                 color: "#fff",
                                 fontWeight: "bold",
-                                "&:hover": { backgroundColor: "#1565c0" },
+                                "& :hover": { backgroundColor: "#1565c0" },
                             }}
                         >
                             {currentLessonId ? "עדכן שיעור" : "הוסף שיעור"}

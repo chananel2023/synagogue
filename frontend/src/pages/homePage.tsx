@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import Carousel from '../components/karusela';
 import TfilotList from '../components/TfilotList';
 import { PlayCircleOutline } from '@mui/icons-material';
-import Footer from '../components/Footer';
+import Footer from '../components/footer';
+import UserMessagesComponent from '../components/UserMessagesComponent';
 
 const videoIds = [
   "TFFnwIS0_pk",
@@ -55,6 +56,11 @@ const HomePage: React.FC = () => {
         <Carousel />
       </div>
 
+      {/* הוספת UserMessagesComponent כאן */}
+      <div className="my-4 w-full">
+        <UserMessagesComponent />
+      </div>
+
       <div className="my-8 w-full">
         <TfilotList />
       </div>
@@ -65,7 +71,7 @@ const HomePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
           className="text-4xl font-extrabold text-center mb-10 text-blue-700"
-          style={{ fontFamily: 'Arial, sans-serif' }} // שינוי לפונט אריאל
+          style={{ fontFamily: 'Arial, sans-serif' }}
         >
           אולי יעניין אותך
         </motion.h2>
@@ -101,7 +107,6 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* הוספת הפוטר */}
       <Footer />
     </div>
   );

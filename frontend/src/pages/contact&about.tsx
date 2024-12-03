@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar2 from '../components/Navbar2';
+import Footer from '../components/footer'
 import {
     Box,
     Typography,
@@ -17,10 +18,10 @@ const AboutContactPage: React.FC = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Box sx={{ backgroundColor: '#F3F4F6', minHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#F3F4F6' }}>
             <Navbar2 />
 
-            <Container maxWidth="lg" sx={{ mt: 12, mb: 4 }}>
+            <Container maxWidth="lg" sx={{ mt: 12, mb: 4, flex: 1 }}>
                 <Grid container spacing={4}>
                     {/* אודות */}
                     <Grid item xs={12} md={6}>
@@ -82,6 +83,8 @@ const AboutContactPage: React.FC = () => {
                     </Grid>
                 </Grid>
             </Container>
+
+            <Footer />
         </Box>
     );
 };
