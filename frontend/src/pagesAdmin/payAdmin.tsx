@@ -20,6 +20,11 @@ const AdminPage: React.FC = () => {
         date: "",
     });
     const [loading, setLoading] = useState<boolean>(false);
+    const [selectedDate, setSelectedDate] = useState<string>(
+        new Date().toISOString().split('T')[0]
+      );
+
+                    
 
     // שליפת כל המידע על משתמשים
     const fetchUsers = async () => {
@@ -51,7 +56,7 @@ const AdminPage: React.FC = () => {
                 aliyahDetails: {
                     price: newAliyah.price,
                     buyer: newAliyah.buyer,
-                    date: newAliyah.date,
+                    date: new Date(selectedDate)
                 },
             });
 

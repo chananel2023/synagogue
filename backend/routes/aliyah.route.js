@@ -7,7 +7,9 @@ import {
     getAliyahFrom,
     
     getUserAliyah,
-    getAllUsersAliyah
+    getAllUsersAliyah,
+    payAliyot,
+    getUnpaidAliyot
 } from "../controllers/aliyaht.controller.js";
 
 const router = express.Router();
@@ -21,6 +23,8 @@ router.delete("/delete", deleteAliyah);
 router.get("/all",getUserAliyah)
 router.get("/",getAliyahFrom)
 router.get('/getAllUsersAliyah' ,getAllUsersAliyah)
+router.post("/getUnpaidAliyot",getUnpaidAliyot) //  פרטי יוזר בדף תשלום 
+router.post('payAliyot' ,payAliyot)  
 
 export default router;
  

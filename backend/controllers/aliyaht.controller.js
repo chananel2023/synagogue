@@ -1,5 +1,7 @@
 import {TorahAliyah} from "../models/TorahAliyah.model.js"; 
-import {User} from "../models/user.model.js"; 
+import {User} from "../models/user.model.js";
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); 
 
 export const addAliyahToUser = async (req, res) => {
     const { userId, aliyahDetails } = req.body;
@@ -219,6 +221,81 @@ export const getAliyahFrom = async (req, res) => {
             });
         } catch (error) {
             console.error("Error in getAliyahFrom:", error);
+            res.status(500).json({ success: false, message: "Server error" });
+        }
+    };
+export const payAliyot = async (req, res) => {
+        const { userId, aliyahIds, paymentMethodId } = req.body;
+    
+        if (!userId || !aliyahIds || aliyahIds.length === 0 || !paymentMethodId) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+    
+        try {
+            // שליפת המשתמש
+            const user = await User.findById(userId);
+            if (!user) {
+                return res.status(404).json({ success: false, message: "User not found" });
+            }
+    
+            // חישוב הסכום לתשלום
+            const aliyotToPay = user.TorahAliyah.filter(aliyah => aliyahIds.includes(aliyah._id.toString()));
+            const totalAmount = aliyotToPay.reduce((sum, aliyah) => sum + (aliyah.price || 0), 0);
+    
+            if (totalAmount === 0) {
+                return res.status(400).json({ success: false, message: "No valid aliyot to pay" });
+            }
+    
+            // יצירת תשלום עם Stripe
+            const paymentIntent = await stripe.paymentIntents.create({
+                amount: totalAmount * 100, // הסכום באגורות
+                currency: "usd",
+                payment_method: paymentMethodId,
+                confirm: true,
+            });
+    
+            // סימון העליות כמשולמות
+            aliyotToPay.forEach(aliyah => {
+                aliyah.isPaid = true;
+                aliyah.paymentId = paymentIntent.id;
+            });
+    
+            await user.save();
+    
+            res.status(200).json({
+                success: true,
+                message: "Payment successful",
+                aliyot: aliyotToPay,
+                paymentIntent,
+            });
+        } catch (error) {
+            console.error("Error in payAliyot:", error);
+            res.status(500).json({ success: false, message: "Server error" });
+        }
+    };
+    export const getUnpaidAliyot = async (req, res) => {
+        const { userId } = req.body;
+    
+        if (!userId) {
+            return res.status(400).json({ success: false, message: "User ID is required" });
+        }
+    
+        try {
+            const result = await fetchUserAliyah(userId);
+            if (!result.success) {
+                return res.status(result.status).json(result);
+            }
+    
+            // סינון העליות שלא שולמו
+            const unpaidAliyot = result.data.userTorahAliyah.filter(aliyah => !aliyah.isPaid);
+    
+            res.status(200).json({
+                success: true,
+                status: 200,
+                data: { userTorahAliyah: unpaidAliyot },
+            });
+        } catch (error) {
+            console.error("Error in getUnpaidAliyot:", error);
             res.status(500).json({ success: false, message: "Server error" });
         }
     };

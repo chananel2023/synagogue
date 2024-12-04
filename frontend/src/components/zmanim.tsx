@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect} from "react";
 import { getZmanimJson } from 'kosher-zmanim';
 import locations from '../data/locations.json';
 import TranslateKeyToHebrew from './TranslateKeyToHebrew';
@@ -65,8 +65,8 @@ const Zmanim2: React.FC = () => {
           color: "#2E3B55",
           marginTop: "60px",
           marginBottom: "40px",
-          fontFamily: 'Arial, sans-serif', // פונט אריאל
-        }}
+          fontFamily: 'Arial, sans-serif',   
+        }} 
       >
         זמני היום
       </Typography>
