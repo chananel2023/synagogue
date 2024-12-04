@@ -105,6 +105,7 @@ export const login = async (req, res) => {
 		}
 
 		generateTokenAndSetCookie(res, user._id);
+		const token=generateTokenAndSetCookie(res, user._id)
 
 		user.lastLogin = new Date();
 		await user.save();
@@ -112,6 +113,7 @@ export const login = async (req, res) => {
 		res.status(200).json({
 			success: true,
 			message: "Logged in successfully",
+			token,
 			user: {
 				...user._doc,
 				password: undefined,
@@ -201,3 +203,23 @@ export const checkAuth = async (req, res) => {
 		res.status(400).json({ success: false, message: error.message });
 	}
 };
+
+export const getAllUsers = async (req, res) => {
+    try {
+        // מציאת כל המשתמשים ללא השדה "password"
+        const users = await User.find().select("-password");
+
+        if (!users || users.length === 0) {
+            return res.status(404).json({ success: false, message: "No users found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            users,
+        });
+    } catch (error) {
+        console.log("Error in getAllUsers ", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+

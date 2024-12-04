@@ -11,7 +11,8 @@ export const useAuthStore = create((set) => ({
 	error: null,
 	isLoading: false,
 	isCheckingAuth: true,
-	message: null,	
+	message: null,
+	token :null,	
 	signup: async (email, password, name) => {
 		if (!email || !password  || !name) {
             
@@ -27,36 +28,46 @@ export const useAuthStore = create((set) => ({
 			throw error;
 		}
 	},
-	login: async (email, password) => {	
-		if (!email || !password ) {
-            
-            alert('Please enter both username and password.');
-            
-        }	
-				
-			set({ isLoading: true, error: null });
-			try {
-			  
-			  const response = await axios.post(`${API_URL}/login`, { email, password });
-			  
-		  
-			  // עדכון החנות
-			  set({
+	login: async (email, password) => {
+		if (!email || !password) {
+			alert("Please enter both username and password.");
+			return;
+		}
+	
+		set({ isLoading: true, error: null });
+		try {
+			const response = await axios.post(`${API_URL}/login`, { email, password });
+			
+			const { token, user } = response.data;
+			if(!token){
+				console.log('no token')
+			}
+			if (token) {
+				localStorage.setItem("token", token);
+				axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+				console.log('token')
+			}
+	
+			set({
 				isAuthenticated: true,
-				user: response.data.user,
+				user,
 				error: null,
 				isLoading: false,
-				success: response.data.success,
-			  });
+				success: true,
+				token,
+			
+			});
+		} catch (error) {
+			set({ error: error.response?.data?.message || "Error logging in", isLoading: false });
+			throw error;
+			
+		}
+	},
+	
 		  
 			  // הדפסת הערכים אחרי העדכון
 			  
-			} catch (error) {
-			  set({ error: error.response?.data?.message || "Error logging in", isLoading: false });
-			  throw error;
-			}
-		  }
-		  ,
+			
 
 	logout: async () => {
 		set({ isLoading: true, error: null });
