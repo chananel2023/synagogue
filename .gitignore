@@ -35,3 +35,4 @@ build/
 *.swp
 *.swo
 
+.env
