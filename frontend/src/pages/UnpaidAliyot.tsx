@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { useAuthStore } from '../store/authStore';
 
 // טעינת המפתח הפומבי מ-.env
 const stripePromise = loadStripe('pk_test_51QRYlcIxvrp9Hc1FCpRCt0Fp7eKNpYhRNrc4rZ70fqHQX5gjksS1LUfyiofDWnRDKLLjp240yw4PfSkNukV4dsop00lLgQDfu4');
 console.log(stripePromise )
+
 
 // טיפוס עבור פרטי עלייה
 interface Aliyah {
@@ -30,6 +32,7 @@ const CheckoutForm: React.FC<{ userId: string; aliyahIds: string[]; onSuccess: (
     const stripe = useStripe();
     const elements = useElements();
     const [loading, setLoading] = useState(false);
+    
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -87,6 +90,7 @@ const CheckoutForm: React.FC<{ userId: string; aliyahIds: string[]; onSuccess: (
 
 const UnpaidAliyot: React.FC<UnpaidAliyotProps> = ({ userId }) => {
     const [aliyot, setAliyot] = useState<Aliyah[]>([]);
+    const { user } = useAuthStore();
 
     useEffect(() => {
         const fetchAliyot = async () => {
@@ -106,7 +110,7 @@ const UnpaidAliyot: React.FC<UnpaidAliyotProps> = ({ userId }) => {
 
     return (
         <div>
-            <h1>Unpaid Aliyot</h1>
+            <h1>היי {user.name}</h1>
             {aliyot.map(aliyah => (
                 <div key={aliyah._id}>
                     <p>
