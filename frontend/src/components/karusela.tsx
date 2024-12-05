@@ -48,7 +48,7 @@ const Carousel: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden mt-[-6rem]">
       {slides.length > 0 ? (
         <motion.div
           className="relative w-full h-full"
@@ -65,7 +65,7 @@ const Carousel: React.FC = () => {
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4">
             <h2 className="text-4xl md:text-6xl font-extrabold mb-4">{slides[currentSlide].title}</h2>
-            <p className="bg-black bg-opacity-50 border-2 border-white text-lg md:text-2xl p-4 rounded-lg max-w-xl mx-auto">
+            <p className="bg-black bg-opacity-50 border-2 border-white text-lg md:text-2xl p-4 rounded-lg max-w-xl mx-auto transition-colors duration-300 hover:bg-yellow-400 hover:border-yellow-400 hover:text-black">
               {slides[currentSlide].description}
             </p>
           </div>

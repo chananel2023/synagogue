@@ -16,7 +16,86 @@ code {
     monospace;
 }
 
+/* index.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  /* You can change this to your preferred font */
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.background {
+  background: linear-gradient(135deg, #007BFF, #FFD700);
+  /* Blue to Yellow gradient */
+  min-height: 100vh;
+  /* Ensures it covers the full height */
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  /* Allows content to grow and fill available space */
+}
 
 
 
+/* index.css או קובץ CSS אחר */
 
+.card {
+  background-color: #007BFF;
+  /* כחול */
+  color: white;
+  /* טקסט לבן */
+}
+
+.card:hover {
+  background-color: #0056b3;
+  /* גוון כהה יותר של כחול בעת ריחוף */
+}
+
+.select {
+  background-color: #FFD700;
+  /* צהוב */
+  color: #2E3B55;
+  /* טקסט כהה */
+  border: 1px solid #0056b3;
+  /* גבול כחול */
+}
+
+.select:hover {
+  border-color: #FFD700;
+  /* גבול צהוב בעת ריחוף */
+}
+
+/* index.css או קובץ CSS אחר */
+
+.date-input {
+  background-color: #FFD700;
+  /* צבע רקע צהוב */
+  color: #2E3B55;
+  /* צבע טקסט כהה */
+  border: 1px solid #0056b3;
+  /* גבול כחול */
+  padding: 10px;
+  /* ריפוד */
+  border-radius: 4px;
+  /* פינות מעוגלות */
+}
+
+.date-input:focus {
+  border-color: #007BFF;
+  /* גבול כחול בעת מיקוד */
+  outline: none;
+  /* הסרת קו מתאר */
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

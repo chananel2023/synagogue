@@ -1,101 +1,113 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PaymentIcon from '@mui/icons-material/Payment'; // אייקון תשלומים
-import SchoolIcon from '@mui/icons-material/School'; // אייקון שיעורים
-import MessageIcon from '@mui/icons-material/Message'; // אייקון עדכונים חמים
-import CarouselIcon from '@mui/icons-material/Slideshow'; // אייקון קרוסלה
+import { Box, Typography, SvgIcon, useTheme, useMediaQuery } from '@mui/material';
+import { PaymentOutlined, SchoolOutlined, MessageOutlined, SlideshowOutlined } from '@mui/icons-material';
+import { motion } from 'framer-motion';
 
-function NavbarAdmin() {
+const menuItems = [
+    { label: 'תשלום', link: '/payAdmin', icon: <PaymentOutlined /> },
+    { label: 'תפילות', link: '/tfilotAdmin', icon: <SchoolOutlined /> },
+    { label: 'הודעות', link: '/messageAdmin', icon: <MessageOutlined /> },
+    { label: 'שיעורים', link: '/Lessons', icon: <SchoolOutlined /> },
+    { label: 'קרוסלה', link: '/UpdataAdminCarousel', icon: <SlideshowOutlined /> },
+];
+
+const IconWrapper: React.FC<{ icon: React.ReactElement }> = ({ icon }) => {
+    return <>{icon}</>;
+};
+
+const NavbarAdmin: React.FC = () => {
     const [hoverIndex, setHoverIndex] = useState<number | null>(null);
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const handleMouseEnter = (index: number) => setHoverIndex(index);
-    const handleMouseLeave = () => setHoverIndex(null);
-    const handleNavigate = (link: string) => {
+    const handleMouseEnter = useCallback((index: number) => setHoverIndex(index), []);
+    const handleMouseLeave = useCallback(() => setHoverIndex(null), []);
+
+    const handleNavigate = useCallback((link: string) => {
         navigate(link);
-    };
+    }, [navigate]);
 
     return (
-        <div style={dashboardContainer}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '20px',
+                padding: '20px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                minHeight: '100vh',
+                backgroundColor: 'transparent',
+            }}
+        >
             {menuItems.map((item, index) => (
-                <div
+                <motion.div
                     key={index}
-                    style={{
-                        ...dashboardItem,
-                        ...(hoverIndex === index ? dashboardItemHover : {}),
-                    }}
+                    initial={{ opacity: 0, scale: 0, rotate: -180 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.2 }}
+                    whileHover={{ rotate: 360, transition: { duration: 0.5 } }}
                     onMouseEnter={() => handleMouseEnter(index)}
                     onMouseLeave={handleMouseLeave}
                     onClick={() => handleNavigate(item.link)}
+                    style={{
+                        backgroundColor: '#1D3557',
+                        color: '#FFFF00',
+                        width: isMobile ? '150px' : '200px',
+                        height: isMobile ? '150px' : '200px',
+                        borderRadius: '20px',
+                        textAlign: 'center',
+                        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        ...(hoverIndex === index
+                            ? {
+                                transform: 'scale(1.05)',
+                                boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)',
+                            }
+                            : {}),
+                    }}
                 >
-                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {item.icon}
-                        <span
-                            style={{
-                                ...linkStyle,
-                                fontSize: hoverIndex === index ? '1.5rem' : '1.2rem', // שינוי גודל הפונט
-                                marginLeft: '8px', // רווח בין האייקון לטקסט
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                        }}
+                    >
+                        <SvgIcon
+                            sx={{
+                                fontSize: isMobile ? '2rem' : '3rem',
+                                color: '#FFFF00',
+                            }}
+                        >
+                            {item.icon}
+                        </SvgIcon>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: '#FFFF00',
+                                textDecoration: 'none',
+                                textTransform: 'uppercase',
+                                transition: 'font-size 0.3s ease',
+                                fontSize: hoverIndex === index ? (isMobile ? '1.2rem' : '1.5rem') : (isMobile ? '1rem' : '1.2rem'),
+                                marginTop: '8px',
                             }}
                         >
                             {item.label}
-                        </span>
-                    </span>
-                </div>
+                        </Typography>
+                    </Box>
+                </motion.div>
             ))}
-        </div>
+        </Box>
     );
-}
-
-// רשימת פריטים עם אייקונים
-const menuItems = [
-    { label: 'תשלומים', link: '/payAdmin', icon: <PaymentIcon /> },
-    { label: 'תפילות', link: '/tfilotAdmin', icon: <SchoolIcon /> },
-    { label: 'עדכונים חמים', link: '/messageAdmin', icon: <MessageIcon /> },
-    { label: 'שיעורים', link: '/Lessons', icon: <SchoolIcon /> },
-    { label: 'קרוסלה', link: '/UpdataAdminCarousel', icon: <CarouselIcon /> },
-];
-
-// עיצוב הדשבורד הכללי
-const dashboardContainer: CSSProperties = {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '20px',
-    padding: '20px',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
 };
 
-// עיצוב של כל כפתור/קובייה
-const dashboardItem: CSSProperties = {
-    backgroundColor: '#4A90E2', // צבע רקע כחול מודרני
-    color: '#FFFFFF',
-    width: '200px',
-    height: '200px',
-    borderRadius: '20px',
-    textAlign: 'center',
-    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease', // שינוי כל המאפיינים בצורה חלקה
-    cursor: 'pointer',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-};
-
-// אפקט hover
-const dashboardItemHover: CSSProperties = {
-    transform: 'scale(1.05)', // הגדלה קלה כאשר הכרטיס מוחזק
-    boxShadow: '0 8px 20px rgba(0, 0, 0, 0.3)',
-};
-
-// עיצוב הטקסט בתוך הקישורים
-const linkStyle: CSSProperties = {
-    color: '#FFFFFF',
-    textDecoration: 'none',
-    textTransform: 'uppercase',
-    transition: 'font-size 0.3s ease',
-};
-
-// ייצוא הקומפוננטה
-export default NavbarAdmin;
+export default React.memo(NavbarAdmin);

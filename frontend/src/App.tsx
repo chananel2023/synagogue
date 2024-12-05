@@ -15,23 +15,21 @@ function App() {
 
 const MainApp = () => {
   const location = useLocation();
-  const { isAuthenticated, isCheckingAuth } = useAuthStore(); 
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
   const hiddenNavbarPaths = ['/', '/login', '/signup'];
 
   useEffect(() => {
-   
     if (!isCheckingAuth) {
-      
+      // You can handle additional authentication checks here if needed
     }
   }, [isCheckingAuth]);
 
-  
   if (!isAuthenticated && !hiddenNavbarPaths.includes(location.pathname)) {
-    return <Navigate to="/login" replace />; 
+    return <Navigate to="/login" replace />;
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="background"> {/* Add background class here */}
       {!hiddenNavbarPaths.includes(location.pathname) && (
         <div className="navbar">
           <Navbar2 />
@@ -40,12 +38,12 @@ const MainApp = () => {
 
       <div
         className={`${!hiddenNavbarPaths.includes(location.pathname)
-          ? "content pt-[100px]" 
+          ? "content pt-[100px]"
           : ""
           }`}
       >
         <div className="min-h-screen w-full items-center justify-center overflow-hidden">
-          {/* נתיבים */}
+          {/* Routes */}
           <Routes>
             {routes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />

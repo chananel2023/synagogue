@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import Footer from '../components/Footer'
-
+import Footer from '../components/footer';
 import {
     Typography,
     Box,
@@ -11,7 +10,7 @@ import {
     Chip,
     CircularProgress,
     useMediaQuery,
-    useTheme,
+    useTheme
 } from "@mui/material";
 import { AccessTime, CalendarToday, LocationOn, Person, School } from "@mui/icons-material";
 import { motion } from 'framer-motion';
@@ -67,97 +66,89 @@ const ShiurimHome: React.FC = () => {
         );
     }
 
-    // קביעת מספר העמודות בהתאם למספר השיעורים
-    const columnsPerRow = lessons.length <= 4 ? 4 : 3;
-
     return (
-        <Box sx={{ width: "100%", padding: isMobile ? 2 : 4, minHeight: "100vh", backgroundColor: "#f5f5f5" }}>
-            <Typography
-                variant={isMobile ? "h5" : "h4"}
-                align="center"
-                gutterBottom
-                sx={{
-                    fontWeight: "bold",
-                    color: "#2E3B55",
-                    marginTop: "60px",
-                    marginBottom: "40px",
-                    fontFamily: 'Arial, sans-serif', // פונט אריאל
-                }}
-            >
-                שיעורים קבועים
-            </Typography>
-            <Grid container spacing={3} justifyContent="center">
-                {lessons.map((lesson, index) => (
-                    <Grid item xs={12} sm={6} md={12 / columnsPerRow} key={lesson._id}>
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }} // התחלה לא שקופה ומעט למטה
-                            animate={{ opacity: 1, y: 0 }} // שקיפות מלאה ומיקום רגיל
-                            transition={{ duration: 0.5, delay: index * 0.1 }} // עיכוב לפי אינדקס
-                        >
-                            <Card
-                                elevation={3}
-                                sx={{
-                                    height: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-                                    '&:hover': {
-                                        transform: 'translateY(-5px)',
-                                        boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
-                                    },
-                                }}
+        <div>
+            <Box sx={{ width: "100%", padding: isMobile ? 2 : 4, minHeight: "100vh" }}>
+                <Typography
+                    variant={isMobile ? "h5" : "h4"}
+                    align="center"
+                    gutterBottom
+                    sx={{
+                        fontWeight: "bold",
+                        color: "#2E3B55",
+                        marginTop: "35px",
+                        marginBottom: "40px",
+                        fontFamily: 'Arial, sans-serif',
+                    }}
+                >
+                    שיעורים קבועים
+                </Typography>
+
+                <Grid container spacing={3} justifyContent="center">
+                    {lessons.map((lesson, index) => (
+                        <Grid item xs={12} sm={6} md={4} lg={3} key={lesson._id}>
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: index * 0.1 }}
                             >
-                                <CardContent sx={{ textAlign: 'center' }}>
-                                    <Typography variant="h6" component="div" gutterBottom sx={{ color: "#2E3B55", fontWeight: "bold" }}>
-                                        {lesson.topic}
-                                    </Typography>
-                                    <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
-                                        <Person sx={{ marginRight: 1, color: "#2E3B55" }} />
-                                        <Typography variant="body2" color="text.secondary">
-                                            {lesson.teacher}
+                                <Card
+                                    elevation={3}
+                                    sx={{
+                                        height: 'auto',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        backgroundColor: '#E0F7FA',
+                                        transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+                                        '&:hover': {
+                                            transform: 'translateY(-5px)',
+                                            boxShadow: '0 8px 16px 0 rgba(0,0,0,0.2)',
+                                        },
+                                        margin: 'auto',
+                                        padding: '16px',
+                                    }}
+                                >
+                                    <CardContent sx={{ textAlign: 'center', flexGrow: 1 }}>
+                                        <Typography variant="h6" component="div" gutterBottom sx={{ color: "#2E3B55", fontWeight: "bold" }}>
+                                            {lesson.topic}
                                         </Typography>
-                                    </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
-                                        <AccessTime sx={{ marginRight: 1, color: "#2E3B55" }} />
-                                        <Typography variant="body2" color="text.secondary">
-                                            {lesson.time}
-                                        </Typography>
-                                    </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
-                                        <CalendarToday sx={{ marginRight: 1, color: "#2E3B55" }} />
-                                        <Typography variant="body2" color="text.secondary">
-                                            {lesson.days}
-                                        </Typography>
-                                    </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
-                                        <LocationOn sx={{ marginRight: 1, color: "#2E3B55" }} />
-                                        <Typography variant="body2" color="text.secondary">
-                                            {lesson.location}
-                                        </Typography>
-                                    </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="center" mt={2}>
-                                        <School sx={{ marginRight: 1, color: "#2E3B55" }} />
-                                        <Chip
-                                            label={lesson.audience}
-                                            size="small"
-                                            sx={{
-                                                backgroundColor: "#E3E9F5",
-                                                color: "#2E3B55",
-                                                fontWeight: "bold"
-                                            }}
-                                        />
-                                    </Box>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    </Grid>
-                ))}
-            </Grid>
+                                        <LessonDetailRow icon={<Person />} text={lesson.teacher} />
+                                        <LessonDetailRow icon={<AccessTime />} text={lesson.time} />
+                                        <LessonDetailRow icon={<CalendarToday />} text={lesson.days} />
+                                        <LessonDetailRow icon={<LocationOn />} text={lesson.location} />
+                                        <Box display="flex" alignItems="center" justifyContent="center" mt={2}>
+                                            <School sx={{ marginRight: 1, color: "#2E3B55" }} />
+                                            <Chip
+                                                label={lesson.audience}
+                                                size="small"
+                                                sx={{
+                                                    backgroundColor: "#E3E9F5",
+                                                    color: "#2E3B55",
+                                                    fontWeight: "bold"
+                                                }}
+                                            />
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        </Grid>
+                    ))}
+                </Grid>
+
+            </Box>
             <Footer />
 
-        </Box>
+        </div>
     );
 };
 
-export default React.memo(ShiurimHome);
+const LessonDetailRow: React.FC<{ icon: React.ReactElement; text: string }> = ({ icon, text }) => (
+    <Box display="flex" alignItems="center" justifyContent="center" mb={1}>
+        {icon}
+        <Typography variant="body2" color="text.secondary" ml={1}>
+            {text}
+        </Typography>
+    </Box>
+);
 
+export default React.memo(ShiurimHome);

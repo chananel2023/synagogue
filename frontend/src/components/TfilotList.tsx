@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import axios from 'axios';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, AlertCircle, RefreshCcw, Loader2, BookOpen } from 'lucide-react';
 
 interface Tfila {
     _id: string;
@@ -8,7 +8,7 @@ interface Tfila {
     time: string;
 }
 
-const TfilotList: React.FC = () => {
+const TfilotList = () => {
     const [tfilot, setTfilot] = useState<Tfila[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -17,8 +17,9 @@ const TfilotList: React.FC = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get<Tfila[]>('http://localhost:5007/api/tfilot');
-            setTfilot(response.data);
+            const response = await fetch('http://localhost:5007/api/tfilot');
+            const data = await response.json();
+            setTfilot(data);
         } catch (err) {
             setError('שגיאה בטעינת התפילות');
         } finally {
@@ -44,70 +45,111 @@ const TfilotList: React.FC = () => {
         hidden: { y: 20, opacity: 0 },
         visible: {
             y: 0,
-            opacity: 1
+            opacity: 1,
+            transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 24
+            }
         }
     };
 
     return (
-        <div className="p-6 max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold text-center mb-8 text-indigo-800" style={{ fontFamily: 'Arial, sans-serif' }}>
-                זמני תפילות
-            </h2>
-
-            {loading && (
-                <div className="flex justify-center items-center h-40">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-                </div>
-            )}
-
-            {error && !loading && (
+        <div className="pt-24 p-6">
+            <div className="max-w-4xl mx-auto">
+                {/* Header */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="text-center mb-4"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center mb-12"
                 >
-                    <p className="text-red-600 mb-2">{error}</p>
-                    <button
-                        onClick={fetchTfilot}
-                        className="px-4 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition duration-300 ease-in-out transform hover:scale-105"
-                    >
-                        נסה שוב
-                    </button>
+                    <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg">
+                        <BookOpen className="w-8 h-8 text-[#007BFF]" />
+                        <h2 className="text-3xl font-bold text-[#007BFF]">
+                            זמני תפילות
+                        </h2>
+                    </div>
                 </motion.div>
-            )}
 
-            {!loading && !error && (
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                >
-                    {tfilot.length === 0 ? (
+                {/* Loading State */}
+                <AnimatePresence mode="wait">
+                    {loading && (
                         <motion.div
-                            variants={itemVariants}
-                            className="text-center text-gray-500 col-span-full"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="flex justify-center items-center h-40"
                         >
-                            לא קיימות תפילות במערכת כרגע. חזור מאוחר יותר.
+                            <Loader2 className="w-12 h-12 animate-spin text-[#007BFF]" />
                         </motion.div>
-                    ) : (
-                        tfilot.map((tfila) => (
-                            <motion.div
-                                key={tfila._id}
-                                variants={itemVariants}
-                                className="flex flex-col items-center bg-white rounded-lg shadow-lg p-6 text-center hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1"
-                            >
-                                <span className="text-xl font-bold text-indigo-800 mb-2">{tfila.tfila}</span>
-                                <span className="text-4xl font-mono font-bold text-indigo-600">
-                                    {tfila.time.split(':')[0]}
-                                    <span className="text-3xl">:</span>
-                                    {tfila.time.split(':')[1]}
-                                </span>
-                            </motion.div>
-                        ))
                     )}
-                </motion.div>
-            )}
+
+                    {/* Error State */}
+                    {error && !loading && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="flex flex-col items-center gap-4 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg"
+                        >
+                            <AlertCircle className="w-12 h-12 text-red-500" />
+                            <p className="text-red-600 font-medium text-lg">{error}</p>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={fetchTfilot}
+                                className="px-6 py-2 bg-[#007BFF] text-white rounded-full flex items-center gap-2 hover:bg-[#0056b3] transition-colors shadow-md"
+                            >
+                                <RefreshCcw className="w-5 h-5" />
+                                <span>נסה שוב</span>
+                            </motion.button>
+                        </motion.div>
+                    )}
+
+                    {/* Prayer Times Grid */}
+                    {!loading && !error && (
+                        <motion.div
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                        >
+                            {tfilot.length === 0 ? (
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="col-span-full text-center bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg"
+                                >
+                                    <p className="text-gray-600 text-lg">לא קיימות תפילות במערכת כרגע</p>
+                                </motion.div>
+                            ) : (
+                                tfilot.map((tfila) => (
+                                    <motion.div
+                                        key={tfila._id}
+                                        variants={itemVariants}
+                                        whileHover={{ scale: 1.03 }}
+                                        className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-md hover:shadow-lg
+                                                 transition-all duration-300 border border-white/50"
+                                    >
+                                        <div className="flex flex-col items-center gap-4">
+                                            <h3 className="text-xl font-bold text-[#007BFF]">
+                                                {tfila.tfila}
+                                            </h3>
+                                            <div className="flex items-center gap-2">
+                                                <Clock className="w-5 h-5 text-[#FFD700]" />
+                                                <span className="text-3xl font-mono font-bold text-[#007BFF]">
+                                                    {tfila.time.split(':')[0]}
+                                                    <span className="text-2xl mx-1">:</span>
+                                                    {tfila.time.split(':')[1]}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                ))
+                            )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     );
 };

@@ -4,7 +4,6 @@ import {
     Typography,
     Button,
     Box,
-    Container,
     useMediaQuery,
     useTheme
 } from '@mui/material';
@@ -19,9 +18,9 @@ const WelcomePage: React.FC = () => {
     };
 
     return (
-        <StyledContainer>
+        <StyledContainer className="px-4">
             <BackgroundShapes />
-            <ContentWrapper>
+            <ContentWrapper className="w-full max-w-md">
                 <motion.div
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -33,7 +32,7 @@ const WelcomePage: React.FC = () => {
                         gutterBottom
                         align="center"
                         sx={{
-                            color: '#2E3B55',
+                            color: '#FFFFFF',
                             fontWeight: 'bold',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
                         }}
@@ -41,15 +40,16 @@ const WelcomePage: React.FC = () => {
                         ברוכים הבאים לבית הכנסת
                     </Typography>
                     <Typography
-                        variant={isMobile ? "h6" : "h5"}
+                        variant={isMobile ? "body1" : "h6"}
                         component="h2"
                         gutterBottom
                         align="center"
                         sx={{
-                            color: '#4A4A4A',
+                            color: '#FFFFFF',
                             mb: 3
                         }}
                     >
+                        מקום לתפילה, לימוד וקהילה
                     </Typography>
                 </motion.div>
 
@@ -71,7 +71,7 @@ const WelcomePage: React.FC = () => {
                             onClick={handleNavigation('/signup')}
                             color="secondary"
                         >
-                            יצירת חשבון
+                            הרשמה
                         </StyledButton>
                     </ButtonContainer>
                 </motion.div>
@@ -86,7 +86,7 @@ const StyledContainer = styled(Box)({
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: '100vh',
-    backgroundColor: '#FFFFFF',
+    background: 'linear-gradient(135deg, #007BFF, #FFD700)',
     overflow: 'hidden',
 });
 
@@ -96,7 +96,8 @@ const ContentWrapper = styled(Box)(({ theme }) => ({
     textAlign: 'center',
     padding: theme.spacing(4),
     borderRadius: theme.spacing(2),
-    backgroundColor: 'rgba(255,255,255,0.9)',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    backdropFilter: 'blur(10px)',
     boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
 }));
 
@@ -113,16 +114,18 @@ const StyledButton = styled(Button)(({ theme }) => ({
     fontWeight: 'bold',
     transition: 'all 0.3s',
     '&:hover': {
-        transform: 'translateY(-5px)',
-        boxShadow: '0 6px 15px rgba(0,0,0,0.2)',
+        transform: 'translateY(-3px)',
+        boxShadow: '0 6px 15px rgba(0,0,0,0.1)',
     },
+    touchAction: 'manipulation',
 }));
 
 const BackgroundShapes: React.FC = () => {
     const shapes = [
-        { color: '#E3F2FD', size: 200, top: '10%', left: '-5%', delay: 0 },
-        { color: '#F3E5F5', size: 150, top: '70%', right: '-5%', delay: 0.5 },
-        { color: '#E8F5E9', size: 100, bottom: '10%', left: '10%', delay: 1 },
+        { color: '#E3F2FD', size: 250, top: '5%', left: '-10%', delay: 0 },
+        { color: '#F3E5F5', size: 200, top: '65%', right: '-8%', delay: 0.3 },
+        { color: '#E8F5E9', size: 150, bottom: '8%', left: '8%', delay: 0.6 },
+        { color: '#FFF3E0', size: 100, top: '20%', right: '15%', delay: 0.9 },
     ];
 
     return (
@@ -131,12 +134,12 @@ const BackgroundShapes: React.FC = () => {
                 <motion.div
                     key={index}
                     initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    animate={{ opacity: 0.7, scale: 1 }}
                     transition={{
                         delay: shape.delay,
-                        duration: 1,
+                        duration: 1.5,
                         type: "spring",
-                        stiffness: 50
+                        stiffness: 40
                     }}
                     style={{
                         position: 'absolute',
@@ -148,8 +151,7 @@ const BackgroundShapes: React.FC = () => {
                         left: shape.left,
                         right: shape.right,
                         bottom: shape.bottom,
-                        opacity: 0.6,
-                        filter: 'blur(60px)',
+                        filter: 'blur(80px)',
                         zIndex: 1
                     }}
                 />
