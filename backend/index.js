@@ -11,12 +11,14 @@ import slideRoutes from './routes/slide.route.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import addToCart from './routes/addToCard.r.js';
 import cartRoutes from './routes/addToCard.r.js'
+import aliyahRoutes from './routes/aliyah.route.js'
 
 
 
 dotenv.config();
 const PORT = process.env.PORT || 5007
 console.log('process.env.PORT ', process.env.PORT)
+
 const app = express();
 //a
 app.use(express.json())
@@ -29,10 +31,11 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/tfilot', tfilotRoutes);
-app.use('/api/lessons', shiurimRouter); // מחבר את הראוטר לנתיב /api
+app.use('/api/lessons', shiurimRouter); 
 app.use('/api/slides', slideRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/addToCart',addToCart)
+app.use("/api/aliyah", aliyahRoutes);
 
 app.use('/cart', cartRoutes);
 

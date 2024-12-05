@@ -29,21 +29,43 @@ const userSchema = new mongoose.Schema(
     resetPasswordToken: String,
     resetPasswordExpiresAt: Date,
     verificationToken: String,
-    verificationTokenExpiresAt: Date,
-
-    // עגלת קניות
-    cartItems: [
+    verificationTokenExpiresAt: Date ,  
+    
+      
+    TorahAliyah: [
       {
-        quantity: {
-          type: Number,
-          default: 1, // כמות ברירת מחדל
+        quantity: { type: Number, required: true },
+        date: {
+          type: Date,
+          required: true,
         },
-        product: {
-          type: mongoose.Schema.Types.ObjectId, // הפניה למוצר
-          ref: "Product", // שם האוסף שאליו מתייחסים
+        buyer: {
+          type: String,
+          required: true,
+        },
+        
+        price: {
+          type: Number,
+          required: true,
+          min: 0,
+        },
+        description: {
+          type: String,
+          required: false,
+        },
+        isPaid: {
+          type: Boolean,
+          required: true,
+          default: false,
+        },
+        paymentDetails: {
+          stripePaymentId: { type: String, required: false },
+          paymentDate: { type: Date, required: false },
         },
       },
     ],
+    
+    
   },
   { timestamps: true } // מוסיף createdAt ו-updatedAt
 );
