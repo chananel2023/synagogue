@@ -1,15 +1,16 @@
-import {TorahAliyah} from "../models/TorahAliyah.model.js"; 
-import {User} from "../models/user.model.js";
+import dotenv from 'dotenv';
+dotenv.config();
+import { TorahAliyah } from "../models/TorahAliyah.model.js";
+import { User } from "../models/user.model.js";
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY); 
-
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const addAliyahToUser = async (req, res) => {
     const { userId, aliyahDetails } = req.body;
-    
+
     if (!userId || !aliyahDetails || !aliyahDetails.buyer || !aliyahDetails.date) {
-        return res.status(400).json({ 
-            success: false, 
-            message: "Missing required fields (userId, buyer, or date)" 
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields (userId, buyer, or date)"
         });
     }
 
@@ -21,11 +22,11 @@ export const addAliyahToUser = async (req, res) => {
         }
 
         // יצירת העלייה החדשה ושמירתה ב-DB
-        const newAliyah ={quantity: 1 , ...aliyahDetails };
-        
-        
+        const newAliyah = { quantity: 1, ...aliyahDetails };
 
-        
+
+
+
         user.TorahAliyah.push(newAliyah);
         await user.save();
 
@@ -96,8 +97,8 @@ export const deleteAliyah = async (req, res) => {
             return res.status(404).json({ success: false, message: "Aliyah not found in user's TorahAliyah" });
         }
 
-        
-        
+
+
 
         res.status(200).json({
             success: true,
@@ -115,7 +116,7 @@ const fetchUserAliyah = async (userId) => {
         if (!user) {
             return { success: false, status: 404, message: "User not found" };
         }
-        
+
         const userTorahAliyah = user.TorahAliyah;
         if (!userTorahAliyah || userTorahAliyah.length === 0) {
             return { success: false, status: 404, message: "No Torah aliyah records found" };
@@ -171,10 +172,10 @@ export const getAllUsersAliyah = async (req, res) => {
                     },
                     { paidSum: 0, unpaidSum: 0 } // ערכי התחלה
                 );
-                
+
 
                 // החזרת המידע
-                return { userId: user._id, aliyahDetails, paidSum,unpaidSum ,name:user.name};
+                return { userId: user._id, aliyahDetails, paidSum, unpaidSum, name: user.name };
             })
         );
 
@@ -191,112 +192,128 @@ export const getAllUsersAliyah = async (req, res) => {
 };
 
 
-
-
 export const getAliyahFrom = async (req, res) => {
-        const { userId } = req.body;
-    
-        try {
-            // מציאת המשתמש לפי ID
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ success: false, message: "User not found" });
-            }
-    
-            // אחזור פרטי העליות מתוך cartItems
-            const aliyahIds = user.cartItems.map(item => item._id);
-            if (!aliyahIds || aliyahIds.length === 0) {
-                return res.status(404).json({ success: false, message: "No aliyot found" });
-            }
-    
-            // אחזור פרטי העליות מה-DB
-            const aliyahDetails = await TorahAliyah.find({ _id: { $in: aliyahIds } });
-            if (aliyahDetails.length === 0) {
-                return res.status(404).json({ success: false, message: "No aliyot details found" });
-            }
-    
-            res.status(200).json({
-                success: true,
-                aliyah: aliyahDetails,
-            });
-        } catch (error) {
-            console.error("Error in getAliyahFrom:", error);
-            res.status(500).json({ success: false, message: "Server error" });
+    const { userId } = req.body;
+
+    try {
+        // מציאת המשתמש לפי ID
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
         }
-    };
+
+        // אחזור פרטי העליות מתוך cartItems
+        const aliyahIds = user.cartItems.map(item => item._id);
+        if (!aliyahIds || aliyahIds.length === 0) {
+            return res.status(404).json({ success: false, message: "No aliyot found" });
+        }
+
+        // אחזור פרטי העליות מה-DB
+        const aliyahDetails = await TorahAliyah.find({ _id: { $in: aliyahIds } });
+        if (aliyahDetails.length === 0) {
+            return res.status(404).json({ success: false, message: "No aliyot details found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            aliyah: aliyahDetails,
+        });
+    } catch (error) {
+        console.error("Error in getAliyahFrom:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
 export const payAliyot = async (req, res) => {
-        const { userId, aliyahIds, paymentMethodId } = req.body;
-    
-        if (!userId || !aliyahIds || aliyahIds.length === 0 || !paymentMethodId) {
-            return res.status(400).json({ success: false, message: "Missing required fields" });
+    const { userId, aliyahIds, paymentMethodId } = req.body;
+
+    if (!userId || !aliyahIds || aliyahIds.length === 0 || !paymentMethodId) {
+        return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
+
+    try {
+        // שליפת המשתמש
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
         }
-    
-        try {
-            // שליפת המשתמש
-            const user = await User.findById(userId);
-            if (!user) {
-                return res.status(404).json({ success: false, message: "User not found" });
-            }
-    
-            // חישוב הסכום לתשלום
-            const aliyotToPay = user.TorahAliyah.filter(aliyah => aliyahIds.includes(aliyah._id.toString()));
-            const totalAmount = aliyotToPay.reduce((sum, aliyah) => sum + (aliyah.price || 0), 0);
-    
-            if (totalAmount === 0) {
-                return res.status(400).json({ success: false, message: "No valid aliyot to pay" });
-            }
-    
-            // יצירת תשלום עם Stripe
-            const paymentIntent = await stripe.paymentIntents.create({
-                amount: totalAmount * 100, // הסכום באגורות
-                currency: "usd",
-                payment_method: paymentMethodId,
-                confirm: true,
-            });
-    
-            // סימון העליות כמשולמות
-            aliyotToPay.forEach(aliyah => {
-                aliyah.isPaid = true;
-                aliyah.paymentId = paymentIntent.id;
-            });
-    
-            await user.save();
-    
-            res.status(200).json({
-                success: true,
-                message: "Payment successful",
-                aliyot: aliyotToPay,
-                paymentIntent,
-            });
-        } catch (error) {
-            console.error("Error in payAliyot:", error);
-            res.status(500).json({ success: false, message: "Server error" });
+
+        // חישוב הסכום לתשלום
+        const aliyotToPay = user.TorahAliyah.filter(aliyah => aliyahIds.includes(aliyah._id.toString()));
+        const totalAmount = aliyotToPay.reduce((sum, aliyah) => sum + (aliyah.price || 0), 0);
+
+        if (totalAmount === 0) {
+            return res.status(400).json({ success: false, message: "No valid aliyot to pay" });
         }
-    };
-    export const getUnpaidAliyot = async (req, res) => {
-        const { userId } = req.body;
-    
-        if (!userId) {
-            return res.status(400).json({ success: false, message: "User ID is required" });
+
+        // יצירת תשלום עם Stripe - עם ההגדרות החדשות
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: totalAmount * 100, // הסכום באגורות
+            currency: "usd",
+            payment_method: paymentMethodId,
+            confirm: true,
+            automatic_payment_methods: {
+                enabled: true,
+                allow_redirects: 'never'
+            },
+            return_url: `${process.env.REACT_APP_API_URL}/payment-success`, // או כל URL אחר שתרצה
+        });
+
+        // סימון העליות כמשולמות
+        aliyotToPay.forEach(aliyah => {
+            aliyah.isPaid = true;
+            aliyah.paymentId = paymentIntent.id;
+        });
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Payment successful",
+            aliyot: aliyotToPay,
+            paymentIntent,
+        });
+    } catch (error) {
+        console.error("Error in payAliyot:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
+    }
+};
+export const getUnpaidAliyot = async (req, res) => {
+    const { userId } = req.body;
+    console.log("Received request for unpaid aliyot with userId:", userId);
+
+    if (!userId) {
+        return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
+    try {
+        console.log("Fetching user aliyot...");
+        const result = await fetchUserAliyah(userId);
+        console.log("Fetch result:", result);
+
+        if (!result.success) {
+            console.log("Failed to fetch aliyot:", result);
+            return res.status(result.status).json(result);
         }
-    
-        try {
-            const result = await fetchUserAliyah(userId);
-            if (!result.success) {
-                return res.status(result.status).json(result);
-            }
-    
-            // סינון העליות שלא שולמו
-            const unpaidAliyot = result.data.userTorahAliyah.filter(aliyah => !aliyah.isPaid);
-    
-            res.status(200).json({
-                success: true,
-                status: 200,
-                data: { userTorahAliyah: unpaidAliyot },
-            });
-        } catch (error) {
-            console.error("Error in getUnpaidAliyot:", error);
-            res.status(500).json({ success: false, message: "Server error" });
-        }
-    };
-    
+
+        // סינון העליות שלא שולמו
+        const unpaidAliyot = result.data.userTorahAliyah.filter(aliyah => !aliyah.isPaid);
+        console.log("Filtered unpaid aliyot:", unpaidAliyot);
+
+        return res.status(200).json({
+            success: true,
+            status: 200,
+            data: { userTorahAliyah: unpaidAliyot },
+        });
+    } catch (error) {
+        console.error("Detailed error in getUnpaidAliyot:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error",
+            error: error.message
+        });
+    }
+};

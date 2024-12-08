@@ -1,39 +1,50 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    Button,
-    TextField,
-    Typography,
-} from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { User } from "../models/User";
-import { NewAliyah } from "../models/NewAliyah";
+import { Accordion, AccordionSummary, AccordionDetails, Button, TextField, Typography, Box, InputAdornment, IconButton } from "@mui/material";
+import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
+import { Search as SearchIcon, Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+interface User {
+    userId: string;
+    name: string;
+    paidSum: number;
+    unpaidSum: number;
+    aliyahDetails: Aliyah[];
+}
+
+interface NewAliyah {
+    price: number;
+    buyer: string;
+    date: string;
+}
+
+interface Aliyah {
+    _id: string;
+    price: number;
+    buyer: string;
+    date: string;
+}
 
 const AdminPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [newAliyah, setNewAliyah] = useState<NewAliyah>({
-        price: 0,
-        buyer: "",
-        date: "",
-    });
+    const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+    const [newAliyah, setNewAliyah] = useState<NewAliyah>({ price: 0, buyer: "", date: "" });
     const [loading, setLoading] = useState<boolean>(false);
-    const [selectedDate, setSelectedDate] = useState<string>(
-        new Date().toISOString().split('T')[0]
-      );
+    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]);
+    const [searchQuery, setSearchQuery] = useState<string>("");
 
-                    
-
-    // שליפת כל המידע על משתמשים
     const fetchUsers = async () => {
         setLoading(true);
         try {
             const { data } = await axios.get("http://localhost:5007/api/aliyah/getAllUsersAliyah");
             setUsers(data.allUsersAliyah);
+            setFilteredUsers(data.allUsersAliyah);
         } catch (error) {
             console.error("Error fetching users:", error);
+            toast.error("שגיאה בטעינת משתמשים", { rtl: true });
         } finally {
             setLoading(false);
         }
@@ -43,142 +54,213 @@ const AdminPage: React.FC = () => {
         fetchUsers();
     }, []);
 
-    // הוספת עלייה למשתמש
     const handleAddAliyah = async (userId: string) => {
         try {
             if (!newAliyah.price || !newAliyah.buyer || !newAliyah.date) {
-                alert("אנא מלא את כל השדות הנדרשים.");
+                toast.warn("אנא מלא את כל השדות הנדרשים", { rtl: true });
                 return;
             }
 
             await axios.post("http://localhost:5007/api/aliyah/addAliyahToUser", {
                 userId,
-                aliyahDetails: {
-                    price: newAliyah.price,
-                    buyer: newAliyah.buyer,
-                    date: new Date(selectedDate)
-                },
+                aliyahDetails: { price: newAliyah.price, buyer: newAliyah.buyer, date: new Date(selectedDate) },
             });
 
-            fetchUsers(); // עדכון הנתונים
-            setNewAliyah({ price: 0, buyer: "", date: "" }); // איפוס הטופס
+            fetchUsers();
+            setNewAliyah({ price: 0, buyer: "", date: "" });
+            toast.success("העלייה נוספה בהצלחה", { rtl: true });
         } catch (error) {
             console.error("Error adding aliyah:", error);
+            toast.error("שגיאה בהוספת העלייה", { rtl: true });
         }
     };
 
-    // מחיקת עלייה
     const handleDeleteAliyah = async (userId: string, aliyahId: string) => {
         try {
-            await axios.delete("http://localhost:5007/api/aliyah/delete", {
-                data: { userId, aliyahId },
-            });
-            fetchUsers(); // עדכון הנתונים
+            await axios.delete("http://localhost:5007/api/aliyah/delete", { data: { userId, aliyahId } });
+            fetchUsers();
+            toast.success("העלייה נמחקה בהצלחה", { rtl: true });
         } catch (error) {
             console.error("Error deleting aliyah:", error);
+            toast.error("שגיאה במחיקת העלייה", { rtl: true });
         }
+    };
+
+    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const query = event.target.value.toLowerCase();
+        setSearchQuery(query);
+        const filteredUsers = users.filter((user) =>
+            user.name.toLowerCase().includes(query)
+        );
+        setFilteredUsers(filteredUsers);
     };
 
     return (
-        <div style={{ padding: "20px" }}>
-            <Typography variant="h4">ניהול עליות</Typography>
-            {loading ? (
-                <Typography>טוען נתונים...</Typography>
-            ) : (
-                users.map((user) => (
-                    <Accordion key={user.userId}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography>{user.name}</Typography>
-                            <Typography style={{ marginLeft: "10px" }}>
-                                {`סכום ששולם: ${user.paidSum} | סכום שחייב: ${user.unpaidSum}`}
-                            </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <div style={{ marginBottom: "20px" }}>
-                                <TextField
-                                    label="סיבה לחיוב "
-                                    variant="outlined"
-                                    size="small"
-                                    style={{ marginRight: "10px" }}
-                                    value={newAliyah.buyer}
-                                    onChange={(e) =>
-                                        setNewAliyah({
-                                            ...newAliyah,
-                                            buyer: e.target.value,
-                                        })
-                                    }
-                                />
-                                <TextField
-                                    label='עלות'
-                                    variant="outlined"
-                                    size="small"
-                                    type="number"
-                                    style={{ marginRight: "10px" }}
-                                    value={newAliyah.price}
-                                    onChange={(e) =>
-                                        setNewAliyah({
-                                            ...newAliyah,
-                                            price: Number(e.target.value),
-                                        })
-                                    }
-                                />
-                                <TextField
-                                    label="תאריך"
-                                    variant="outlined"
-                                    size="small"
-                                    type="date"
-                                    InputLabelProps={{ shrink: true }}
-                                    value={newAliyah.date}
-                                    onChange={(e) =>
-                                        setNewAliyah({
-                                            ...newAliyah,
-                                            date: e.target.value,
-                                        })
-                                    }
-                                />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => handleAddAliyah(user.userId)}
-                                    style={{ marginTop: "10px" }}
-                                >
-                                    הוסף
-                                </Button>
-                            </div>
-                            <div>
-    {user.aliyahDetails.map((aliyah) => (
-        <div
-            key={aliyah._id}
-            style={{
+        <Box
+            className="p-4 min-h-screen"
+            sx={{
+                backgroundColor: "transparent",
                 display: "flex",
-                justifyContent: "space-between",
+                flexDirection: "column",
                 alignItems: "center",
-                marginBottom: "10px",
+                justifyContent: "center",
             }}
         >
-            <div style={{ flex: 1 }}>
-                <Typography>{`סכום: ${aliyah.price} ₪`}</Typography>
-                <Typography>{`תאריך: ${new Date(aliyah.date).toLocaleDateString("he-IL")}`}</Typography>
-                <Typography>{`מתי נקנה ${aliyah.buyer}`}</Typography>
-            </div>
-            <Button
-                variant="outlined"
-                color="error"
-                onClick={() =>
-                    handleDeleteAliyah(user.userId, aliyah._id)
-                }
+            <ToastContainer position="top-center" rtl={true} />
+            <motion.div
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-4 w-full max-w-4xl"
             >
-                מחק
-            </Button>
-        </div>
-    ))}
-</div>
+                <Typography variant="h4" className="font-bold text-gray-800">
+                    ניהול עליות
+                </Typography>
+                <Box className="mt-3">
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        placeholder="חפש משתמש..."
+                        value={searchQuery}
+                        onChange={handleSearch}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <SearchIcon className="text-gray-500" />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+                </Box>
+            </motion.div>
 
-                        </AccordionDetails>
-                    </Accordion>
-                ))
+            {loading ? (
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex justify-center items-center h-64 bg-white rounded-xl shadow-md"
+                >
+                    <div className="relative w-12 h-12">
+                        <motion.div
+                            animate={{
+                                rotate: 360,
+                                transition: { duration: 1, repeat: Infinity, ease: "linear" },
+                            }}
+                            className="absolute top-0 left-0 w-full h-full border-4 border-blue-200 border-opacity-20 rounded-full"
+                        />
+                        <motion.div
+                            animate={{
+                                rotate: -360,
+                                transition: { duration: 1, repeat: Infinity, ease: "linear" },
+                            }}
+                            className="absolute top-0 left-0 w-full h-full border-4 border-t-blue-500 rounded-full"
+                        />
+                    </div>
+                </motion.div>
+            ) : (
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="space-y-3 w-full max-w-4xl"
+                >
+                    {filteredUsers.map((user) => (
+                        <Accordion
+                            key={user.userId}
+                            className="bg-white rounded-xl shadow-md overflow-hidden"
+                        >
+                            <AccordionSummary
+                                expandIcon={
+                                    <ExpandMoreIcon className="text-gray-500 group-hover:text-gray-700" />
+                                }
+                                className="bg-gray-100 group"
+                            >
+                                <Typography className="text-gray-800 font-medium">{user.name}</Typography>
+                                <Typography className="text-gray-600 ml-2">
+                                    סכום ששולם: {user.paidSum} | סכום שחייב: {user.unpaidSum}
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails className="bg-white pt-3">
+                                <div className="mb-3">
+                                    <TextField
+                                        label="סיבה לחיוב"
+                                        variant="outlined"
+                                        size="small"
+                                        className="mr-2 bg-gray-100 text-gray-800"
+                                        value={newAliyah.buyer}
+                                        onChange={(e) =>
+                                            setNewAliyah({ ...newAliyah, buyer: e.target.value })
+                                        }
+                                    />
+                                    <TextField
+                                        label="עלות"
+                                        variant="outlined"
+                                        size="small"
+                                        type="number"
+                                        className="mr-2 bg-gray-100 text-gray-800"
+                                        value={newAliyah.price}
+                                        onChange={(e) =>
+                                            setNewAliyah({ ...newAliyah, price: Number(e.target.value) })
+                                        }
+                                    />
+                                    <TextField
+                                        label="תאריך"
+                                        variant="outlined"
+                                        size="small"
+                                        type="date"
+                                        InputLabelProps={{ shrink: true }}
+                                        className="bg-gray-100 text-gray-800"
+                                        value={newAliyah.date}
+                                        onChange={(e) =>
+                                            setNewAliyah({ ...newAliyah, date: e.target.value })
+                                        }
+                                    />
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg mt-2"
+                                        onClick={() => handleAddAliyah(user.userId)}
+                                    >
+                                        <AddIcon className="mr-1" />
+                                        הוסף
+                                    </motion.button>
+                                </div>
+
+                                <div className="space-y-2">
+                                    {user.aliyahDetails.map((aliyah) => (
+                                        <motion.div
+                                            key={aliyah._id}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="flex items-center justify-between bg-gray-100 p-3 rounded-lg"
+                                        >
+                                            <div className="flex-1">
+                                                <Typography className="text-gray-800">{`סכום: ${aliyah.price} ₪`}</Typography>
+                                                <Typography className="text-gray-600">{`תאריך: ${new Date(
+                                                    aliyah.date
+                                                ).toLocaleDateString("he-IL")}`}</Typography>
+                                                <Typography className="text-gray-600">{`מתי נקנה ${aliyah.buyer}`}</Typography>
+                                            </div>
+                                            <motion.button
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
+                                                onClick={() => handleDeleteAliyah(user.userId, aliyah._id)}
+                                            >
+                                                <DeleteIcon className="mr-1" />
+                                                מחק
+                                            </motion.button>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
+                </motion.div>
             )}
-        </div>
+        </Box>
     );
 };
 

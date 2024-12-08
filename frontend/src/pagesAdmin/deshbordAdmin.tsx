@@ -10,6 +10,8 @@ const menuItems = [
     { label: 'הודעות', link: '/messageAdmin', icon: <MessageOutlined /> },
     { label: 'שיעורים', link: '/Lessons', icon: <SchoolOutlined /> },
     { label: 'קרוסלה', link: '/UpdataAdminCarousel', icon: <SlideshowOutlined /> },
+    { label: 'מקומות', link: '/mapadmin' },
+
 ];
 
 const IconWrapper: React.FC<{ icon: React.ReactElement }> = ({ icon }) => {

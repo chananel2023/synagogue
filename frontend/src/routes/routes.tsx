@@ -13,7 +13,8 @@ import AdminLessons from '../pagesAdmin/shiurimAdmun'
 import ShiurimHome from "../pages/user.shiurim"
 import AboutAndContact from '../pages/contact&about'
 import UpdataAdminCarousel from "../pagesAdmin/UpdataAdminCarousel"
-
+import SynagogueMap from "../pages/mapsinagog"
+import SynagogueAdmin from '../pagesAdmin/mapsinagogadmin'
 const routes = [
     { path: "/", element: <WelcomePage /> },
     { path: "/signup", element: <SignUpPage /> },
@@ -29,6 +30,8 @@ const routes = [
     { path: "/deshbord", element: <NavbarAdmin /> },
     { path: "/Lessons", element: <AdminLessons /> },
     { path: "/shiurim", element: <ShiurimHome /> },
+    // { path: "/map", element: <SynagogueMap /> },
+    // { path: "/mapadmin", element: <SynagogueAdmin /> },
     { path: "/UpdataAdminCarousel", element: <UpdataAdminCarousel /> },
     
 ];

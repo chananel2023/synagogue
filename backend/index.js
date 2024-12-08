@@ -10,54 +10,37 @@ import cors from 'cors';
 import slideRoutes from './routes/slide.route.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import addToCart from './routes/addToCard.r.js';
-import cartRoutes from './routes/addToCard.r.js'
-import aliyahRoutes from './routes/aliyah.route.js'
-
-
+import cartRoutes from './routes/addToCard.r.js';
+import aliyahRoutes from './routes/aliyah.route.js';
+// import seatRoutes from './routes/seatRoutes.js'
 
 dotenv.config();
-const PORT = process.env.PORT || 5007
-console.log('process.env.PORT ', process.env.PORT)
+const PORT = process.env.PORT || 5007;
+console.log('process.env.PORT ', process.env.PORT);
 
 const app = express();
-//a
-app.use(express.json())
-app.use(cookieParser())
+
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
-    origin: 'http://localhost:3000', // הכתובת של ה-Frontend
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true // מתיר שליחת עוגיות
+    credentials: true
 }));
+
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messagesRoutes);
 app.use('/api/tfilot', tfilotRoutes);
-app.use('/api/lessons', shiurimRouter); 
+app.use('/api/lessons', shiurimRouter);
 app.use('/api/slides', slideRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api/addToCart',addToCart)
+// app.use('/api/seats', seatRoutes);  // שינינו את הנתיב ל-/api/seats
+app.use('/api/addToCart', addToCart);
 app.use("/api/aliyah", aliyahRoutes);
-
 app.use('/cart', cartRoutes);
 
 app.listen(PORT, () => {
     connectDB();
     console.log('Server is running on port : ', PORT);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

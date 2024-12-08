@@ -20,7 +20,7 @@ const MainApp = () => {
 
   useEffect(() => {
     if (!isCheckingAuth) {
-      // You can handle additional authentication checks here if needed
+      // You can handl e additional authentication checks here if needed
     }
   }, [isCheckingAuth]);
 

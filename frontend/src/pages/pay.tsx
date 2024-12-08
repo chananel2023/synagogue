@@ -13,7 +13,6 @@ const PaymentPage = () => {
     const { user, isAuthenticated } = useAuthStore();
     return(
     <div>
-            <h1>Your Aliyot</h1>
             {/* אתה שולח את ה-userId כמו שמצופה */}
             <UnpaidAliyot userId={user._id} />
         </div>

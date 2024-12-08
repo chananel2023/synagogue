@@ -21,6 +21,7 @@ const Navbar2: React.FC = () => {
   const menuItems = useMemo(() => [
     { path: '/homePage', label: 'דף הבית', icon: <Home /> },
     { path: '/pay', label: 'תשלומים', icon: <Payment /> },
+    { path: '/map', label: 'מקומות'},
     { path: '/shiurim', label: 'שיעורים', icon: <School /> },
     { path: '/zmanim', label: 'זמני היום', icon: <AccessTime /> },
     { path: '/contact', label: 'אודות', icon: <Info /> },
