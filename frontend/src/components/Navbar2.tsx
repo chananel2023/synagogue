@@ -11,7 +11,6 @@ const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isDonateDrawerOpen, setIsDonateDrawerOpen] = useState<boolean>(false);
   const { logout, user } = useAuthStore();
-  const isAdmin = user?.isAdmin;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
