@@ -5,7 +5,7 @@ import TranslateKeyToHebrew from './TranslateKeyToHebrew';
 import Location from '../models/Location';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Clock, MapPin, Calendar, Loader2, Sun } from 'lucide-react';
-import Footer from '../components/footer'
+import Footer from '../components/Footer'
 
 const Zmanim2: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState<Location>(locations[0]);

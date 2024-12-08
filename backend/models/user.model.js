@@ -26,6 +26,11 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false, // משתמש אינו מאומת כברירת מחדל
     },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     resetPasswordToken: String,
     resetPasswordExpiresAt: Date,
     verificationToken: String,
@@ -67,7 +72,7 @@ const userSchema = new mongoose.Schema(
     
     
   },
-  { timestamps: true } // מוסיף createdAt ו-updatedAt
+  { timestamps: true }
 );
 
 // הוספת אינדקס ייחודי לשדה email

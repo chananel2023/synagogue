@@ -59,7 +59,7 @@ export const markAliyahAsPaid = async (req, res) => {
             return res.status(404).json({ success: false, message: "Aliyah not found" });
         }
 
-        // סימון העלייה כמשולמת
+        
         aliyah.isPaid = true;
         aliyah.paymentId = stripePaymentId;
 

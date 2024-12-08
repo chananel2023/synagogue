@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar2 from '../components/Navbar2';
-import Footer from '../components/footer';
+import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
 import { MessageCircle, Mail, Info, Building2, Phone } from 'lucide-react';
 

@@ -33,6 +33,8 @@ export const signup = async (req, res) => {
             name,
             verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000 
+			
+
         });
 
         await user.save();
@@ -222,4 +224,25 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ success: false, message: "Server error" });
     }
 };
+
+export const updateToAdmin = async (req, res) => {
+    const { userId } = req.body;
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        user.isAdmin = true;
+        await user.save();
+        res.status(200).json({
+            success: true,
+            message: "User updated to admin",
+            isAdmin: user.isAdmin,
+        });
+    } catch (error) {
+        console.log("Error in updateToAdmin: ", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
 

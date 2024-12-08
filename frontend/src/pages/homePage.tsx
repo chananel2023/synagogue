@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Carousel from '../components/karusela';
 import TfilotList from '../components/TfilotList';
-import Footer from '../components/footer';
+import Footer from '../components/Footer';
 import UserMessagesComponent from '../components/UserMessagesComponent';
 
 const videoIds = [

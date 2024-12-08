@@ -11,23 +11,34 @@ const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isDonateDrawerOpen, setIsDonateDrawerOpen] = useState<boolean>(false);
   const { logout, user } = useAuthStore();
+  const isAdmin = user?.isAdmin;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+
 
   const handleLogout = useCallback(() => {
     logout();
   }, [logout]);
 
-  const menuItems = useMemo(() => [
-    { path: '/homePage', label: 'דף הבית', icon: <Home /> },
-    { path: '/pay', label: 'תשלומים', icon: <Payment /> },
-    { path: '/map', label: 'מקומות'},
-    { path: '/shiurim', label: 'שיעורים', icon: <School /> },
-    { path: '/zmanim', label: 'זמני היום', icon: <AccessTime /> },
-    { path: '/contact', label: 'אודות', icon: <Info /> },
-    { path: "/deshbord", label: 'ניהול', icon: <Dashboard /> },
-    { path: '/login', label: 'יציאה', onClick: handleLogout, icon: <ExitToApp /> },
-  ], [handleLogout]);
+  const menuItems = useMemo(() => {
+    const items = [
+      { path: '/homePage', label: 'דף הבית', icon: <Home /> },
+      { path: '/pay', label: 'תשלומים', icon: <Payment /> },
+      { path: '/map', label: 'מקומות' },
+      { path: '/shiurim', label: 'שיעורים', icon: <School /> },
+      { path: '/zmanim', label: 'זמני היום', icon: <AccessTime /> },
+      { path: '/contact', label: 'אודות', icon: <Info /> },
+      { path: '/login', label: 'יציאה', onClick: handleLogout, icon: <ExitToApp /> },
+    ];
+  
+    if (user?.isAdmin) {
+      items.splice(0, 0, { path: "/deshbord", label: 'ניהול', icon: <Dashboard /> });
+    }
+  
+    return items;
+  }, [handleLogout, user]);
+  
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(prev => !prev);
