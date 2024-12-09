@@ -6,3 +6,4 @@ export interface User {
     unpaidSum: number;
     aliyahDetails: AliyahDetails[];
 }
+

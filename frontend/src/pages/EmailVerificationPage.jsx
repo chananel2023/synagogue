@@ -14,7 +14,7 @@ const EmailVerificationPage = () => {
 	const handleChange = (index, value) => {
 		const newCode = [...code];
 
-		// Handle pasted content
+		
 		if (value.length > 1) {
 			const pastedCode = value.slice(0, 6).split("");
 			for (let i = 0; i < 6; i++) {
@@ -63,7 +63,7 @@ const EmailVerificationPage = () => {
 	}, [code]);
 
 	return (
-		<div className='max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'>
+		<div  className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 to-yellow-400 px-4">
 			<motion.div
 				initial={{ opacity: 0, y: -50 }}
 				animate={{ opacity: 1, y: 0 }}
@@ -71,9 +71,9 @@ const EmailVerificationPage = () => {
 				className='bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-2xl p-8 w-full max-w-md'
 			>
 				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-500 to-yellow-100 text-transparent bg-clip-text'>
-					Verify Your Email
+				אמת את האימייל שלך
 				</h2>
-				<p className='text-center text-gray-300 mb-6'>Enter the 6-digit code sent to your email address.</p>
+				<p className='text-center text-gray-300 mb-6'>הזן את הקוד בן 6 הספרות שנשלח לכתובת המייל שלך.</p>
 
 				<form onSubmit={handleSubmit} className='space-y-6'>
 					<div className='flex justify-between'>

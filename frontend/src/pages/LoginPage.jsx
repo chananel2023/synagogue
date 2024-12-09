@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader } from "lucide-react";
 import Input from "../components/Input";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // הוספת useLocation
 import { useAuthStore } from "../store/authStore";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [notification, setNotification] = useState("");
 
     const { login, isLoading, error } = useAuthStore();
     const navigate = useNavigate();
+    const location = useLocation(); 
+
+    useEffect(() => {
+        if (location.state?.message) {
+            setNotification(location.state.message);
+        }
+    }, [location.state]);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -32,6 +40,13 @@ const LoginPage = () => {
                     <h2 className='text-3xl font-bold mb-6 text-center text-white'>
                         ברוכים הבאים
                     </h2>
+
+                    {/* הודעה כללית */}
+                    {notification && (
+                        <div className="mb-4 text-center text-yellow-300 font-medium">
+                            {notification}
+                        </div>
+                    )}
 
                     <form onSubmit={handleLogin}>
                         <Input
@@ -64,11 +79,16 @@ const LoginPage = () => {
                         </motion.button>
                     </form>
                 </div>
-                <div className='px-8 py-4 bg-black bg-opacity-30 flex justify-center'>
+                <div className='px-8 py-4 bg-black bg-opacity-30 flex flex-col items-center'>
                     <p className='text-sm text-white'>
                         אינך רשום?{" "}
-                        <Link to='/signup' className='text-yellow-300 hover:underline'>
+                        <Link to='/signup' className='text-yellow-300 hover:underline' aria-label='הרשמה לאתר'>
                             הרשמה
+                        </Link>
+                    </p>
+                    <p className='text-sm text-white mt-2'>
+                        <Link to='/homepage' className='text-yellow-300 hover:underline' aria-label='כניסת אורח'>
+                            כניסת אורח
                         </Link>
                     </p>
                 </div>

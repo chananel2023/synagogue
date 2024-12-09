@@ -1,39 +1,32 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Accordion, AccordionSummary, AccordionDetails, Button, TextField, Typography, Box, InputAdornment, IconButton } from "@mui/material";
+import { Accordion, AccordionSummary, AccordionDetails,  TextField, Typography, Box, InputAdornment } from "@mui/material";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { Search as SearchIcon, Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion  } from "framer-motion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {User} from '../models/User'
+import { NewAliyah } from "../models/NewAliyah";
 
-interface User {
-    userId: string;
-    name: string;
-    paidSum: number;
-    unpaidSum: number;
-    aliyahDetails: Aliyah[];
-}
 
-interface NewAliyah {
-    price: number;
-    buyer: string;
-    date: string;
-}
 
-interface Aliyah {
-    _id: string;
-    price: number;
-    buyer: string;
-    date: string;
-}
+
+
+
 
 const AdminPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-    const [newAliyah, setNewAliyah] = useState<NewAliyah>({ price: 0, buyer: "", date: "" });
+    const [newAliyah, setNewAliyah] = useState<NewAliyah>({
+        _id: "", // מזהה ריק כברירת מחדל
+        price: 0,
+        buyer: "",
+        date: "",
+      });
+      
     const [loading, setLoading] = useState<boolean>(false);
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0]);
+    const [selectedDate] = useState<string>(new Date().toISOString().split("T")[0]);
     const [searchQuery, setSearchQuery] = useState<string>("");
 
     const fetchUsers = async () => {
@@ -67,7 +60,8 @@ const AdminPage: React.FC = () => {
             });
 
             fetchUsers();
-            setNewAliyah({ price: 0, buyer: "", date: "" });
+            setNewAliyah({ _id: "", price: 0, buyer: "", date: "" });
+
             toast.success("העלייה נוספה בהצלחה", { rtl: true });
         } catch (error) {
             console.error("Error adding aliyah:", error);

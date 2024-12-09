@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import { Menu, Close, Home, Payment, School, AccessTime, Info, Dashboard, ExitToApp, WavingHand } from '@mui/icons-material';
+import { HourglassBottom, Menu, Close, Home, Payment, School, AccessTime, Info, Dashboard, ExitToApp, WavingHand } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import PayPalIcon from '@mui/icons-material/Payment';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { useTheme, useMediaQuery } from '@mui/material';
+
+
 
 const Navbar2: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
@@ -24,7 +26,7 @@ const Navbar2: React.FC = () => {
     const items = [
       { path: '/homePage', label: 'דף הבית', icon: <Home /> },
       { path: '/pay', label: 'תשלומים', icon: <Payment /> },
-      { path: '/map', label: 'מקומות' },
+      { path: '/map', label: 'מקומות', icon: <HourglassBottom /> },
       { path: '/shiurim', label: 'שיעורים', icon: <School /> },
       { path: '/zmanim', label: 'זמני היום', icon: <AccessTime /> },
       { path: '/contact', label: 'אודות', icon: <Info /> },
@@ -75,12 +77,23 @@ const Navbar2: React.FC = () => {
         <CreditCardIcon className="mr-2" /> תרום
       </button>
 
-      <h1 className="text-lg font-bold text-yellow-300 md:text-xl lg:text-2xl">בית הכנסת בית ישראל</h1>
+   <h1 
+    className="text-lg font-bold text-yellow-300 md:text-xl lg:text-2xl"
+    style={{ fontFamily: "'Rubik Scribble', sans-serif" }}
+>
+    בית הכנסת בית ישראל
+</h1>   
 
-      <span className="text-base font-semibold text-white flex items-center md:text-lg lg:text-xl">
-        <WavingHand className="mr-2" />
-        {greeting} {user ? user.name : "אורח"}
-      </span>
+
+
+<span 
+  className="text-base font-semibold text-white flex items-center md:text-lg lg:text-xl"
+  style={{ fontFamily: "'Assistant', sans-serif" }}
+>
+  <WavingHand className="mr-2" />
+  {greeting} {user ? user.name : "אורח"}
+</span>
+
 
       <motion.button
         className="block text-3xl cursor-pointer"

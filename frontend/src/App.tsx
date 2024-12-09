@@ -16,34 +16,43 @@ function App() {
 const MainApp = () => {
   const location = useLocation();
   const { isAuthenticated, isCheckingAuth } = useAuthStore();
-  const hiddenNavbarPaths = ['/', '/login', '/signup'];
+  
+  const hiddenNavbarPaths = ['/', '/login', '/signup', '/verify-email'];
+  const freeAccessPaths = [...hiddenNavbarPaths, '/homepage'];
 
   useEffect(() => {
     if (!isCheckingAuth) {
-      // You can handl e additional authentication checks here if needed
+      // אפשר להוסיף לוגיקות נוספות לאימות אם יש צורך
     }
   }, [isCheckingAuth]);
 
-  if (!isAuthenticated && !hiddenNavbarPaths.includes(location.pathname)) {
-    return <Navigate to="/login" replace />;
+  if (!isAuthenticated && !freeAccessPaths.includes(location.pathname)) {
+    // ניתוב ל-Login עם הודעה
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ message: 'אנא התחבר כדי לגשת לעמוד זה.' }}
+      />
+    );
   }
 
+  const shouldHideNavbar = hiddenNavbarPaths.includes(location.pathname);
+
   return (
-    <div className="background"> {/* Add background class here */}
-      {!hiddenNavbarPaths.includes(location.pathname) && (
+    <div className="background">
+      {!shouldHideNavbar && (
         <div className="navbar">
           <Navbar2 />
         </div>
       )}
 
       <div
-        className={`${!hiddenNavbarPaths.includes(location.pathname)
-          ? "content pt-[100px]"
-          : ""
-          }`}
+        className={`${
+          !hiddenNavbarPaths.includes(location.pathname) ? "content pt-[100px]" : ""
+        }`}
       >
         <div className="min-h-screen w-full items-center justify-center overflow-hidden">
-          {/* Routes */}
           <Routes>
             {routes.map(({ path, element }) => (
               <Route key={path} path={path} element={element} />
@@ -53,6 +62,6 @@ const MainApp = () => {
       </div>
     </div>
   );
-}
+};
 
 export default App;
