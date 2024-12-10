@@ -26,7 +26,7 @@ interface UnpaidAliyotProps {
     userId: string;
 }
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY || '');
+const stripePromise = loadStripe(process.env.PUBLIC_URL);
 console.log(stripePromise)
 
 const cardStyle: StripeCardElementOptions = {

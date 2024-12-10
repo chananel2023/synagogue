@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import axios from 'axios';
+
 import './PaymentPage.css'; // Custom CSS for better styling
 import UnpaidAliyot from './UnpaidAliyot';
 import { useAuthStore } from '../store/authStore';
@@ -10,10 +7,9 @@ import { useAuthStore } from '../store/authStore';
 
 
 const PaymentPage = () => {
-    const { user, isAuthenticated } = useAuthStore();
+    const { user } = useAuthStore();
     return(
     <div>
-            {/* אתה שולח את ה-userId כמו שמצופה */}
             <UnpaidAliyot userId={user._id} />
         </div>
         )

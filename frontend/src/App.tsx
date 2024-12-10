@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'r
 import Navbar2 from './components/Navbar2';
 import routes from './routes/routes';
 import { useAuthStore } from './store/authStore'; 
+import 'dotenv/config';
 
 function App() {
   return (

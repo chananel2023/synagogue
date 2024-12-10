@@ -65,7 +65,6 @@ export const useAuthStore = create((set) => ({
 	},
 	
 		  
-			  // הדפסת הערכים אחרי העדכון
 			  
 			
 
