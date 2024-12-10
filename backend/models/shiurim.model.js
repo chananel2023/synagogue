@@ -10,11 +10,11 @@ const lessonSchema = new mongoose.Schema({
         required: true,
     },
     time: {
-        type: String, // בפורמט HH:mm
+        type: String, 
         required: true,
     },
     days: {
-        type: [String], // לדוגמה: ["Sunday", "Monday"]
+        type: [String], 
         required: true,
     },
     location: {
@@ -22,7 +22,7 @@ const lessonSchema = new mongoose.Schema({
         required: true,
     },
     audience: {
-        type: String, // לדוגמה: "Men", "Women", "Children"
+        type: String, 
         required: true,
     },
 });

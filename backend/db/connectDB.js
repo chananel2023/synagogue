@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 export const connectDB = async () => {
     try {
         console.log('mongo_uri: ', process.env.MONGO_URI); 
@@ -7,6 +6,6 @@ export const connectDB = async () => {
         console.log(`db connected: ${conn.connection.host}`); 
     } catch (error) {
         console.log('error connecting to db: ', error.message); 
-        process.exit(1); // '0' הוא הצלחה, '1' הוא כישלון
+        process.exit(1); 
     }
 };

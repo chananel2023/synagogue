@@ -6,7 +6,7 @@ const tfilotSchema = new mongoose.Schema({
         required: true
     },
     time: {
-        type: String,  // שעה בתצורת "HH:mm"
+        type: String,  
         required: true
     }
 });

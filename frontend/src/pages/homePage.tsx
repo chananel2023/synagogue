@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
         animate="visible"
       >
         <motion.div variants={itemVariants} className="w-full">
-          <Carousel />
+          <Carousel/>
         </motion.div>
 
         <motion.div variants={itemVariants} className="my-8 w-full">

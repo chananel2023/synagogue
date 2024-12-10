@@ -1,5 +1,5 @@
 import express from 'express';
-import { getMessages, createMessage, deleteMessage } from '../controllers/message.controller.js'; // ודא שהנתיב נכון
+import { getMessages, createMessage, deleteMessage } from '../controllers/message.controller.js'; 
 
 const router = express.Router();
 

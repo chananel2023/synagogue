@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, SvgIcon, useTheme, useMediaQuery } from '@mui/material';
-import { PaymentOutlined, SchoolOutlined, MessageOutlined, SlideshowOutlined } from '@mui/icons-material';
+import { PaymentOutlined, SchoolOutlined, MessageOutlined, SlideshowOutlined, HourglassBottom } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 
 const menuItems = [
@@ -10,7 +10,7 @@ const menuItems = [
     { label: 'הודעות', link: '/messageAdmin', icon: <MessageOutlined /> },
     { label: 'שיעורים', link: '/Lessons', icon: <SchoolOutlined /> },
     { label: 'קרוסלה', link: '/UpdataAdminCarousel', icon: <SlideshowOutlined /> },
-    { label: 'מקומות', link: '/mapadmin' },
+    { label: 'מקומות', link: '/mapadmin', icon: <HourglassBottom/>},
 
 ];
 

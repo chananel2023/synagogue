@@ -3,7 +3,7 @@ import './index.css';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import Navbar2 from './components/Navbar2';
 import routes from './routes/routes';
-import { useAuthStore } from './store/authStore'; // ייבוא של החנות
+import { useAuthStore } from './store/authStore'; 
 
 function App() {
   return (
@@ -22,12 +22,11 @@ const MainApp = () => {
 
   useEffect(() => {
     if (!isCheckingAuth) {
-      // אפשר להוסיף לוגיקות נוספות לאימות אם יש צורך
+
     }
   }, [isCheckingAuth]);
 
   if (!isAuthenticated && !freeAccessPaths.includes(location.pathname)) {
-    // ניתוב ל-Login עם הודעה
     return (
       <Navigate
         to="/login"

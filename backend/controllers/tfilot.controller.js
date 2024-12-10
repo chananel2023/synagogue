@@ -1,6 +1,4 @@
 import Tfilot from '../models/tfilot.model.js';
-
-// יצירת תפילה חדשה
 const createTfila = async (req, res) => {
     try {
         const { tfila, time } = req.body;
@@ -12,7 +10,6 @@ const createTfila = async (req, res) => {
     }
 };
 
-// קריאת כל התפילות
 const getTfilot = async (req, res) => {
     try {
         const tfilot = await Tfilot.find();
@@ -22,7 +19,6 @@ const getTfilot = async (req, res) => {
     }
 };
 
-// עדכון תפילה לפי ID
 const updateTfila = async (req, res) => {
     try {
         const { id } = req.params;
@@ -41,7 +37,6 @@ const updateTfila = async (req, res) => {
     }
 };
 
-// מחיקת תפילה לפי ID
 const deleteTfila = async (req, res) => {
     try {
         const { id } = req.params;
