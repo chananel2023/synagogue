@@ -12,11 +12,13 @@ import { NewAliyah } from "../models/NewAliyah";
 
 
 
+const apiUrl = process.env.REACT_APP_API_URL
 
 
 
 const AdminPage: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
+    
     const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
     const [newAliyah, setNewAliyah] = useState<NewAliyah>({
         _id: "", // מזהה ריק כברירת מחדל
@@ -32,7 +34,8 @@ const AdminPage: React.FC = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const { data } = await axios.get("http://localhost:5007/api/aliyah/getAllUsersAliyah");
+            
+            const { data } = await axios.get(`${apiUrl}/api/aliyah/getAllUsersAliyah`);
             setUsers(data.allUsersAliyah);
             setFilteredUsers(data.allUsersAliyah);
         } catch (error) {
@@ -54,7 +57,7 @@ const AdminPage: React.FC = () => {
                 return;
             }
 
-            await axios.post("http://localhost:5007/api/aliyah/addAliyahToUser", {
+            await axios.post(`${apiUrl}/api/aliyah/addAliyahToUser`, {
                 userId,
                 aliyahDetails: { price: newAliyah.price, buyer: newAliyah.buyer, date: new Date(selectedDate) },
             });
@@ -71,7 +74,7 @@ const AdminPage: React.FC = () => {
 
     const handleDeleteAliyah = async (userId: string, aliyahId: string) => {
         try {
-            await axios.delete("http://localhost:5007/api/aliyah/delete", { data: { userId, aliyahId } });
+            await axios.delete(`${apiUrl}/api/aliyah/delete`, { data: { userId, aliyahId } });
             fetchUsers();
             toast.success("העלייה נמחקה בהצלחה", { rtl: true });
         } catch (error) {
@@ -178,7 +181,7 @@ const AdminPage: React.FC = () => {
                             <AccordionDetails className="bg-white pt-3">
                                 <div className="mb-3">
                                     <TextField
-                                        label="סיבה לחיוב"
+                                        label=" סיבה לחיוב  "
                                         variant="outlined"
                                         size="small"
                                         className="mr-2 bg-gray-100 text-gray-800"
@@ -222,33 +225,51 @@ const AdminPage: React.FC = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    {user.aliyahDetails.map((aliyah) => (
-                                        <motion.div
-                                            key={aliyah._id}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className="flex items-center justify-between bg-gray-100 p-3 rounded-lg"
-                                        >
-                                            <div className="flex-1">
-                                                <Typography className="text-gray-800">{`סכום: ${aliyah.price} ₪`}</Typography>
-                                                <Typography className="text-gray-600">{`תאריך: ${new Date(
-                                                    aliyah.date
-                                                ).toLocaleDateString("he-IL")}`}</Typography>
-                                                <Typography className="text-gray-600">{`מתי נקנה ${aliyah.buyer}`}</Typography>
-                                            </div>
-                                            <motion.button
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
-                                                onClick={() => handleDeleteAliyah(user.userId, aliyah._id)}
-                                            >
-                                                <DeleteIcon className="mr-1" />
-                                                מחק
-                                            </motion.button>
-                                        </motion.div>
-                                    ))}
-                                </div>
+    {user.aliyahDetails?.length ? (
+        user.aliyahDetails.map((aliyah) => (
+            <motion.div
+                key={aliyah._id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center justify-between bg-gray-100 p-3 rounded-lg"
+            >
+                <div className="flex-1">
+                    <Typography className="text-gray-800">{`סכום: ${
+                        aliyah.price ? `${aliyah.price} ₪` : "לא זמין"
+                    }`}</Typography>
+                    <Typography className="text-gray-600">{`תאריך: ${
+                        aliyah.date
+                            ? new Date(aliyah.date).toLocaleDateString("he-IL")
+                            : "לא זמין"
+                    }`}</Typography>
+                    <Typography className="text-gray-600">{`רוכש: ${
+                        aliyah.buyer || "לא ידוע"
+                    }`}</Typography>
+                    <Typography
+                        className={`text-sm ${
+                            aliyah.isPaid ? "text-green-500" : "text-red-500"
+                        }`}
+                    >
+                        {aliyah.isPaid ? "שולם" : "לא שולם"}
+                    </Typography>
+                </div>
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg"
+                    onClick={() => handleDeleteAliyah(user.userId, aliyah._id)}
+                >
+                    <DeleteIcon className="mr-1" />
+                    מחק
+                </motion.button>
+            </motion.div>
+        ))
+    ) : (
+        <Typography className="text-gray-600">אין נתונים להצגה</Typography>
+    )}
+</div>
+
                             </AccordionDetails>
                         </Accordion>
                     ))}

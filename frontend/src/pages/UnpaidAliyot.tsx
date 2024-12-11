@@ -6,28 +6,23 @@ import { useAuthStore } from '../store/authStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-interface Aliyah {
-    _id: string;
-    buyer: string;
-    price: number;
-    date: string;
-    isPaid: boolean;
-    quantity: number;
-}
+import { Aliyah } from '../models/Aliyah';
+import { CheckoutFormProps } from '../models/CheckoutFormProps';
+import { UnpaidAliyotProps } from '../models/UnpaidAliyotProps';
 
-interface CheckoutFormProps {
-    userId: string;
-    aliyahIds: string[];
-    onSuccess: () => void;
-    totalAmount: number;
-}
 
-interface UnpaidAliyotProps {
-    userId: string;
-}
 
-const stripePromise = loadStripe(process.env.PUBLIC_URL);
-console.log(stripePromise)
+
+
+
+
+
+
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+const apiUrl = process.env.REACT_APP_API_URL
+
+
+
 
 const cardStyle: StripeCardElementOptions = {
     style: {
@@ -99,8 +94,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ userId, aliyahIds, onSucces
             });
 
             if (stripeError) throw new Error(stripeError.message);
-
-            const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5007';
+            
+             
             await axios.post(`${apiUrl}/api/aliyah/payAliyot`, {
                 userId,
                 aliyahIds,

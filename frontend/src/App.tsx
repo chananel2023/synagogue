@@ -3,10 +3,14 @@ import './index.css';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import Navbar2 from './components/Navbar2';
 import routes from './routes/routes';
-import { useAuthStore } from './store/authStore'; 
-import 'dotenv/config';
+import { useAuthStore } from './store/authStore';
+
+
+
+
 
 function App() {
+  console.log('ddd',process.env.REACT_APP_API_URL )
   return (
     <Router>
       <MainApp />

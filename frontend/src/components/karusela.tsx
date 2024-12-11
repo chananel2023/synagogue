@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
+const apiUrl = process.env.REACT_APP_API_URL
+
 interface Slide {
   _id: string;
   title: string;
@@ -18,7 +20,7 @@ const Carousel: React.FC = () => {
   useEffect(() => {
     const fetchSlides = async () => {
       try {
-        const response = await axios.get('http://localhost:5007/api/slides');
+        const response = await axios.get(`${apiUrl}/api/slides`);
         const sortedSlides = response.data.sort((a: Slide, b: Slide) => a.priority - b.priority);
         setSlides(sortedSlides);
       } catch (error) {

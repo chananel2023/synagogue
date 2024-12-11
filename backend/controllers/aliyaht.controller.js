@@ -3,6 +3,7 @@ dotenv.config();
 import { TorahAliyah } from "../models/TorahAliyah.model.js";
 import { User } from "../models/user.model.js";
 import Stripe from 'stripe';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export const addAliyahToUser = async (req, res) => {
     const { userId, aliyahDetails } = req.body;
@@ -283,25 +284,25 @@ export const payAliyot = async (req, res) => {
 };
 export const getUnpaidAliyot = async (req, res) => {
     const { userId } = req.body;
-    console.log("Received request for unpaid aliyot with userId:", userId);
+    
 
     if (!userId) {
         return res.status(400).json({ success: false, message: "User ID is required" });
     }
 
     try {
-        console.log("Fetching user aliyot...");
+        
         const result = await fetchUserAliyah(userId);
-        console.log("Fetch result:", result);
+        
 
         if (!result.success) {
-            console.log("Failed to fetch aliyot:", result);
+            
             return res.status(result.status).json(result);
         }
 
         // סינון העליות שלא שולמו
         const unpaidAliyot = result.data.userTorahAliyah.filter(aliyah => !aliyah.isPaid);
-        console.log("Filtered unpaid aliyot:", unpaidAliyot);
+        
 
         return res.status(200).json({
             success: true,

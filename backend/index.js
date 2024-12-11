@@ -12,7 +12,8 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import addToCart from './routes/addToCard.r.js';
 import cartRoutes from './routes/addToCard.r.js';
 import aliyahRoutes from './routes/aliyah.route.js';
-// import seatRoutes from './routes/seatRoutes.js'
+
+
 
 dotenv.config();
 const PORT = process.env.PORT || 5007;
@@ -35,7 +36,6 @@ app.use('/api/tfilot', tfilotRoutes);
 app.use('/api/lessons', shiurimRouter);
 app.use('/api/slides', slideRoutes);
 app.use('/api/payments', paymentRoutes);
-// app.use('/api/seats', seatRoutes);  // שינינו את הנתיב ל-/api/seats
 app.use('/api/addToCart', addToCart);
 app.use("/api/aliyah", aliyahRoutes);
 app.use('/cart', cartRoutes);
