@@ -36,7 +36,7 @@
 
 ## 🎯 About
 
-The **בית הכנסת בית ישראל Management System** is a modern, full-stack web application designed to digitize and streamline synagogue operations. Built with community needs in mind, it provides comprehensive tools for managing religious services, community members, and administrative tasks.
+The **Beth Israel Synagogue Management System** is a modern, full-stack web application designed to digitize and streamline synagogue operations. Built with community needs in mind, it provides comprehensive tools for managing religious services, community members, and administrative tasks.
 
 ### 🌟 Why This Project?
 
