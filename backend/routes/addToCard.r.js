@@ -1,14 +1,10 @@
 import express from 'express';
-
-
 import addToCart, { getCart } from '../controllers/addToCart.js';
+import { verifyToken } from '../middleware/verifyToken.js';
 
 const router = express.Router();
 
-// הוספת מוצר לעגלה
-router.post('/', addToCart );
-
-// הצגת עגלת קניות לפי ID של משתמש
-router.get('/:userId',getCart )
+router.post('/', verifyToken, addToCart);
+router.get('/:userId', verifyToken, getCart);
 
 export default router;

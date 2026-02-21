@@ -1,32 +1,31 @@
 import express from 'express';
 import Stripe from 'stripe';
+import { verifyToken } from '../middleware/verifyToken.js';
 
-// הגדרת Stripe עם המפתח הסודי שלך
-const stripe = new Stripe('YOUR_STRIPE_SECRET_KEY'); // המפתח הסודי שלך ב-Stripe
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const router = express.Router();
 
-// יצירת Payment Intent
-router.post('/create-payment-intent', async (req, res) => {
-    const { amount, description } = req.body; // קבלת הנתונים מה-Client
+router.post('/create-payment-intent', verifyToken, async (req, res) => {
+    const { amount, description } = req.body;
 
-    // ווידוא שהנתונים הגיעו
     if (!amount || !description) {
         return res.status(400).json({ message: 'Amount and description are required' });
     }
 
+    if (typeof amount !== 'number' || amount <= 0 || amount > 100000) {
+        return res.status(400).json({ message: 'Invalid amount' });
+    }
+
     try {
-        // יצירת Payment Intent
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount * 100, // Stripe מצפה לסכום באגורות (למשל 10 דולר = 1000 אגורות)
-            currency: 'usd', // הגדרת המטבע
-            description, // תיאור התשלום
+            amount: Math.round(amount * 100),
+            currency: 'usd',
+            description,
         });
 
-        // החזרת ה-clientSecret לקליינט
         res.status(200).json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Error creating payment intent' });
     }
 });

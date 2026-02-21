@@ -29,11 +29,15 @@ export const useAuthStore = create((set) => ({
 		}
 	},
 	login: async (email, password) => {
+		
+
 		if (!email || !password) {
+			console.log("Missing email or password");
 			alert("Please enter both username and password.");
 			return;
 		}
-	
+		console.log('Sending login data:', { email, password });
+
 		set({ isLoading: true, error: null });
 		try {
 			const response = await axios.post(`${API_URL}/login`, { email, password });

@@ -75,8 +75,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// הוספת אינדקס ייחודי לשדה email
-userSchema.index({ email: 1 }, { unique: true });
+
 
 // יצירת מודל משתמש
 export const User = mongoose.model("User", userSchema);

@@ -1,14 +1,11 @@
 import express from 'express';
 import { createTfila, getTfilot, updateTfila, deleteTfila } from '../controllers/tfilot.controller.js';
+import { verifyToken, verifyAdmin } from '../middleware/verifyToken.js';
+
 const router = express.Router();
-router.post('/', createTfila);
 router.get('/', getTfilot);
-router.put('/:id', updateTfila);
-router.delete('/:id', deleteTfila);
+router.post('/', verifyToken, verifyAdmin, createTfila);
+router.put('/:id', verifyToken, verifyAdmin, updateTfila);
+router.delete('/:id', verifyToken, verifyAdmin, deleteTfila);
+
 export default router;
-
-
-
-
-
-

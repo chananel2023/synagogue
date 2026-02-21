@@ -54,7 +54,7 @@ export const signup = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        res.status(400).json({ success: false, message: "Signup failed" });
     }
 };
 
@@ -107,7 +107,6 @@ export const login = async (req, res) => {
 		}
 
 		generateTokenAndSetCookie(res, user._id);
-		const token=generateTokenAndSetCookie(res, user._id)
 
 		user.lastLogin = new Date();
 		await user.save();
@@ -115,15 +114,13 @@ export const login = async (req, res) => {
 		res.status(200).json({
 			success: true,
 			message: "Logged in successfully",
-			token,
 			user: {
 				...user._doc,
 				password: undefined,
 			},
 		});
 	} catch (error) {
-		console.log("Error in login ", error);
-		res.status(400).json({ success: false, message: error.message });
+		res.status(400).json({ success: false, message: "Login failed" });
 	}
 };
 
@@ -155,8 +152,7 @@ export const forgotPassword = async (req, res) => {
 
 		res.status(200).json({ success: true, message: "Password reset link sent to your email" });
 	} catch (error) {
-		console.log("Error in forgotPassword ", error);
-		res.status(400).json({ success: false, message: error.message });
+		res.status(400).json({ success: false, message: "Request failed" });
 	}
 };
 
@@ -186,8 +182,7 @@ export const resetPassword = async (req, res) => {
 
 		res.status(200).json({ success: true, message: "Password reset successful" });
 	} catch (error) {
-		console.log("Error in resetPassword ", error);
-		res.status(400).json({ success: false, message: error.message });
+		res.status(400).json({ success: false, message: "Password reset failed" });
 	}
 };
 
@@ -201,8 +196,7 @@ export const checkAuth = async (req, res) => {
 
 		res.status(200).json({ success: true, user });
 	} catch (error) {
-		console.log("Error in checkAuth ", error);
-		res.status(400).json({ success: false, message: error.message });
+		res.status(400).json({ success: false, message: "Authentication check failed" });
 	}
 };
 

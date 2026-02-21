@@ -5,9 +5,12 @@ import {
     updateLesson,
     deleteLesson,
 } from '../controllers/shiurim.controller.js';
+import { verifyToken, verifyAdmin } from '../middleware/verifyToken.js';
+
 const router = express.Router();
-router.post('/', createLesson);
 router.get('/', getAllLessons);
-router.put('/:id', updateLesson);
-router.delete('/:id', deleteLesson);
+router.post('/', verifyToken, verifyAdmin, createLesson);
+router.put('/:id', verifyToken, verifyAdmin, updateLesson);
+router.delete('/:id', verifyToken, verifyAdmin, deleteLesson);
+
 export default router;
